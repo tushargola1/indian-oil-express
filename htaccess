@@ -1,0 +1,12 @@
+Options +FollowSymLinks
+RewriteEngine On
+
+# Exclude real asset folders
+RewriteCond %{REQUEST_URI} !^/(css|js|scss|vendor|static)/
+
+# If file or directory doesn't exist
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Route to index.html (React Router will take over)
+RewriteRule ^ index.html [L]
