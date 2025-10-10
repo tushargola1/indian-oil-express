@@ -6,6 +6,7 @@ import Login from "./authentication/Login";
 import ForgetPassword from "./authentication/ForgetPassword";
 import ProtectedRoute from "./authentication/ProtectedRoute";
 import PublicRoute from "./authentication/PublicRoute";
+import NewsDetails from "./innerPage/NewsDetails";
 
 function AppContent() {
   const location = useLocation();
@@ -34,12 +35,20 @@ function AppContent() {
           }
         />
 
-        {/* 🔐 Protected Routes */}
         <Route
           path="/"
           element={
             // <ProtectedRoute>
               <Home />
+            // </ProtectedRoute>
+          }
+        />
+
+          <Route
+          path="/news-detail"
+          element={
+            // <ProtectedRoute>
+              <NewsDetails />
             // </ProtectedRoute>
           }
         />
