@@ -93,7 +93,7 @@ const HomeBanner = () => {
                     <Link to="/news-detail" className="arrow-btn">
                       <img src={arrow} alt="arrow" />
                     </Link>
-                    <p className="mb-0 date-read">29-07-2025 1 minute read</p>
+                    <p className="mb-0 date-read"> 29-07-2025 | 1 minutes read</p>
                   </div>
                 </>
               )}
