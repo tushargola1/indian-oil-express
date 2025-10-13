@@ -12,15 +12,15 @@
     --orange-color:#f37127;
 }
 
-@font-face {
+/* @font-face {
   font-family: "times";
   src: url("../font/times.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
-}
+} */
 /* poppins */
 body {
-  font-family: "times", serif;
+  font-family: "Poppins", sans-serif;
   font-size: 16px;
   overflow-x: hidden;
 }
@@ -267,13 +267,13 @@ height: unset;
 } 
 @media (max-width: 1412px) {
     .navbar-expand-lg .navbar-nav  {
-   gap: 35px !important;
-    }
+   gap: 15px !important;
+   }
 } 
 @media (max-width: 1280px) {
     .navbar-expand-lg .navbar-nav  {
-   gap: 25px !important;
-    }
+   gap: 10px !important;
+   }
       .bulletin-section-content div>p {
     font-size: 13px !important;
 }
@@ -281,7 +281,7 @@ height: unset;
 @media (max-width: 1160px) {
     .navbar-expand-lg .navbar-nav  {
    gap: 15px !important;
-    }
+   }
      
 } 
     /* @media (max-width: 1380px) {
@@ -299,18 +299,18 @@ height: unset;
     }  */
 
 .navbar-expand-lg .navbar-nav{
-    gap: 40px;
+    /* gap: 20px; */
 }
 @media (max-width:1800px) {
 
   .navbar-expand-lg .navbar-nav{
-    gap: 30px;
+    /* gap: 30px; */
 }
 }
 @media (max-width:1550px) {
 
   .navbar-expand-lg .navbar-nav{
-    gap: 40px;
+    /* gap: 20px; */
 }
 }
 
@@ -655,7 +655,7 @@ padding-bottom: 30px;
 
 @media (max-width:2500px) {
     .banner-right-content p , .banner2 h4{
-        font-size: 22px;
+        font-size: 20px;
     }
     
 }
@@ -765,7 +765,7 @@ padding-bottom: 30px;
 
 @media (max-width:2500px) {
     .banner-right-content p , .banner2 h4{
-        font-size: 22px;
+        font-size: 20px;
     }
     
 }
@@ -1072,6 +1072,7 @@ margin-bottom: 0;
     align-items: center;
     justify-content: center;
     width: 100%;
+    font-size: 1.1rem;
 }
 .home-img-card-img{
       height: 70px;

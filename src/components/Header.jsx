@@ -1,5 +1,5 @@
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { Link, Links, useNavigate } from "react-router-dom";
 import indianOilLogo from "../assets/image/logos/indianOil-Logo.png";
 import sprintLogo from "../assets/image/logos/sprint-Logo.png";
 import indianOil from "../assets/image/logos/indianOil.png";
@@ -79,16 +79,22 @@ export default function Header() {
           {/* Left Logo */}
           <div className={`col-md-2 col-lg-3 col-6 right-logo-area  `}>
             <div className={`${issticky ? 'd-none ' : '  '}`}>
-              <img
+              <Link to='/'>
+                  <img
                 src={indianOil}
                 alt="Indian Oil"
                 className="indianOil-logo d-xl-block d-md-block d-none"
               />
-              <img
+              </Link>
+              <Link to='/'>
+                 <img
                 src={sprintLogo}
                 alt="Indian Oil"
                 className="sprint-logo   d-xl-none d-md-none d-block"
               />
+              </Link>
+          
+           
             </div>
           </div>
 
@@ -104,12 +110,12 @@ export default function Header() {
             <div className="right-content d-none d-md-block d-lg-block right-nav">
               <div className="d-flex  align-items-center gap-3 justify-content-end">
                 <div className=" top-content-navbar d-flex justify-content-start">
-                  <a
-                    href="/"
+                  <Link
+                    to="/"
                     className="text-dark text-decoration-none me-3  fw-600"
                   >
                     Home
-                  </a>
+                  </Link>
                   {/* | */}
                   <a
                     href=""
