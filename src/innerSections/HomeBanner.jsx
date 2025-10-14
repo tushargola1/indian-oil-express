@@ -4,8 +4,8 @@ import { Autoplay, EffectFade } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-fade";
 
-import slide1 from "../assets/image/banner/1.png";
-import slide2 from "../assets/image/banner/1.png";
+import slide1 from "../assets/image/banner/main-img.jpg";
+import slide2 from "../assets/image/banner/main-img.jpg";
 
 import arrow from "../assets/image/arrow.png";
 
@@ -37,7 +37,7 @@ const HomeBanner = () => {
   const images = [slide1, slide2];
 
   return (
-    <div className="container-fluid my-5 px-lg-5 px-md-3 px-0">
+    <div className="container-fluid my-3 px-lg-5 px-md-3 px-0">
       <div className="row g-3">
         {/* MAIN BANNER */}
         <div className="col-xl-9 col-lg-7 col-md-12 col-12">
@@ -53,20 +53,20 @@ const HomeBanner = () => {
                     effect="fade"
                     fadeEffect={{ crossFade: true }}
                     autoplay={{ delay: 3000, disableOnInteraction: false }}
-                    loop={true}
+                    loop={false}
                     speed={800}
                   >
                     {images.map((image, index) => (
                       <SwiperSlide key={index}>
-                            <div className="image-wrapper">
-                        <img src={image} alt="Banner" className="banner-img" />
-                        <div className="blur-bg"></div>
-                        <div className="bannerContent">
+                            <div className="image-wrapDSFDASper">
+                        <img src={image} alt="Banner" className="banner-imgdfad" />
+                        {/* <div className="blur-bg"></div> */}
+                        {/* <div className="bannerContent">
                           <h3 className="italic-text">
                             Celebrating service in the Himalayas: Chairman's heartfelt
                             connect in Kargil & Srinagar
                           </h3>
-                        </div>
+                        </div> */}
                         </div>
                       </SwiperSlide>
                     ))}

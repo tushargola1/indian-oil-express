@@ -75,7 +75,8 @@ export default function Header() {
     <header className={`border-bottom shadow-sm ${issticky ? 'sticky-navbar' : ' '}`}>
       {/* Top Row */}
       <div className="container-fluid  ">
-        <div className="row align-items-center  py-2 px-lg-5 px-md-3 px-3">
+        {/* <div className="row align-items-center  py-2 px-lg-5 px-md-3 px-3"> */}
+        <div className="row align-items-center  py-2 top-nav-header">
           {/* Left Logo */}
           <div className={`col-md-2 col-lg-3 col-6 right-logo-area  `}>
             <div className={`${issticky ? 'd-none ' : '  '}`}>
@@ -178,7 +179,7 @@ export default function Header() {
                   </div>
                 </div>
               </div>
-              <div className={`sprint-logo-area mt-3 ${issticky ? 'd-none ' : ' '}`}>
+              <div className={`sprint-logo-area mb-3 mt-2 ${issticky ? 'd-none ' : ' '}`}>
                 <img
                   src={sprintLogo}
                   alt="Sprint Logo"
@@ -232,8 +233,8 @@ export default function Header() {
               ></button>
             </div>
             {/* px-xl-4 px-lg-4 px-md-4 px-4 */}
-            <div className="offcanvas-body d-flex align-items-xl-center align-items-md-start align-items-start   flex-xl-row flex-lg-column flex-md-column flex-column ps-5">
-              <div className="row align-items-center justify-content-between w-100">
+            <div className="offcanvas-body d-flex align-items-xl-center align-items-md-start align-items-start  flex-lg-column flex-md-column flex-column" style={{paddingLeft:'3.9rem'}}>
+              <div className="row align-items-center justify-content-between">
                 <ul className="navbar-nav  pe-3 fw-semibold col-md-8 py-0">
                   <li className="nav-item">
                     <a className="nav-link" href="#">

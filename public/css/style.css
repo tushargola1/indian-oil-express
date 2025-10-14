@@ -64,11 +64,11 @@ a{
 /* ============ header  ============ */
 
 .sprint-logo{
-     height: 85px;
+     height: 50px;
 }
-.indianOil-logo{height: 120px; margin-bottom: 10px;}
+.indianOil-logo{height: 80px;margin-bottom: 38px;}
 .center-logo{
-        padding-top: 95px;
+        padding-top: 10px;
         text-align: center;
 }
 .center-logo img{
@@ -84,6 +84,9 @@ a{
 }
 .bottom-navbar{
     position: relative;
+}
+.top-nav-header{
+  padding-left: 40px;
 }
 .bottom-navbar::before{
     content: '';
@@ -111,12 +114,15 @@ a{
 
 .right-content{
         text-align: end;
-    margin-bottom: 20px;
+        /* margin-bottom: 20px; */
 }
 
+.border-bottom.sticky-navbar .bottom-navbar{
+  margin-top: -18px;
+}
 
 .bottom-navbar{
-    margin-top: -20px;
+    margin-top: -33px;
 }
 
 @media (max-width:992px) {
@@ -177,7 +183,7 @@ height: unset;
 
 }
 .top-content-navbar a , .top-content-navbar button{
-  font-size: 21px;
+  font-size: 16px;
 }
 .right-nav div > a {
     position: relative;
@@ -201,14 +207,13 @@ height: unset;
 
 .navbar-form{
     align-items: center;
-    padding: 0 30px;
+    padding: 0 20px;
     background-color: var(--light-blue);
-    height: 55px;
+    /* height: 55px; */
 }
 .bulletin-section{
-    height: 55px;
-    display: flex
-;
+    height: 38px;
+    display: flex;
     align-items: center;
     justify-content: center;
 }
@@ -216,15 +221,14 @@ height: unset;
     font-size: 18px;
 }
 .bulletin-section-content div>p{
-    font-size: 16px;
+    font-size: 12px;
     font-weight: bold;
 }
 .navbar-form input{
     border: unset;
     background-color: transparent;
-    color: white !important ;
-    font-size: 1.2rem;
-
+    color: white !important;
+    font-size: 1rem;
 }
 .navbar-form input::placeholder{
     color: white !important ;
@@ -267,7 +271,7 @@ height: unset;
 } 
 @media (max-width: 1412px) {
     .navbar-expand-lg .navbar-nav  {
-   gap: 15px !important;
+   gap: 20px !important;
    }
 } 
 @media (max-width: 1280px) {
@@ -284,6 +288,10 @@ height: unset;
    }
      
 } 
+i.fa.fa-bars.dark-blue-color.fs-4
+ {
+    font-size: 15px !important;
+}
     /* @media (max-width: 1380px) {
         .navbar-expand-lg .navbar-nav .nav-link {
             padding-left: unset;
@@ -1670,3 +1678,4 @@ font-weight: 600;
 .ac1 u i.fa-solid.fa-thumbs-up , .ac1 u i.fa-solid.fa-thumbs-down {
   color: var(--orange-color);
 }
+
