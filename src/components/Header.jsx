@@ -234,7 +234,7 @@ export default function Header() {
             </div>
             {/* px-xl-4 px-lg-4 px-md-4 px-4 */}
             <div className="offcanvas-body d-flex align-items-xl-center align-items-md-start align-items-start  flex-lg-column flex-md-column flex-column" style={{paddingLeft:'3.9rem'}}>
-              <div className="row align-items-center justify-content-between">
+              <div className="row align-items-center justify-content-between w-100">
                 <ul className="navbar-nav  pe-3 fw-semibold col-md-8 py-0">
                   <li className="nav-item">
                     <a className="nav-link" href="#">
