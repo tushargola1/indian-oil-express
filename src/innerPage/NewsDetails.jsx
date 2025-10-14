@@ -32,7 +32,7 @@ export default function NewsDetails() {
         <>
             <div className="container-fluid px-lg-5 px-md-3 px-3 mt-5">
                 <div className="row g-5 align-items-center justify-content-between">
-                    <div className="col-xl-9 col-lg-8 col-md-12 col-12">
+                    <div className="col-xl-9 col-lg-8 col-md-12 col-12 mt-4">
                         <div className="detail-page-content">
                             <h3 className="italic-text">Celebrating service in the Himalayas: Chairman 's heartfelt connect in Kargil & Srinagar</h3>
 
@@ -142,7 +142,7 @@ export default function NewsDetails() {
                     </div>
                 </div>
                     </div>
-                    <div className="col-xl-3 col-lg-3 col-md-12 col-12 details-page-right-section right-bar-side">
+                    <div className="col-xl-3 mt-4 col-lg-3 col-md-12 col-12 details-page-right-section right-bar-side">
                         {
                             newsHighlights.map((item, index) => (
                                 <div className=" d-flex flex-column banner-2 " key={index}>

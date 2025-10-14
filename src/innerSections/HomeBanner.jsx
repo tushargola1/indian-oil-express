@@ -7,6 +7,8 @@ import "swiper/css/effect-fade";
 import slide1 from "../assets/image/banner/main-img.jpg";
 import slide2 from "../assets/image/banner/main-img.jpg";
 
+import announcement from '../assets/image/banner/announcement.png'
+
 import arrow from "../assets/image/arrow.png";
 
 import Skeleton from "react-loading-skeleton";
@@ -89,7 +91,7 @@ const HomeBanner = () => {
                     terrain and extreme weather...
                   </p>
 
-                  <div className="d-flex align-items-center gap-3 mt-5">
+                  <div className="d-flex align-items-center gap-3 mt-3">
                     <Link to="/news-detail" className="arrow-btn">
                       <img src={arrow} alt="arrow" />
                     </Link>
@@ -103,7 +105,7 @@ const HomeBanner = () => {
 
         {/* RIGHT SIDE SMALL BANNER */}
         <div className="col-xl-3 col-lg-5 col-md-12 col-12 right-bar-side d-flex flex-column">
-          <Swiper
+          {/* <Swiper
             className="banner2-swiper"
             modules={[Autoplay]}
             spaceBetween={20}
@@ -143,7 +145,8 @@ const HomeBanner = () => {
                 </div>
               </SwiperSlide>
             ))}
-          </Swiper>
+          </Swiper> */}
+          <img src={announcement} alt="" className="announcement-img" />
         </div>
       </div>
     </div>

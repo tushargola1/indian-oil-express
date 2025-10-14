@@ -223,7 +223,7 @@ height: unset;
     font-size: 18px;
 }
 .bulletin-section-content div>p{
-    font-size: 12px;
+    font-size: 15px;
     font-weight: bold;
 }
 .navbar-form input{
@@ -244,7 +244,7 @@ height: unset;
 }
 .navbar-expand-lg .navbar-nav .nav-link{
             color: black;
-            font-weight: 500;
+            font-weight: 400;
 }
 .fas.fa-search{
     font-size: 16px;
@@ -279,12 +279,12 @@ height: unset;
 } 
 @media (max-width: 1412px) {
     .navbar-expand-lg .navbar-nav  {
-   gap: 18px !important;
+   gap: 12px !important;
    }
 } 
 @media (max-width: 1280px) {
     .navbar-expand-lg .navbar-nav  {
-   gap: 10px !important;
+   gap: 5px !important;
    }
       .bulletin-section-content div>p {
     font-size: 13px !important;
@@ -593,7 +593,7 @@ display: none;
     color: var(--dark-blue);
     font-weight: 600;
     margin-bottom: 25px;
-    border-bottom: 7px solid var(--orange-color);
+    border-bottom: 4px solid var(--orange-color);
     padding-bottom: 5px;
     display: inline-block;
 }
@@ -671,7 +671,7 @@ padding-bottom: 30px;
 
 @media (max-width:2500px) {
     .banner-right-content p , .banner2 h4{
-        font-size: 20px;
+        font-size: 19px;
 
     }
     
@@ -695,7 +695,15 @@ padding-bottom: 30px;
     padding: 0 1px ;
 }
 
-
+.announcement-img{
+  height: 350px;
+  object-fit: contain;
+}
+@media (max-width:1600px) {
+  .announcement-img{
+    height: 250px;
+  }
+}
 .news-details {
   min-height: 80px; 
 }
@@ -782,7 +790,7 @@ padding-bottom: 30px;
 
 @media (max-width:2500px) {
     .banner-right-content p , .banner2 h4{
-        font-size: 20px;
+        font-size: 19px;
     }
     
 }
@@ -800,6 +808,12 @@ padding-bottom: 30px;
     height: unset;
 }
 }
+@media (max-width:1500px) {
+ .banner-right-content p{
+    font-size: 15px;
+}
+}
+
 
 
 .news-details {
@@ -1092,15 +1106,16 @@ margin-bottom: 0;
       font-size: 1.3rem;
 }
 .home-img-card-img{
-      height: 70px;
-    width: 100%;
-    object-fit: cover;
+      height: 79px;
+      width: 100%;
+      object-fit: cover;
 }
 .home-img-card-content {
     font-size: 1rem;
     font-weight: 500;
     font-style: italic;
     display: -webkit-box;
+    margin-left: 8px;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
     overflow: hidden;
@@ -1118,10 +1133,11 @@ margin-bottom: 0;
 }
 .home-img-card-section .col-md-6{
   margin-top: 0 !important;
-  padding: 10px;
+  padding: 4px;
 }
 .home-img-card-section {
     margin-top: 0;
+    align-items: center;
 }
 
 

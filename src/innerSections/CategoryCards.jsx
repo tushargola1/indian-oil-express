@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function CategoryCard() {
   return (
-    <div className="container-fluid mt-5 px-lg-5 px-md-3 px-3">
+    <div className="container-fluid mt-4 px-lg-5 px-md-3 px-3">
       <div className="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 justify-content-center align-items-stretch gy-2">
         {categoryData.map((category, index) => (
           <div className="col news-card-col news-card-col-img" key={index}>

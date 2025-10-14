@@ -148,7 +148,7 @@ const NewsCards = () => {
   }, []);
 
   return (
-    <div className="container-fluid my-5 px-lg-5 px-md-3 px-3">
+    <div className="container-fluid my-2 px-lg-5 px-md-3 px-3">
       <div className="row row-cols-xl-6 row-cols-lg-4 row-cols-md-3 row-cols-1 gy-2 justify-content-center align-items-center flex-wrap">
         {newsData.map((card, i) => (
           <div className="col news-card-col" key={i}>
