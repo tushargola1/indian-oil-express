@@ -115,32 +115,30 @@ export default function NewsDetails() {
                                         </div>
                                     ))
                                 }
-                                {
-                                    !showComment && <button className="  px-3 py-2 details-page-button" onClick={() => setShowComment(true)}>
-                                        Read Comments
-                                    </button>
-                                }
+                                <button className="  px-3 py-2 details-page-button" onClick={() => setShowComment(true)}>
+                                    Read Comments
+                                </button>
 
                                 {showComment && <CommentSection />}
                             </div>
                         </div>
-   <div className="d-flex align-items-center justify-content-between mt-5 flex-wrap">
-                    <h3 className="recommanded-story-heading">
-                        Recommanded Stories
-                    </h3>
-                    <div className="d-flex align-items-center gap-3 flex-wrap
+                        <div className="d-flex align-items-center justify-content-between mt-5 flex-wrap">
+                            <h3 className="recommanded-story-heading">
+                                Recommanded Stories
+                            </h3>
+                            <div className="d-flex align-items-center gap-3 flex-wrap
                     ">
-                        <p className="mb-0 hashtag-text">
-                            #Chairman
-                        </p>
-                        <p className="mb-0 hashtag-text">
-                            #Marketing Division
-                        </p>
-                        <p className="mb-0 hashtag-text">
-                            #RHQ
-                        </p>
-                    </div>
-                </div>
+                                <p className="mb-0 hashtag-text">
+                                    #Chairman
+                                </p>
+                                <p className="mb-0 hashtag-text">
+                                    #Marketing Division
+                                </p>
+                                <p className="mb-0 hashtag-text">
+                                    #RHQ
+                                </p>
+                            </div>
+                        </div>
                     </div>
                     <div className="col-xl-3 mt-4 col-lg-3 col-md-12 col-12 details-page-right-section right-bar-side">
                         {
@@ -160,11 +158,16 @@ export default function NewsDetails() {
                                         <h4>
                                             {item.title}
                                         </h4>
-                                        <img
+                                        {/* <img
                                             src={mainImg}
                                             alt="Right Banner"
                                             className="right-bar-side-image mt-auto"
-                                        />
+                                        /> */}
+                                         <div className="image-wrapper image-wrapper-sidebar">
+                                    <img src={mainImg} alt="Banner" className="banner-img-details " />
+                                    <div className="blur-bg-details"></div>
+                                   
+                                </div>
                                     </div>
                                 </div>
                             ))
@@ -172,7 +175,7 @@ export default function NewsDetails() {
                     </div>
                 </div>
 
-             
+
                 <div className="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 justify-content-center align-items-stretch gy-2">
 
                     {Array.from({ length: 5 }).map((_, index) => (

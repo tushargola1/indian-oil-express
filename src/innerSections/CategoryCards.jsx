@@ -20,6 +20,11 @@ export default function CategoryCard() {
                <p className="mb-0">
                  {category.title}
                </p>
+                <img
+                  src={arrow}
+                  alt="icon"
+                  style={{ width: "50px", height:'70px',  objectFit:"contain" }}
+                />
               </div>
               <ul className="list-group list-group-flush">
                 {category.items.map((item, i) => (
@@ -40,12 +45,12 @@ export default function CategoryCard() {
                 ))}
               </ul>
             </div>
-            <div className="text-end">
+            {/* <div className="text-end">
                 <Link>
                   <img src={arrow} alt="" style={{width:"60px" , height:'30px'}} className="mt-1"/>
                 </Link>
               
-            </div>
+            </div> */}
           </div>
         ))}
       </div>

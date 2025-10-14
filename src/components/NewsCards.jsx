@@ -12,6 +12,9 @@ import newsImg1 from "../assets/image/category-news/1.png";
 import newsImg2 from "../assets/image/category-news/2.png";
 import newsImg3 from "../assets/image/category-news/3.png";
 
+import arrow from '../assets/image/home-img-card/arrow.png'
+
+
 // Sample News Data
 const newsData = [
   {
@@ -181,8 +184,21 @@ const NewsCard = ({ category, slides, color, loading }) => {
           <h5 className="card-title news-heading italic-text">
             {loading ? <Skeleton width={150} /> : category}
           </h5>
+          
         </div>
-
+  <img
+    src={arrow}
+    alt="icon"
+    style={{
+      width: "50px",
+      height: "70px",
+      objectFit: "contain",
+      position: "absolute",
+      right:' 4px',
+      top: "7%",
+      transform: "translateY(-50%)"
+    }}
+  />
         <div className="carousel-arrows text-center">
           <i
             ref={prevRef}
