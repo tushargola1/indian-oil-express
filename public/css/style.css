@@ -703,12 +703,16 @@ padding-bottom: 30px;
 }
 
 .announcement-img{
-  height: 350px;
-  object-fit: contain;
+  /* height: 350px; */
+  max-width: 315px;
+  /* object-fit: contain; */
+  /* max-width: 100%; */
+  /* width: 100%; */
 }
 @media (max-width:1600px) {
   .announcement-img{
-    height: 250px;
+    /* height: 250px; */
+    max-width: 250px;
   }
 }
 .news-details {
