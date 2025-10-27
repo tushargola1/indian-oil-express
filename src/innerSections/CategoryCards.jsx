@@ -15,16 +15,19 @@ export default function CategoryCard() {
                 <img
                   src={category.icon}
                   alt="icon"
-                  style={{ width: "40px", height:'40px',  objectFit:"cover" }}
+                  style={{ width: "50px", height:'50px',  objectFit:"cover" }}
                 />
                <p className="mb-0">
                  {category.title}
                </p>
-                <img
+               <Link to={"/news-detail"}>
+                  <img
                   src={arrow}
                   alt="icon"
-                  style={{ width: "50px", height:'70px',  objectFit:"contain" }}
+                  style={{ width: "50px", height:'50px',  objectFit:"contain" }}
                 />
+               </Link>
+             
               </div>
               <ul className="list-group list-group-flush">
                 {category.items.map((item, i) => (

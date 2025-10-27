@@ -3,7 +3,7 @@ import { Link, Links, useNavigate } from "react-router-dom";
 import indianOilLogo from "../assets/image/logos/indianOil-Logo.png";
 import sprintLogo from "../assets/image/logos/sprint-Logo.png";
 import indianOil from "../assets/image/logos/indianOil.png";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CalendarModal from "../modal/CalendarModal";
 
 export default function Header() {
@@ -11,9 +11,28 @@ export default function Header() {
   const [showLocationMenu, setShowLocationMenu] = useState(false);
   const [issticky, setIsSticky] = useState(false)
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const locationMenuRef = useRef(null);
+
   const toggleLocationMenu = () => {
     setShowLocationMenu((prev) => !prev);
   };
+
+  useEffect(() => {
+  const handleClickOutside = (event) => {
+    if (
+      locationMenuRef.current &&
+      !locationMenuRef.current.contains(event.target)
+    ) {
+      setShowLocationMenu(false);
+    }
+  };
+
+  document.addEventListener("mousedown", handleClickOutside);
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, []);
+
   const handleLogout = (e) => {
     e.preventDefault();
 
@@ -94,8 +113,6 @@ export default function Header() {
                 className="sprint-logo   d-xl-none d-md-none d-block"
               />
               </Link>
-          
-           
             </div>
           </div>
 
@@ -138,7 +155,7 @@ export default function Header() {
                  <i className="fa fa-bars dark-blue-color"></i>
                 </a> */}
                 </div>
-                <div className="location-wrapper ">
+                <div className="location-wrapper " ref={locationMenuRef}  >
                   <div className="share-btn" onClick={toggleLocationMenu}>
                     <i
                       className={`fa ${showLocationMenu ? "fa-times" : "fa-bars"

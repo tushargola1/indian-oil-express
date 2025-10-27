@@ -61,7 +61,10 @@ const HomeBanner = () => {
                     {images.map((image, index) => (
                       <SwiperSlide key={index}>
                             <div className="image-wrapDSFDASper">
+                              <Link to={"/news-detail"}>
                         <img src={image} alt="Banner" className="banner-imgdfad" />
+
+                              </Link>
                         {/* <div className="blur-bg"></div> */}
                         {/* <div className="bannerContent">
                           <h3 className="italic-text">

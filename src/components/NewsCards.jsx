@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Links } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -180,25 +180,24 @@ const NewsCard = ({ category, slides, color, loading }) => {
       }}
     >
       <div className="card-body">
-        <div className="text-center">
-          <h5 className="card-title news-heading italic-text">
+        <div className="d-flex justify-content-between align-items-center mb-2  position-relative">
+          <h5 className="card-title news-heading italic-text mb-0">
             {loading ? <Skeleton width={150} /> : category}
           </h5>
-          
-        </div>
-  <img
+            <Link to={"/news-detail"}>
+           <img
     src={arrow}
     alt="icon"
     style={{
-      width: "50px",
-      height: "70px",
+      width: "40px",
+      height: "40px",
       objectFit: "contain",
-      position: "absolute",
-      right:' 4px',
-      top: "7%",
-      transform: "translateY(-50%)"
+     
     }}
   />
+  </Link>
+        </div>
+ 
         <div className="carousel-arrows text-center">
           <i
             ref={prevRef}

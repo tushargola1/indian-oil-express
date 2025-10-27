@@ -1,5 +1,6 @@
 
 import mainImg from "../assets/image/banner/1.png";
+import secondImg from "../assets/image/detail2.png";
 import arrow from "../assets/image/arrow.png";
 import { Link } from "react-router-dom";
 import CommentSection from "../components/CommentSection";
@@ -74,33 +75,33 @@ export default function NewsDetails() {
                                     <img src={mainImg} alt="Banner" className="banner-img-details" />
                                     <div className="blur-bg-details"></div>
                                     <div className="bannerContent-details">
-                                        <h3 className="italic-text">
+                                        <h3 className="italic-text ">
                                             Chairman tying Rakhi to A WS drivers and TT crew at Zoji La Pass
                                         </h3>
                                     </div>
                                 </div>
                             </div>
-                            <div className="news-details-content-section my-4">
+                            <div className="news-details-content-section mt-4">
                                 <p>
                                     Mr A S Sahney, Chairman, recently undertook a meaningful visit to Kargil & Srinagar, where he engaged closely with people across high-altitude passes,
                                     frontline installations, and historic sites.
                                 </p>
-                                <p>
+                                <p className="fw-bold">
                                     Chairman salutes AWS drivers & TT crew at Loji La Pass
                                 </p>
                             </div>
                             <div className="news-details-main-img">
                                 <div className="image-wrapper">
-                                    <img src={mainImg} alt="Banner" className="banner-img-details" />
-                                    <div className="blur-bg-details"></div>
+                                    <img src={secondImg} alt="Banner" className="banner-img-details" />
+                                    {/* <div className="blur-bg-details"></div>
                                     <div className="bannerContent-details">
                                         <h3 className="italic-text">
                                             Chairman tying Rakhi to A WS drivers and TT crew at Zoji La Pass
                                         </h3>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
-                            <div className="news-details-content-section my-4">
+                            <div className="news-details-content-section mb-4">
                                 {
                                     Array.from({ length: 1 }).map((_, index) => (
                                         <div key={index}>

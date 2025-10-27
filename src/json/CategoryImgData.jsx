@@ -6,10 +6,10 @@ import synergy4 from "../assets/image/category-news/1.png";
 import synergy5 from "../assets/image/category-news/1.png";
 
 import graduationCap from "../assets/image/home-img-card/cap.png";
-import meeting from "../assets/image/home-img-card/meeting.png";
-import safety from "../assets/image/home-img-card/cap.png";
-import news from "../assets/image/home-img-card/meeting.png";
-import synergy from "../assets/image/home-img-card/cap.png";
+import meeting from "../assets/image/category-card-img/Layer-10b.png";
+import safety from "../assets/image/category-card-img/Layer-10c.png";
+import news from "../assets/image/category-card-img/Layer-10d.png";
+import synergy from "../assets/image/category-card-img/image016.png";
 
 const categoryData = [
   {

@@ -599,7 +599,12 @@ display: none;
     padding-bottom: 5px;
     display: inline-block;
 }
-
+@media (max-width:1400px) {
+  .news-heading{
+    font-size: 18px;
+  }
+  
+}
 .news-details{
       /* font-size: 18px; */
     font-weight: 600;
@@ -713,7 +718,7 @@ padding-bottom: 30px;
 
 @media (max-width:1800px) {
     .news-heading{
-    font-size: 25px;
+    /* font-size: 25px; */
 }
 
 .news-details{
@@ -726,7 +731,7 @@ padding-bottom: 30px;
 }
 @media (max-width:1500px) {
     .news-heading{
-    font-size: 20px;
+    /* font-size: 20px; */
 }
 
 .news-details{
@@ -820,7 +825,7 @@ padding-bottom: 30px;
 
 @media (max-width:1800px) {
     .news-heading{
-    font-size: 25px;
+    /* font-size: 25px; */
 }
 
 
@@ -831,7 +836,7 @@ padding-bottom: 30px;
 }
 @media (max-width:1500px) {
     .news-heading{
-    font-size: 20px;
+    /* font-size: 20px; */
 }
 
 .news-details{
@@ -1120,7 +1125,7 @@ margin-bottom: 0;
 .list-group-flush>.list-group-item{
   border: unset !important;
   margin: 0 10px;
-  padding-top: 0;
+  padding-top: 4px;
 }
 .list-group-flush>.list-group-item:last-child{
   border-bottom-width: unset !important;
@@ -1681,7 +1686,7 @@ font-weight: 600;
 .form-control:focus {
     border-color: unset !important;
     box-shadow:unset !important;
-}
+} 
 .add-remove-btn button{
     font-size: 18px !important;
     padding: 5px 10px  !important;
