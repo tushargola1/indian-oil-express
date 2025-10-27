@@ -591,7 +591,7 @@ display: none;
 
 /* news cards */
 .news-heading{
-    font-size: 23px;
+    font-size: 20px;
     color: var(--dark-blue);
     font-weight: 600;
     margin-bottom: 25px;
@@ -729,9 +729,9 @@ padding-bottom: 30px;
 }
     
 }
-@media (max-width:1500px) {
+@media (max-width:1600px) {
     .news-heading{
-    /* font-size: 20px; */
+    font-size: 16px;
 }
 
 .news-details{
