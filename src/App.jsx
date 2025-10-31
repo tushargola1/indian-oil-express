@@ -7,6 +7,10 @@ import ForgetPassword from "./authentication/ForgetPassword";
 import ProtectedRoute from "./authentication/ProtectedRoute";
 import PublicRoute from "./authentication/PublicRoute";
 import NewsDetails from "./innerPage/NewsDetails";
+import CategoriesWrapper from "./components/CategoriesWrapper";
+import CategoryCard from "./innerSections/CategoryCards";
+
+
 
 function AppContent() {
   const location = useLocation();
@@ -39,20 +43,25 @@ function AppContent() {
           path="/"
           element={
             // <ProtectedRoute>
-              <Home />
+            <Home />
             // </ProtectedRoute>
           }
         />
 
-          <Route
+        <Route
           path="/news-detail"
           element={
             // <ProtectedRoute>
-              <NewsDetails />
+            <NewsDetails />
+            
             // </ProtectedRoute>
           }
         />
+
+        <Route path="/categories" element={<CategoriesWrapper />} />
+
       </Routes>
+
 
       {!hideLayout && <Footer />}
     </>

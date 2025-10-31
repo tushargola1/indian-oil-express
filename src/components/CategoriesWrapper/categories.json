@@ -1,0 +1,454 @@
+
+[
+    {
+        
+        "img": "1.png",
+        "title": "Legendary Actor Achyut Potdar Passes Away at 91",
+        "content": "Veteran actor and former IOClan Achyut Potdar (1934–2025) left behind an illustrious legacy in Bollywood and Indian television.",
+        "type": "news",
+        "date": "October 1, 2025",
+        "category": "Entertainment",
+        "id": "1"
+    },
+    {
+        "img": "2.png",
+        "title": "National Handloom Day 2025 - Celebrating India's Weavers",
+        "content": "India observes National Handloom Day on August 7 each year to honor the artistry and heritage of the country's weavers.",
+        "type": "event",
+        "date": "August 7, 2025",
+        "category": "Culture",
+        "id": "2"
+    },
+    {
+        "img": "3.png",
+        "title": "Handloom Heritage Featured in October Calendar",
+        "content": "Cultural events across India continue to highlight the importance of handloom weaving.",
+        "type": "calendar",
+        "date": "October 1, 2025",
+        "category": "Culture",
+        "id": "3"
+    },
+    {
+        "img": "4.png",
+        "title": "Handloom Heritage in Focus",
+        "content": "Workshops and sessions emphasize the value of indigenous weaving techniques.",
+        "type": "schedule",
+        "date": "September 5, 2025",
+        "category": "In Focus",
+        "id": "4"
+    },
+    {
+        "img": "1.png",
+        "title": "Spotlight on Weavers' Craft",
+        "content": "Discussions and demonstrations celebrate the skills of Indian artisans.",
+        "type": "schedule",
+        "date": "August 18, 2025",
+        "category": "Spotlight",
+        "id": "5"
+    },
+    {
+        "img": "2.png",
+        "title": "Youth Innovation Challenge 2025 Announced",
+        "content": "Students are invited to submit innovative ideas in science and technology for sustainable development.",
+        "type": "event",
+        "date": "July 10, 2025",
+        "category": "Education",
+        "id": "6"
+    },
+    {
+        "img": "3.png",
+        "title": "Independence Day Celebrations Planned Nationwide",
+        "content": "India gears up to celebrate its 79th Independence Day with parades, speeches, and cultural programs.",
+        "type": "news",
+        "date": "August 15, 2025",
+        "category": "National",
+        "id": "7"
+    },
+    {
+        "img": "4.png",
+        "title": "Clean India Drive 2025 Launched",
+        "content": "Government initiates a nationwide campaign for a cleaner and greener India.",
+        "type": "news",
+        "date": "March 5, 2025",
+        "category": "Environment",
+        "id": "8"
+    },
+    {
+        "img": "1.png",
+        "title": "Tech Expo 2025 Opens in Bengaluru",
+        "content": "The annual technology expo showcases cutting-edge innovations in AI, robotics, and automation.",
+        "type": "event",
+        "date": "June 22, 2025",
+        "category": "Technology",
+        "id": "9"
+    },
+    {
+        "img": "2.png",
+        "title": "Health Awareness Week 2025",
+        "content": "Schools and institutions observe Health Week focusing on fitness and mental wellness.",
+        "type": "schedule",
+        "date": "April 8, 2025",
+        "category": "Health",
+        "id": "10"
+    },
+    {
+        "img": "3.png",
+        "title": "Teachers' Day Celebration in Schools",
+        "content": "Students express gratitude to teachers with cultural programs and appreciation events.",
+        "type": "schedule",
+        "date": "September 5, 2025",
+        "category": "Education",
+        "id": "11"
+    },
+    {
+        "img": "4.png",
+        "title": "Sports Meet 2025 Kicks Off",
+        "content": "The annual inter-school sports meet begins with enthusiasm and healthy competition.",
+        "type": "event",
+        "date": "December 2, 2025",
+        "category": "Sports",
+        "id": "12"
+    },
+    {
+        "img": "1.png",
+        "title": "Earth Day 2025 - Restore Our Planet",
+        "content": "Various activities and drives organized to raise awareness about environmental protection.",
+        "type": "event",
+        "date": "April 22, 2025",
+        "category": "Environment",
+        "id": "13"
+    },
+    {
+        "img": "2.png",
+        "title": "International Yoga Day 2025",
+        "content": "Mass yoga sessions held globally to promote health, mindfulness, and unity.",
+        "type": "event",
+        "date": "June 21, 2025",
+        "category": "Health",
+        "id": "14"
+    },
+    {
+        "img": "3.png",
+        "title": "Cultural Fest 2025 - Colors of India",
+        "content": "Students and artists showcase diverse traditions through dance, art, and drama.",
+        "type": "schedule",
+        "date": "November 10, 2025",
+        "category": "Culture",
+        "id": "15"
+    },
+    {
+        "img": "4.png",
+        "title": "Science Fair 2025 Inspires Young Minds",
+        "content": "Young innovators present creative scientific models and eco-friendly solutions.",
+        "type": "event",
+        "date": "February 14, 2025",
+        "category": "Education",
+        "id": "16"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/1.png",
+        "title": "Women's Day Celebration 2025",
+        "content": "Events across India recognize the achievements of women in every field.",
+        "type": "news",
+        "date": "March 8, 2025",
+        "category": "Social",
+        "id": "17"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/2.png",
+        "title": "Heritage Walk Conducted in Jaipur",
+        "content": "Tourists and locals explore the rich cultural heritage of the Pink City.",
+        "type": "event",
+        "date": "January 12, 2025",
+        "category": "Culture",
+        "id": "18"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/3.png",
+        "title": "Book Fair 2025 Opens in New Delhi",
+        "content": "Publishers and authors gather for one of Asia's largest literary events.",
+        "type": "event",
+        "date": "May 15, 2025",
+        "category": "Literature",
+        "id": "19"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/4.png",
+        "title": "World Environment Day Campaign",
+        "content": "Eco-clubs organize plantation drives and sustainability workshops.",
+        "type": "schedule",
+        "date": "June 5, 2025",
+        "category": "Environment",
+        "id": "20"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/1.png",
+        "title": "Republic Day Parade 2025 Highlights Diversity",
+        "content": "India celebrates unity in diversity with a grand parade in New Delhi.",
+        "type": "news",
+        "date": "January 26, 2025",
+        "category": "National",
+        "id": "21"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/2.png",
+        "title": "Digital Literacy Week 2025 Announced",
+        "content": "Workshops to enhance students' digital skills and online safety awareness.",
+        "type": "schedule",
+        "date": "May 2, 2025",
+        "category": "Technology",
+        "id": "22"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/3.png",
+        "title": "Swachh Bharat Award 2025 Winners Announced",
+        "content": "Cities and organizations recognized for outstanding cleanliness initiatives.",
+        "type": "news",
+        "date": "October 10, 2025",
+        "category": "Environment",
+        "id": "23"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/4.png",
+        "title": "Unity Day Run Organized Nationwide",
+        "content": "Participants join marathons across states to celebrate the spirit of oneness.",
+        "type": "event",
+        "date": "October 31, 2025",
+        "category": "Sports",
+        "id": "24"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/1.png",
+        "title": "International Literacy Day 2025",
+        "content": "Schools and NGOs promote the importance of education for all.",
+        "type": "event",
+        "date": "September 8, 2025",
+        "category": "Education",
+        "id": "25"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/2.png",
+        "title": "Gandhi Jayanti Observed Across India",
+        "content": "Tributes paid to Mahatma Gandhi through cleanliness drives and peace marches.",
+        "type": "event",
+        "date": "October 2, 2025",
+        "category": "National",
+        "id": "26"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/3.png",
+        "title": "Diwali Celebration at School Campus",
+        "content": "Students decorate classes and perform skits depicting the festival's values.",
+        "type": "schedule",
+        "date": "October 28, 2025",
+        "category": "Culture",
+        "id": "27"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/4.png",
+        "title": "Cyber Safety Workshop for Teens",
+        "content": "Interactive session teaching responsible and secure online behavior.",
+        "type": "schedule",
+        "date": "April 18, 2025",
+        "category": "Technology",
+        "id": "28"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/1.png",
+        "title": "Plastic-Free India Mission",
+        "content": "Awareness drives launched to reduce single-use plastic consumption.",
+        "type": "news",
+        "date": "September 15, 2025",
+        "category": "Environment",
+        "id": "29"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/2.png",
+        "title": "Rainwater Harvesting Campaign",
+        "content": "Citizens encouraged to conserve water through community projects.",
+        "type": "schedule",
+        "date": "July 3, 2025",
+        "category": "Environment",
+        "id": "30"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/3.png",
+        "title": "Art Exhibition - Colors of Nature",
+        "content": "Local artists display eco-themed artworks promoting environmental harmony.",
+        "type": "event",
+        "date": "August 22, 2025",
+        "category": "Art",
+        "id": "31"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/4.png",
+        "title": "Road Safety Week 2025",
+        "content": "Campaigns across schools emphasize safe driving and pedestrian awareness.",
+        "type": "schedule",
+        "date": "January 14, 2025",
+        "category": "Safety",
+        "id": "32"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/1.png",
+        "title": "National Sports Day 2025",
+        "content": "Tribute to Major Dhyan Chand and promotion of physical fitness programs.",
+        "type": "event",
+        "date": "August 29, 2025",
+        "category": "Sports",
+        "id": "33"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/2.png",
+        "title": "Climate Action Forum 2025",
+        "content": "Experts discuss sustainable policies and green innovations for the future.",
+        "type": "event",
+        "date": "November 22, 2025",
+        "category": "Environment",
+        "id": "34"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/3.png",
+        "title": "STEM Learning Camp 2025",
+        "content": "Students explore robotics, coding, and space science through workshops.",
+        "type": "schedule",
+        "date": "June 12, 2025",
+        "category": "Education",
+        "id": "35"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/4.png",
+        "title": "Eco-Club Summit 2025",
+        "content": "Youth leaders share sustainability initiatives from across schools and colleges.",
+        "type": "event",
+        "date": "May 18, 2025",
+        "category": "Environment",
+        "id": "36"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/1.png",
+        "title": "Flood Relief Drive in Assam",
+        "content": "Volunteers and NGOs join hands to provide aid to flood-affected regions.",
+        "type": "news",
+        "date": "August 3, 2025",
+        "category": "Social",
+        "id": "37"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/2.png",
+        "title": "Tree Plantation Marathon",
+        "content": "Students plant saplings to promote a greener and healthier environment.",
+        "type": "schedule",
+        "date": "July 10, 2025",
+        "category": "Environment",
+        "id": "38"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/3.png",
+        "title": "Entrepreneurship Workshop for Youth",
+        "content": "Training sessions encourage young innovators to start their own ventures.",
+        "type": "schedule",
+        "date": "August 24, 2025",
+        "category": "Business",
+        "id": "39"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/4.png",
+        "title": "International Peace Day 2025",
+        "content": "Events promoting peace and harmony take place across the world.",
+        "type": "event",
+        "date": "September 21, 2025",
+        "category": "Social",
+        "id": "40"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/1.png",
+        "title": "Digital India Seminar 2025",
+        "content": "Leaders discuss the progress of India's digital transformation and innovation.",
+        "type": "event",
+        "date": "March 12, 2025",
+        "category": "Technology",
+        "id": "41"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/2.png",
+        "title": "Cultural Exchange Program - Indo Japan 2025",
+        "content": "Students from both countries share ideas on art, culture, and education.",
+        "type": "schedule",
+        "date": "April 30, 2025",
+        "category": "Culture",
+        "id": "42"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/3.png",
+        "title": "Smart Cities Conference 2025",
+        "content": "Urban planners discuss sustainable and tech-driven urban development.",
+        "type": "event",
+        "date": "May 28, 2025",
+        "category": "Infrastructure",
+        "id": "43"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/4.png",
+        "title": "Blood Donation Camp 2025",
+        "content": "Volunteers participate in donation drives to save lives.",
+        "type": "schedule",
+        "date": "June 14, 2025",
+        "category": "Health",
+        "id": "44"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/1.png",
+        "title": "Science & Innovation Awards 2025",
+        "content": "Young scientists honored for outstanding research and contributions.",
+        "type": "news",
+        "date": "October 5, 2025",
+        "category": "Education",
+        "id": "45"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/2.png",
+        "title": "Festival of Lights 2025",
+        "content": "Cities across India glow with decorations, music, and community gatherings.",
+        "type": "event",
+        "date": "October 26, 2025",
+        "category": "Culture",
+        "id": "46"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/3.png",
+        "title": "Waste Management Workshop",
+        "content": "Experts teach sustainable waste segregation and recycling practices.",
+        "type": "schedule",
+        "date": "March 20, 2025",
+        "category": "Environment",
+        "id": "47"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/4.png",
+        "title": "Rural Development Drive",
+        "content": "Initiatives launched to improve infrastructure and education in villages.",
+        "type": "news",
+        "date": "April 25, 2025",
+        "category": "Social",
+        "id": "48"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/1.png",
+        "title": "World Science Day for Peace & Development",
+        "content": "Lectures and exhibitions underline the role of science in human progress.",
+        "type": "event",
+        "date": "November 10, 2025",
+        "category": "Education",
+        "id": "49"
+    },
+    {
+        "img": "indian-oil-express/src/assets/image/category-news/2.png",
+        "title": "Innovation & Research Symposium 2025",
+        "content": "Universities host discussions on the future of research and development in India.",
+        "type": "schedule",
+        "date": "December 5, 2025",
+        "category": "Technology",
+        "id": "50"
+    }
+]

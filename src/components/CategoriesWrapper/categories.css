@@ -1,0 +1,328 @@
+:root {
+    --dark-blue: #002060;
+    --light-blue: #0e4094;
+    --orange-color: #f37127;
+    --text-light: #fff;
+    --text-dark: #000;
+}
+
+/* @font-face {
+  font-family: "times";
+  src: url("../font/times.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+} */
+/* poppins */
+body {
+    font-family: "Poppins", sans-serif;
+    font-size: 16px;
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.fs-12 {
+    font-size: 12px;
+}
+
+.fs-13 {
+    font-size: 13px;
+}
+
+.fs-14 {
+    font-size: 14px;
+}
+
+.fw-600 {
+    font-weight: 500;
+}
+
+/* heading classes */
+.heading{
+    font-size: 28px;
+}
+
+
+
+
+
+/* ============= accessable colors ============== */
+.dark-blue-color {
+    color: var(--dark-blue);
+}
+
+.light-blue-color {
+    color: var(--light-blue);
+}
+
+.orange-color {
+    color: var(--orange-color);
+}
+
+.dark-blue-bg-color {
+    background-color: var(--dark-blue);
+}
+
+.light-blue-bg-color {
+    background-color: var(--light-blue);
+}
+
+.orange-color-bg-color {
+    background-color: var(--orange-color);
+}
+
+/* ============ header  ============ */
+
+
+.categories_container {
+    width: 100%;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    /* Mobile: categories upar */
+    gap: 20px;
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+    .categories_container {
+        flex-direction: row;
+        /* Desktop: side-by-side */
+        justify-content: space-between;
+    }
+}
+
+.article_primary {
+    min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    order: 2;
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+    .article_primary {
+        flex: 3;
+        order: 1;
+                                                                            
+    }
+}
+
+.article_primary h2 {
+    font-weight: 600;
+    padding:40px 0 0 20px;
+    text-transform: capitalize;
+}
+
+.article_secondary {
+    width: 100%;
+    /* Mobile: full width */
+    min-height: auto;
+    border-left: none;
+    border-bottom: 3px solid var(--dark-blue);
+    /* Mobile: bottom border */
+    order: 1;
+    /* Mobile: categories upar */
+    overflow-x: auto;
+    /* Horizontal scroll */
+    padding-bottom: 10px;
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+    .article_secondary {
+        width: 20%;
+        flex: 1;
+        border-left: 3px solid var(--dark-blue);
+        border-bottom: none;
+        order: 2;
+        /* Desktop: categories right */
+        overflow-x: visible;
+        padding-bottom: 0;
+    }
+}
+
+.article_secondary ul {
+    display: flex;
+    flex-direction: row;
+    /* Mobile: horizontal layout */
+    gap: 15px;
+    color: var(--text-dark);
+    width: max-content;
+    /* Horizontal scroll ke liye */
+    margin-block-start: 20px;
+    padding: 5px 0;
+    font-weight: 800;
+    font-size: 18px;
+    min-width: 100%;
+    /* Scroll ke liye */
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+    .article_secondary ul {
+        flex-direction: column;
+        /* Desktop: vertical */
+        width: 100%;
+        min-width: auto;
+    }
+}
+
+.article_secondary ul h3 {
+    display: inline-block;
+    padding: 8px 0;
+    font-weight: 800;
+    font-size: 30px;
+    /* Horizontal scroll ke liye */
+    margin-right: 15px;
+}
+
+.article_secondary ul h3 em {
+    background-color: var(--dark-blue);
+    color:var(--text-light);
+    padding:10px 10px 10px 30px;
+}
+
+.article_secondary ul li {
+    display: block;
+    white-space: nowrap;
+    /* Text wrap nahi hoga */
+    min-width: max-content;
+    /* Horizontal scroll ke liye */
+    padding: 8px 0px;
+    border-radius: 5px;
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+    .article_secondary ul li {
+        width: 100%;
+        margin-inline-start: 0;
+        margin-bottom: 8px;
+        
+    }
+}
+
+
+.article_secondary ul li {
+    width: 50%;
+    height: 48px;
+    margin-left:10px;
+    border-radius: 0!important;
+}
+
+.article_secondary ul li:hover {
+    background-color: var(--orange-color);
+}
+
+
+.article_secondary ul li button {
+    color: inherit;
+    display: inline-block;
+    width:80%;
+    border:1px solid black;
+    margin-left:10px;
+    padding:0 90px 15px  0;
+    border:none;
+    border-bottom:3px solid var(--light-blue);
+    font-weight: 800;
+    font-size: 18px;    
+    text-transform: capitalize;
+    background-color: transparent;
+}
+
+.article_secondary ul li button::before {
+    content:"",
+
+}
+
+
+
+
+
+/* Horizontal scroll styling */
+.article_secondary::-webkit-scrollbar {
+    height: 6px;
+}
+
+.article_secondary::-webkit-scrollbar-track {
+    background: var(--text-light);
+    border-radius: 10px;
+}
+
+.article_secondary::-webkit-scrollbar-thumb {
+    background: var(--dark-blue);
+    border-radius: 10px;
+}
+
+.article_secondary::-webkit-scrollbar-thumb:hover {
+    background: var(--orange-color);
+}
+
+/* Primary article ke list items - full width */
+.article_primary .categories_list {
+    width: 100%;
+    display: block;
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.pagination_buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 30px;
+    font-weight: 500;
+    margin-top: 20px;
+}
+
+.pagination_buttons button {
+    font-size: inherit;
+    font-weight: inherit;
+    background-color: var(--text-light);
+    height: 50px;
+    width: 50px;
+    border: none;
+    color: var(--text-dark);
+    cursor: pointer;
+}
+
+.pagination_buttons button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination_buttons button.active {
+    background: var(--orange-color);
+    border-radius: 50%;
+    color: var(--text-light);
+}
+
+.type_links {
+    display: inline-block;
+    font-size: 22px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--dark-blue);
+    width: 200px;
+    padding-inline-start: 20px;
+    position: relative;
+}
+
+.single-line {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.activeBtn {
+    background-color: var(--orange-color)!important;
+    color:var(--text-light)!important;
+
+}

@@ -1,7 +1,7 @@
 import Swal from "sweetalert2";
 import { Link, Links, useNavigate } from "react-router-dom";
 import indianOilLogo from "../assets/image/logos/indianOil-Logo.png";
-import sprintLogo from "../assets/image/logos/sprint-Logo.png";
+import sprintLogo from '../assets/image/logos/sprint-logo.png';
 import indianOil from "../assets/image/logos/indianOil.png";
 import { useEffect, useRef, useState } from "react";
 import CalendarModal from "../modal/CalendarModal";
