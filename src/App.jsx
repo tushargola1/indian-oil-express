@@ -7,6 +7,7 @@ import ForgetPassword from "./authentication/ForgetPassword";
 import ProtectedRoute from "./authentication/ProtectedRoute";
 import PublicRoute from "./authentication/PublicRoute";
 import NewsDetails from "./innerPage/NewsDetails";
+import NewsListing from "./innerPage/NewsListing";
 
 function AppContent() {
   const location = useLocation();
@@ -52,6 +53,7 @@ function AppContent() {
             // </ProtectedRoute>
           }
         />
+        <Route path="/news-listing" element={<NewsListing/>}/>
       </Routes>
 
       {!hideLayout && <Footer />}

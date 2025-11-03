@@ -9,25 +9,25 @@ export default function CategoryCard() {
         {categoryData.map((category, index) => (
           <div className="col news-card-col news-card-col-img" key={index}>
             <div className="card home-category-img-cards" style={{
-        background: `linear-gradient(241deg, ${category.color} 0%, rgba(255, 255, 255, 1) 100%)`
-      }}>
+              background: `linear-gradient(241deg, ${category.color} 0%, rgba(255, 255, 255, 1) 100%)`
+            }}>
               <div className="card-header card-img-heading d-flex align-items-center ">
                 <img
                   src={category.icon}
                   alt="icon"
-                  style={{ width: "50px", height:'50px',  objectFit:"cover" }}
+                  style={{ width: "50px", height: '50px', objectFit: "cover" }}
                 />
-               <p className="mb-0">
-                 {category.title}
-               </p>
-               <Link to={"/news-detail"}>
+                <p className="mb-0">
+                  {category.title}
+                </p>
+                <Link to={"/news-detail"}>
                   <img
-                  src={arrow}
-                  alt="icon"
-                  style={{ width: "50px", height:'50px',  objectFit:"contain" }}
-                />
-               </Link>
-             
+                    src={arrow}
+                    alt="icon"
+                    style={{ width: "50px", height: '50px', objectFit: "contain" }}
+                  />
+                </Link>
+
               </div>
               <ul className="list-group list-group-flush">
                 {category.items.map((item, i) => (
