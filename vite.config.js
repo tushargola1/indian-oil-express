@@ -1,15 +1,17 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-// import fs from 'fs';
-// import path from 'path';
-
+ 
 export default defineConfig({
   plugins: [react()],
-  // server: {
-  //   https: {
-  //     key: fs.readFileSync(path.resolve(__dirname, 'certs/key.pem')),
-  //     cert: fs.readFileSync(path.resolve(__dirname, 'certs/cert.pem')),
-  //   },
-  //   port: 5173,
-  // }., 
+  server: {
+    port: 5173,
+    proxy: {
+      '/api': {
+        target: 'https://ioclxpressapp.businesstowork.com',
+        changeOrigin: true,
+        secure: false, // set to true if your target uses a valid SSL cert
+        rewrite: (path) => path.replace(/^\/api/, ''), // removes /api prefix
+      },
+    },
+  },
 });

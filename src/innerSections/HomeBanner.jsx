@@ -14,6 +14,8 @@ import arrow from "../assets/image/arrow.png";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Link } from "react-router-dom";
+import { apiBaseUrl } from "../Helper";
+import axios from "axios";
 
 const bannerData = [
   {
@@ -48,6 +50,27 @@ const HomeBanner = () => {
     return () => clearTimeout(timer);
   }, []);
 
+
+  axios.post(
+    apiBaseUrl("XpressNews/GetTopXpressNewsFHPS"),
+    {
+      showIn: "W",
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    }
+  )
+    .then((res) => {
+      console.log("✅ Response:", res.data);
+    })
+    .catch((err) => {
+      console.error("❌ Error:", err);
+    });
+
+    
   return (
     <div className="container-fluid my-3 px-lg-5 px-md-3 px-0">
       <div className="row g-3">
