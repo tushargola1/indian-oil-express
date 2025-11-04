@@ -37,18 +37,22 @@ const CategoriesSidebar = () => {
       </div>
 
       {/* Button for smaller screens */}
-      <div className="d-xl-none  mb-3 d-lg-none d-md-flex d-flex justify-content-between">
-        <div className="p-3 fw-bold text-white sidebar-header">Categories</div>
-          <div>
-<button
+      <div className="d-xl-none  mb-3 d-lg-none d-md-flex d-flex justify-content-between align-items-center">
+        <div className="p-3 fw-bold text-white sidebar-header col-md-6">
+
+          <h3>
+            Categories
+          </h3>
+        </div>
+
+        <div
           type="button"
-          className="btn btn-primary"
+          className=" col-md-6 text-end"
           data-bs-toggle="modal"
           data-bs-target="#categoriesModal"
         >
-          <i className="bi bi-list me-2"></i> Menu
-        </button>
-          </div>
+<i className="fa-solid fa-ellipsis-vertical"></i>
+        </div>
         
       </div>
 

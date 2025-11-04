@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import mainImg from "../assets/image/banner/1.png";
 import Pagination from "../components/Pagination";
-import CategoriesSidebar from "./CategoriesSidebar";
+import CategoriesSidebar from "../innerPage/CategoriesSidebar";
 
 
 
@@ -97,8 +97,8 @@ const ITEMS_PER_PAGE = 3;
               />
           </div>
 
-          <div className="col-xl-3 col-lg-5 col-md-12 col-12 right-bar-side d-flex flex-column ps-0">
-                <div className="sticky-sidebar-listing">
+          <div className="col-xl-3 col-lg-5 col-md-12 col-12 page-listing-side d-flex flex-column ps-0 ">
+                <div className="sticky-sidebar-listing w-100">
     <CategoriesSidebar />
   </div>
           </div>

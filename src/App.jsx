@@ -6,8 +6,8 @@ import Login from "./authentication/Login";
 import ForgetPassword from "./authentication/ForgetPassword";
 import ProtectedRoute from "./authentication/ProtectedRoute";
 import PublicRoute from "./authentication/PublicRoute";
-import NewsDetails from "./innerPage/NewsDetails";
-import NewsListing from "./innerPage/NewsListing";
+import NewsDetails from "./Pages/NewsDetails";
+import NewsListing from "./Pages/NewsListing";
 
 function AppContent() {
   const location = useLocation();

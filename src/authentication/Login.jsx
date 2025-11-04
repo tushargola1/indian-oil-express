@@ -1,82 +1,74 @@
-import React, { useState } from "react";
-import indianOilLogo from "../assets/image/logos/indianOil-Logo.png";
-import Swal from "sweetalert2";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import { Encryption } from "./Encryption"; // your encryption logic
+import Swal from "sweetalert2";
+
+import indianOilLogo from "../assets/image/logos/indianOil-Logo.png";
 import { apiBaseUrl } from "../Helper";
+import { Encryption } from "./Encryption";
 
-
-const Login = () => {
+export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
 
-    try {
-      // Encrypt credentials
-      const encryptedEmail = Encryption(email);
-      const encryptedPassword = Encryption(password);
+    // ✅ RAW STRING BODY (not normal JSON)
+    const rawBody = JSON.stringify({
+      username: Encryption(email),
+      password: Encryption(password),
+    });
 
-      const payload = {
-        username: encryptedEmail,
-        password: encryptedPassword,
-      };
+    axios
+      .post(apiBaseUrl("Auth/SapLogin"), rawBody, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        console.log("✅ Login Response:", res.data);
 
-      console.log("🚀 API Endpoint:", apiBaseUrl("/Auth/Login"));
-      console.log("📦 Payload:", payload);
+        if (res.data.success) {
+          Swal.fire({
+            icon: "success",
+            title: "Welcome 🎉",
+            text: "Login successful",
+            timer: 1500,
+            showConfirmButton: false,
+          });
 
-      const response = await axios.post(apiBaseUrl("/Auth/Login"), payload, {
-        headers: { "Content-Type": "application/json" },
-      });
+          localStorage.setItem("auth", "true");
+          navigate("/");
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Invalid Credentials ❌",
+            text: res.data.message ?? "Wrong email or password",
+          });
+        }
+      })
+      .catch((err) => {
+        console.error("❌ Error:", err);
 
-      console.log("✅ API Response:", response.data);
-
-      if (response.data.success) {
-        localStorage.setItem("auth", "true");
-
-        Swal.fire({
-          icon: "success",
-          title: "Welcome 🎉",
-          text: "You have successfully logged in!",
-          showConfirmButton: false,
-          timer: 2000,
-        });
-
-        setTimeout(() => navigate("/"), 2000);
-      } else {
         Swal.fire({
           icon: "error",
-          title: "Oops ❌",
-          text: response.data.message || "Invalid email or password",
-          showConfirmButton: false,
-          timer: 2000,
+          title: "Server Error 🚨",
+          text:
+            err.response?.data?.message ??
+            "Could not contact the server. Try again.",
         });
-      }
-    } catch (error) {
-      console.error("❌ API Error:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Server Error 🚨",
-        text: error.response?.data?.message || "Something went wrong",
-        showConfirmButton: false,
-        timer: 2000,
       });
-    }
   };
 
   return (
     <div className="container-fluid">
       <div className="row auth-page">
-        <form
-          className="login-form mx-lg-0 mx-md-0 mx-5"
-          onSubmit={handleLogin}
-        >
-          {/* Logo */}
+        <form className="login-form mx-lg-0 mx-md-0 mx-5" onSubmit={handleLogin}>
+          
+          {/* ✅ Logo */}
           <div className="text-center mb-3">
             <img
               src={indianOilLogo}
@@ -86,52 +78,50 @@ const Login = () => {
             />
           </div>
 
-          {/* Email */}
-          <div className="login-flex-column">
-            <label>Email</label>
-          </div>
+          {/* ✅ Email */}
+          <label>Email</label>
           <div className="login-inputForm">
             <i className="fa fa-envelope"></i>
             <input
-              placeholder="Enter your Email"
-              className="login-input"
               type="email"
+              className="login-input"
+              placeholder="Enter your Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
 
-          {/* Password */}
-          <div className="login-flex-column">
-            <label>Password</label>
-          </div>
+          {/* ✅ Password */}
+          <label>Password</label>
           <div className="login-inputForm">
             <i className="fa fa-lock"></i>
             <input
-              placeholder="Enter your Password"
-              className="login-input"
               type={showPassword ? "text" : "password"}
+              className="login-input"
+              placeholder="Enter your Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+
+            {/* ✅ Show/Hide Password */}
             <i
-              className={`fa ${
-                showPassword ? "fa-eye-slash" : "fa-eye"
-              } password-eye`}
-              onClick={() => setShowPassword(!showPassword)}
+              className={`fa ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
               style={{ cursor: "pointer", marginRight: "10px" }}
+              onClick={() => setShowPassword(!showPassword)}
             ></i>
           </div>
 
+          {/* ✅ Forget Password */}
           <Link
-            to={"/forgetPassword"}
+            to="/forgetPassword"
             className="text-end text-dark fw-medium fs-13"
           >
             Forget Password?
           </Link>
 
+          {/* ✅ Submit */}
           <button type="submit" className="login-button-submit mt-0">
             Sign In
           </button>
@@ -139,6 +129,4 @@ const Login = () => {
       </div>
     </div>
   );
-};
-
-export default Login;
+}

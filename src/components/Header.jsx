@@ -91,14 +91,14 @@ export default function Header() {
   }, []);
 
   return (
-    <header className={`border-bottom shadow-sm ${issticky ? 'sticky-navbar' : ' '}`}>
+    <header className={`border-bottom shadow-sm  `}>
       {/* Top Row */}
       <div className="container-fluid  ">
         {/* <div className="row align-items-center  py-2 px-lg-5 px-md-3 px-3"> */}
         <div className="row align-items-center  py-2 top-nav-header">
           {/* Left Logo */}
           <div className={`col-md-2 col-lg-3 col-6 right-logo-area  `}>
-            <div className={`${issticky ? 'd-none ' : '  '}`}>
+            <div className={`hh`}>
               <Link to='/'>
                   <img
                 src={indianOil}
@@ -118,7 +118,7 @@ export default function Header() {
 
           {/* Center Logo */}
           <div className="col-md-6">
-            <div className={`center-logo ${issticky ? 'pt-0' : ' '} `}>
+            <div className={`center-logo  `}>
               <img src={indianOilLogo} alt="Indian Oil Logo" className="px-3" />
             </div>
           </div>
@@ -196,7 +196,7 @@ export default function Header() {
                   </div>
                 </div>
               </div>
-              <div className={`sprint-logo-area mb-3 mt-2 ${issticky ? 'd-none ' : ' '}`}>
+              <div className={`sprint-logo-area mb-3 mt-2  `}>
                 <img
                   src={sprintLogo}
                   alt="Sprint Logo"

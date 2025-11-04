@@ -63,6 +63,12 @@
         background-color: var(--orange-color);
     }
     /* ============ header  ============ */
+    header{
+      background-color: white;
+      z-index: 999;
+      position: sticky;
+      top: 0;
+    }
     
     .sprint-logo{
          height: 50px;
@@ -589,7 +595,7 @@
         border-left: 3px solid black;
     }
     
-    
+  
     /* news cards */
     .news-heading{
         font-size: 20px;
@@ -1712,6 +1718,14 @@
     
     
     /* listing page  */
+      .page-listing-side{
+      border-left: 3px solid black;
+    }
+    @media (max-width:999px) {
+         .page-listing-side{
+      border-left: 0;
+    }
+    }
     .listing-page-section {
         padding: 10px;
         border-top: 2px solid #abc8f7;

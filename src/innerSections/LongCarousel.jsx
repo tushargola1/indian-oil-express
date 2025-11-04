@@ -86,7 +86,7 @@ const LongCarousel = () => {
                   />
                 )}
               </div>
-
+                    
               <div className="card-title-carousel px-3 pt-2">
                 <h5>{loading ? <Skeleton width={150} /> : item.category}</h5>
               </div>
