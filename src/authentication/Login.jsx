@@ -16,29 +16,33 @@ localStorage.setItem("accessToken", "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJodH
 localStorage.setItem("refreshToken", "9d5008c1-29d6-43d6-8987-b8244397b9a8");
 localStorage.setItem("auth", "true");
 
-    loginApi(email, password)
-      .then((res) => {
-        console.log('✅ Login Response:', res.data);
+    loginApi(email, password) 
+  .then((res) => {
+    console.log('✅ Login Response:', res.data);
 
-        if (res.data.success) {
-          Swal.fire({
-            icon: 'success',
-            title: 'Welcome 🎉',
-            text: 'Login successful',
-            timer: 1500,
-            showConfirmButton: false,
-          });
+    if (res.data.isSuccess) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Welcome 🎉',
+        text: 'Login successful',
+        timer: 1500,
+        showConfirmButton: false,
+      });
 
-          localStorage.setItem('auth', 'true');
-          navigate('/');
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Invalid Credentials ❌',
-            text: res.data.message ?? 'Wrong email or password',
-          });
-        }
-      })
+      localStorage.setItem("accessToken", res.data.data.accessToken);
+      localStorage.setItem("refreshToken", res.data.data.refreshToken);
+      localStorage.setItem("auth", "true");
+
+      navigate('/');
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Invalid Credentials ❌',
+        text: res.data.message ?? 'Wrong email or password',
+      });
+    }
+  })
+
       .catch((err) => {
         console.error('❌ Error:', err);
 

@@ -59,14 +59,12 @@ function AppContent() {
       {!hideLayout && <Footer />}
     </>
   );
-}
-
+} 
 function App() {
   return (
     <Router>
       <AppContent />
     </Router>
   );
-}
-
-export default App;
+} 
+export default App; 
