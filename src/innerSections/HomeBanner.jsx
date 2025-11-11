@@ -17,40 +17,23 @@ import { Link } from "react-router-dom";
 import { apiBaseUrl } from "../Helper";
 import axios from "axios";
 
-const bannerData = [
-  {
-    image: slide1,
-    text: `Mr A S Sahney, Chairman, recently undertook a meaningful
-           visit to Kargil & Srinagar, where he engaged closely with 
-           people across high-altitude passes, frontline installations,
-           and historic sites. On the auspicious eve of Rakshabandhan,
-           he visited the strategically critical Zoji La Pass...`,
-    date: "29-07-2025 | 1 minutes read",
-    link: "/news-detail",
-  },
-  {
-    image: slide2,
-    text: `A new milestone in service excellence as Chairman continues 
-           his journey across strategic regions and interacts with 
-           frontline teams, ensuring commitment to duty and resilience.`,
-    date: "30-07-2025 | 2 minutes read",
-    link: "/news-detail",
-  },
-];
 
 const HomeBanner = () => {
   const [bannerLoader, setBannerLoader] = useState(true);
   const [imageSwiper, setImageSwiper] = useState(null);
   const [textSwiper, setTextSwiper] = useState(null);
+  const [bannerData , setBannerData] = useState([])
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setBannerLoader(false);
     }, 1500);
+    getbannerData()
     return () => clearTimeout(timer);
   }, []);
 
-
+const getbannerData = () =>{
+  
   axios.post(
     apiBaseUrl("XpressNews/GetTopXpressNewsFHPS"),
     {
@@ -64,12 +47,14 @@ const HomeBanner = () => {
     }
   )
     .then((res) => {
-      console.log("✅ Response:", res.data);
+      setBannerData(res.data.data)
+      console.log(res.data.data)
     })
     .catch((err) => {
       console.error("❌ Error:", err);
     });
 
+}
     
   return (
     <div className="container-fluid my-3 px-lg-5 px-md-3 px-0">
@@ -95,11 +80,11 @@ const HomeBanner = () => {
                   loop={false}
                 >
                   {bannerData.map((item, i) => (
-                    <SwiperSlide key={i}>
+                    <SwiperSlide key={i}> 
                       <div className="image-wrapDSFDASper">
-                        <Link to={item.link}>
+                        <Link to={item.id}>
                           <img
-                            src={item.image}
+                            src={item.imagePath}
                             alt="Banner"
                             className="banner-imgdfad"
                           />
@@ -128,15 +113,15 @@ const HomeBanner = () => {
                   loop={false}
                 >
                   {bannerData.map((item, i) => (
-                    <SwiperSlide key={i}>
+                    <SwiperSlide key={item.id}>
                       <div>
-                        <p>{item.text}</p>
+                        <p>{item.shortDesc}</p>
 
                         <div className="d-flex align-items-center gap-3 mt-3">
-                          <Link to={item.link} className="arrow-btn">
+                          <Link to={item.id} className="arrow-btn">
                             <img src={arrow} alt="arrow" />
                           </Link>
-                          <p className="mb-0 date-read">{item.date}</p>
+                          <p className="mb-0 date-read">{item.newsDate} | {item.readTime}</p>
                         </div>
                       </div>
                     </SwiperSlide>

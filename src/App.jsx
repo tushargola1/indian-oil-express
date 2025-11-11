@@ -39,21 +39,23 @@ function AppContent() {
         <Route
           path="/"
           element={
-            // <ProtectedRoute>
+            <ProtectedRoute>
               <Home />
-            // </ProtectedRoute>
+             </ProtectedRoute>
           }
         />
 
           <Route
           path="/news-detail"
           element={
-            // <ProtectedRoute>
+            <ProtectedRoute>
               <NewsDetails />
-            // </ProtectedRoute>
+             </ProtectedRoute>
           }
         />
-        <Route path="/news-listing" element={<NewsListing/>}/>
+        <Route path="/news-listing" element={<ProtectedRoute>
+              <NewsListing/>
+             </ProtectedRoute>}/>
       </Routes>
 
       {!hideLayout && <Footer />}
