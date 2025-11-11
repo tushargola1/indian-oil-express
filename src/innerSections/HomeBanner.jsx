@@ -48,7 +48,6 @@ const getbannerData = () =>{
   )
     .then((res) => {
       setBannerData(res.data.data)
-      console.log(res.data.data)
     })
     .catch((err) => {
       console.error("❌ Error:", err);

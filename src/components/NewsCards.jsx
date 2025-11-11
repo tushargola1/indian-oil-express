@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, Links } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -7,148 +7,69 @@ import { Navigation } from "swiper/modules";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-import newsImg from "../assets/image/newsImg.png";
-import newsImg1 from "../assets/image/category-news/1.png";
-import newsImg2 from "../assets/image/category-news/2.png";
-import newsImg3 from "../assets/image/category-news/3.png";
+import arrow from '../assets/image/home-img-card/arrow.png';
+import { apiBaseUrl } from "../Helper";
+import axios from "axios";
 
-import arrow from '../assets/image/home-img-card/arrow.png'
-
-
-// Sample News Data
-const newsData = [
-  {
-    category: "In Focus",
-    slides: [
-      {
-        title:
-          "Hon’ble President of India unveils trophies of IndianOil Brand Cup Tournament",
-        image: newsImg1,
-        date: "29-07-2025",
-        readingTime: "1 minutes read",
-      },
-      {
-        title:
-          "Hon’ble President of India unveils trophies of IndianOil Brand Cup Tournament",
-        image: newsImg1,
-        date: "29-07-2025",
-        readingTime: "1 minutes read",
-      },
-    ],
-    color: "#0e4094",
-  },
-  {
-    category: "Spotlight",
-    slides: [
-      {
-        title:
-          "Warm bonds at M/s Sonam Angdus Memorial Filling Station, Kargil",
-        image: newsImg2,
-        date: "29-07-2025",
-        readingTime: "1 minutes read",
-      },
-      {
-        title:
-          "Warm bonds at M/s Sonam Angdus Memorial Filling Station, Kargil",
-        image: newsImg2,
-        date: "29-07-2025",
-        readingTime: "1 minutes read",
-      },
-    ],
-    color: "#69a9b9",
-  },
-  {
-    category: "News Buzz",
-    slides: [
-      {
-        title:
-          "Director (Finance) inaugurates Tax Audit and Compliance Solution (TACS) Portal",
-        image: newsImg3,
-        date: "29-07-2025",
-        readingTime: "1 minutes read",
-      },
-      {
-        title:
-          "Director (Finance) inaugurates Tax Audit and Compliance Solution (TACS) Portal",
-        image: newsImg3,
-        date: "29-07-2025",
-        readingTime: "1 minutes read",
-      },
-    ],
-    color: "#61a884",
-  },
-  {
-    category: "Achiever",
-    slides: [
-      {
-        title:
-          "IndianOil wins Clarivate Plc South Asia Innovation Award 2025 in PSU category",
-        image: newsImg,
-        date: "29-07-2025",
-        readingTime: "1 minutes read",
-      },
-      {
-        title:
-          "IndianOil wins Clarivate Plc South Asia Innovation Award 2025 in PSU category",
-        image: newsImg,
-        date: "29-07-2025",
-        readingTime: "1 minutes read",
-      },
-    ],
-    color: "#f37127",
-  },
-  {
-    category: "Fostering Values",
-    slides: [
-      {
-        title:
-          "Flood relief at Koila village: Mathura Refinery reaffirms Pehle Indian, Phir Oil commitment",
-        image: newsImg,
-        date: "29-07-2025",
-        readingTime: "1 minutes read",
-      },
-      {
-        title:
-          "Flood relief at Koila village: Mathura Refinery reaffirms Pehle Indian, Phir Oil commitment",
-        image: newsImg,
-        date: "29-07-2025",
-        readingTime: "1 minutes read",
-      },
-    ],
-    color: "#69a9b9",
-  },
-  {
-    category: "Community Connect",
-    slides: [
-      {
-        title:
-          "Director (Finance) inaugurates Tax Audit and Compliance Solution (TACS) Portal",
-        image: newsImg3,
-        date: "29-07-2025",
-        readingTime: "1 minutes read",
-      },
-      {
-        title:
-          "Director (Finance) inaugurates Tax Audit and Compliance Solution (TACS) Portal",
-        image: newsImg3,
-        date: "29-07-2025",
-        readingTime: "1 minutes read",
-      },
-    ],
-    color: "#f28bb6",
-  },
-];
-
+// NewsCards component
 const NewsCards = () => {
   const [newsLoading, setNewsLoading] = useState(true);
+  const [newsData, setNewsData] = useState([]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setNewsLoading(false);
     }, 2000);
-
+    getTopXpressNews();
     return () => clearTimeout(timer);
   }, []);
+
+  const getTopXpressNews = () => {
+    axios
+      .post(
+        apiBaseUrl("XpressNews/GetTopXpressNews"),
+        {
+          showIn: "W",
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      )
+      .then((res) => {
+        const transformedData = res.data.data.map((category) => ({
+          category: category.name,
+          slides: category.list.map((item) => ({
+            title: item.title,
+            image: item.imagePath,
+            date: item.newsDate,
+            readingTime: item.readTime 
+          })),
+          color: getCategoryColor(category.name),
+        }));
+        setNewsData(transformedData);
+      })
+      .catch((err) => {
+        console.log("Error fetching news:", err);
+      });
+  };
+
+  const getCategoryColor = (categoryName) => {
+    switch (categoryName) {
+      case "Spotlight":
+        return "#69a9b9";
+      case "News Buzz":
+        return "#61a884";
+      case "Achievers":
+        return "#f37127";
+      case "Community Connect":
+        return "#f28bb6";
+      default:
+        return "#0e4094"; // Default color
+    }
+  };
 
   return (
     <div className="container-fluid my-2 px-lg-5 px-md-3 px-3">
@@ -168,6 +89,7 @@ const NewsCards = () => {
   );
 };
 
+// NewsCard component
 const NewsCard = ({ category, slides, color, loading }) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
@@ -184,20 +106,19 @@ const NewsCard = ({ category, slides, color, loading }) => {
           <h5 className="card-title news-heading italic-text mb-0">
             {loading ? <Skeleton width={150} /> : category}
           </h5>
-            <Link to={"/news-detail"}>
-           <img
-    src={arrow}
-    alt="icon"
-    style={{
-      width: "40px",
-      height: "40px",
-      objectFit: "contain",
-     
-    }}
-  />
-  </Link>
+          <Link to={"/news-detail"}>
+            <img
+              src={arrow}
+              alt="icon"
+              style={{
+                width: "40px",
+                height: "40px",
+                objectFit: "contain",
+              }}
+            />
+          </Link>
         </div>
- 
+
         <div className="carousel-arrows text-center">
           <i
             ref={prevRef}
@@ -235,18 +156,20 @@ const NewsCard = ({ category, slides, color, loading }) => {
                   <Skeleton count={3} height={20} />
                   <Skeleton height={170} className="my-2" />
                   <Skeleton width={80} height={15} />
-                  <div className="d-flex align-items-center gap-3 ">
-                        <Skeleton width={80} height={15} />
-                        |
-                        <Skeleton width={80} height={15} />
-
+                  <div className="d-flex align-items-center gap-3">
+                    <Skeleton width={80} height={15} />
+                    |
+                    <Skeleton width={80} height={15} />
                   </div>
-
                 </>
               ) : (
                 <>
                   <p className="card-text news-details">{slide.title}</p>
-                  <img src={slide.image} alt="News" className="news-card-img" />
+                  <img
+                    src={slide.image}
+                    alt="News"
+                    className="news-card-img"
+                  />
                   <Link
                     to="/more-details"
                     className="card-link news-card-link italic-text d-block text-start"
