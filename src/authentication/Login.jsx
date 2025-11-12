@@ -4,65 +4,110 @@ import { useNavigate, Link } from "react-router-dom";
 import indianOilLogo from "../assets/image/logos/indianOil-Logo.png";
 import { loginApi } from "../components/ApiFunctions";
 import { showAlert } from "../components/SweetAlert";
+import Cookies from "js-cookie";
 
 export default function Login() {
-  const navigate = useNavigate(); 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  // ✅ Single state object for form fields
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = (e) => {
-    e.preventDefault();
+  // ✅ Handle input change dynamically
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-    loginApi(email, password)
-      .then((res) => {
-        if (res.success) {
-          const accessToken = res.data?.data?.accessToken || null;
-          const refreshToken = res.data?.data?.refreshToken || null;
+const handleLogin = (e) => {
+  e.preventDefault();
 
-          // ✅ Check for null/invalid tokens
-          if (!accessToken || !refreshToken) {
-            showAlert({
-              type: "error",
-              title: "Login Failed ❌",
-              text: "Server returned invalid credentials. Please try again.",
-            });
-            return;
-          }
+  loginApi(form.email, form.password)
+    .then((res) => {
+      if (res.success) {
+        const data = res.data?.data || {};
+        const accessToken = data.accessToken || null;
+        const refreshToken = data.refreshToken || null;
+        const refreshTokenExpiry = data.refreshTokenExpiry || null;
 
-          // ✅ Store tokens if valid
-          localStorage.setItem("accessToken", accessToken);
-          localStorage.setItem("refreshToken", refreshToken);
-          localStorage.setItem("auth", "true");
-
-          // ✅ Success message
-          showAlert({
-            type: "success",
-            title: "Welcome 🎉",
-            text: "Login successful",
-            timer: 1500,
-            showConfirmButton: false,
-          });
-
-          navigate("/");
-        } else {
-          // Invalid credentials
+        if (!accessToken || !refreshToken) {
           showAlert({
             type: "error",
-            title: "Invalid Credentials ❌",
-            text: res.message ?? "Wrong email or password",
+            title: "Login Failed ❌",
+            text: "Server returned invalid credentials. Please try again.",
+          });
+          return;
+        }
+
+        // ✅ Convert expiry date string (UTC) to JS Date
+        let refreshExpiryDate = null;
+        if (refreshTokenExpiry) {
+          refreshExpiryDate = new Date(refreshTokenExpiry); // e.g. "2025-11-12T17:23:46.4307038Z"
+        }
+
+        // ✅ Save access token cookie (short expiry — 1 day)
+        Cookies.set("accessToken", accessToken, {
+          expires: 1, // 1 day
+          secure: true,
+          sameSite: "Strict",
+        });
+
+        // ✅ Save refresh token cookie with real expiry from API
+        if (refreshExpiryDate) {
+          Cookies.set("refreshToken", refreshToken, {
+            expires: refreshExpiryDate, // exact date from backend
+            secure: true,
+            sameSite: "Strict",
+          });
+        } else {
+          // fallback if no expiry provided
+          Cookies.set("refreshToken", refreshToken, {
+            expires: 7, // 7 days default
+            secure: true,
+            sameSite: "Strict",
           });
         }
-      })
-      .catch((err) => {
-        console.error("❌ Error:", err);
+
+        // ✅ Optional: store simple flag
+        Cookies.set("auth", "true", {
+          expires: 1,
+          sameSite: "Strict",
+        });
+
+        showAlert({
+          type: "success",
+          title: "Welcome 🎉",
+          text: "Login successful",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+
+        navigate("/");
+      } else {
         showAlert({
           type: "error",
-          title: "Server Error 🚨",
-          text: err.message ?? "Could not contact the server. Try again.",
+          title: "Invalid Credentials ❌",
+          text: res.message ?? "Wrong email or password",
         });
+      }
+    })
+    .catch((err) => {
+      console.error("❌ Error:", err);
+      showAlert({
+        type: "error",
+        title: "Server Error 🚨",
+        text: err.message ?? "Could not contact the server. Try again.",
       });
-  };
+    });
+};
+
 
   return (
     <div className="container-fluid">
@@ -86,8 +131,9 @@ export default function Login() {
               type="text"
               className="login-input"
               placeholder="Enter your Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              name="email"
+              value={form.email}
+              onChange={handleChange}
               required
             />
           </div>
@@ -100,8 +146,9 @@ export default function Login() {
               type={showPassword ? "text" : "password"}
               className="login-input"
               placeholder="Enter your Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
+              value={form.password}
+              onChange={handleChange}
               required
             />
             <i

@@ -1,13 +1,13 @@
 import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import Header from "./components/Header";
-import Home from "./Pages/Home";
 import Footer from "./components/Footer";
+import Home from "./Pages/Home";
 import Login from "./authentication/Login";
 import ForgetPassword from "./authentication/ForgetPassword";
-import ProtectedRoute from "./authentication/ProtectedRoute";
-import PublicRoute from "./authentication/PublicRoute";
 import NewsDetails from "./Pages/NewsDetails";
 import NewsListing from "./Pages/NewsListing";
+import ProtectedRoute from "./authentication/ProtectedRoute";
+import PublicRoute from "./authentication/PublicRoute";
 
 function AppContent() {
   const location = useLocation();
@@ -36,37 +36,42 @@ function AppContent() {
           }
         />
 
+        {/* 🔒 Protected Routes */}
         <Route
           path="/"
           element={
             <ProtectedRoute>
               <Home />
-             </ProtectedRoute>
+            </ProtectedRoute>
           }
         />
-
-          <Route
+        <Route
           path="/news-detail"
           element={
             <ProtectedRoute>
               <NewsDetails />
-             </ProtectedRoute>
+            </ProtectedRoute>
           }
         />
-        <Route path="/news-listing" element={<ProtectedRoute>
-              <NewsListing/>
-             </ProtectedRoute>}/>
+        <Route
+          path="/news-listing/:newsId"
+          element={
+            <ProtectedRoute>
+              <NewsListing />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
 
       {!hideLayout && <Footer />}
     </>
   );
-} 
-function App() {
+}
+
+export default function App() {
   return (
     <Router>
       <AppContent />
     </Router>
   );
-} 
-export default App; 
+}

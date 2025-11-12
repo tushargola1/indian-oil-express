@@ -5,7 +5,7 @@ import sprintLogo from "../assets/image/logos/sprint-Logo.png";
 import indianOil from "../assets/image/logos/indianOil.png";
 import { useEffect, useRef, useState } from "react";
 import CalendarModal from "../modal/CalendarModal";
-
+import Cookies from "js-cookie";
 export default function Header() {
   const navigate = useNavigate();
   const [showLocationMenu, setShowLocationMenu] = useState(false);
@@ -18,24 +18,24 @@ export default function Header() {
   };
 
   useEffect(() => {
-  const handleClickOutside = (event) => {
-    if (
-      locationMenuRef.current &&
-      !locationMenuRef.current.contains(event.target)
-    ) {
-      setShowLocationMenu(false);
-    }
-  };
+    const handleClickOutside = (event) => {
+      if (
+        locationMenuRef.current &&
+        !locationMenuRef.current.contains(event.target)
+      ) {
+        setShowLocationMenu(false);
+      }
+    };
 
-  document.addEventListener("mousedown", handleClickOutside);
-  return () => {
-    document.removeEventListener("mousedown", handleClickOutside);
-  };
-}, []);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleLogout = (e) => {
     e.preventDefault();
-
+localStorage.clear()
     Swal.fire({
       title: "Are you sure?",
       text: "You will be logged out of your session!",
@@ -51,7 +51,9 @@ export default function Header() {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        localStorage.removeItem("auth");
+        Cookies.remove("accessToken", { path: "/" });
+        Cookies.remove("refreshToken", { path: "/" });
+        Cookies.remove("auth", { path: "/" });
 
         Swal.fire({
           icon: "success",
@@ -100,18 +102,18 @@ export default function Header() {
           <div className={`col-md-2 col-lg-3 col-6 right-logo-area  `}>
             <div className={`hh`}>
               <Link to='/'>
-                  <img
-                src={indianOil}
-                alt="Indian Oil"
-                className="indianOil-logo d-xl-block d-md-block d-none"
-              />
+                <img
+                  src={indianOil}
+                  alt="Indian Oil"
+                  className="indianOil-logo d-xl-block d-md-block d-none"
+                />
               </Link>
               <Link to='/'>
-                 <img
-                src={sprintLogo}
-                alt="Indian Oil"
-                className="sprint-logo   d-xl-none d-md-none d-block"
-              />
+                <img
+                  src={sprintLogo}
+                  alt="Indian Oil"
+                  className="sprint-logo   d-xl-none d-md-none d-block"
+                />
               </Link>
             </div>
           </div>
@@ -250,7 +252,7 @@ export default function Header() {
               ></button>
             </div>
             {/* px-xl-4 px-lg-4 px-md-4 px-4 */}
-            <div className="offcanvas-body d-flex align-items-xl-center align-items-md-start align-items-start  flex-lg-column flex-md-column flex-column" style={{paddingLeft:'3.9rem'}}>
+            <div className="offcanvas-body d-flex align-items-xl-center align-items-md-start align-items-start  flex-lg-column flex-md-column flex-column" style={{ paddingLeft: '3.9rem' }}>
               <div className="row align-items-center justify-content-between w-100">
                 <ul className="navbar-nav  pe-3 fw-semibold col-md-8 py-0">
                   <li className="nav-item">

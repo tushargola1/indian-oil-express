@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -6,58 +6,28 @@ import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-
-import arrow from '../assets/image/home-img-card/arrow.png';
-import { apiBaseUrl } from "../Helper";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import Cookies from "js-cookie";
 
-// NewsCards component
-const NewsCards = () => {
-  const [newsLoading, setNewsLoading] = useState(true);
-  const [newsData, setNewsData] = useState([]);
+import arrow from "../assets/image/home-img-card/arrow.png";
+import { apiBaseUrl } from "../Helper";
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setNewsLoading(false);
-    }, 2000);
-    getTopXpressNews();
-    return () => clearTimeout(timer);
-  }, []);
+// ✅ API function
+const fetchTopXpressNews = async () => {
+  const res = await axios.post(
+    apiBaseUrl("XpressNews/GetTopXpressNews"),
+    { showIn: "W" },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${Cookies.get("accessToken")}`,
+      },
+    }
+  );
 
-  const getTopXpressNews = () => {
-    axios
-      .post(
-        apiBaseUrl("XpressNews/GetTopXpressNews"),
-        {
-          showIn: "W",
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      )
-      .then((res) => {
-        const transformedData = res.data.data.map((category) => ({
-          category: category.name,
-          slides: category.list.map((item) => ({
-            title: item.title,
-            image: item.imagePath,
-            date: item.newsDate,
-            readingTime: item.readTime 
-          })),
-          color: getCategoryColor(category.name),
-        }));
-        setNewsData(transformedData);
-      })
-      .catch((err) => {
-        console.log("Error fetching news:", err);
-      });
-  };
-
-  const getCategoryColor = (categoryName) => {
-    switch (categoryName) {
+  const getCategoryColor = (name) => {
+    switch (name) {
       case "Spotlight":
         return "#69a9b9";
       case "News Buzz":
@@ -67,30 +37,65 @@ const NewsCards = () => {
       case "Community Connect":
         return "#f28bb6";
       default:
-        return "#0e4094"; // Default color
+        return "#0e4094";
     }
   };
+
+  // Transform API response
+  return res.data.data.map((category) => ({
+    category: category.name,
+    slides: category.list.map((item) => ({
+      title: item.title,
+      image: item.imagePath,
+      date: item.newsDate,
+      readingTime: item.readTime,
+    })),
+    color: getCategoryColor(category.name),
+  }));
+};
+
+const NewsCards = () => {
+  // ✅ Use React Query for caching and fetching
+  const { data: newsData = [], isLoading, error } = useQuery({
+    queryKey: ["topXpressNews"],
+    queryFn: fetchTopXpressNews,
+    staleTime: Infinity,
+    cacheTime: Infinity,
+    refetchOnWindowFocus: false,
+  });
+
+  if (error) {
+    return <p className="text-center text-danger">Failed to load news 😞</p>;
+  }
 
   return (
     <div className="container-fluid my-2 px-lg-5 px-md-3 px-3">
       <div className="row row-cols-xl-6 row-cols-lg-4 row-cols-md-3 row-cols-1 gy-2 justify-content-center align-items-center flex-wrap">
-        {newsData.map((card, i) => (
-          <div className="col news-card-col" key={i}>
-            <NewsCard
-              category={card.category}
-              slides={card.slides}
-              color={card.color}
-              loading={newsLoading}
-            />
-          </div>
-        ))}
+        {isLoading
+          ? // ✅ Show skeletons while loading
+            Array.from({ length: 6 }).map((_, i) => (
+              <div className="col news-card-col" key={i}>
+                <NewsCard loading={true} />
+              </div>
+            ))
+          : // ✅ Show real cards after data loads
+            newsData.map((card, i) => (
+              <div className="col news-card-col" key={i}>
+                <NewsCard
+                  category={card.category}
+                  slides={card.slides}
+                  color={card.color}
+                  loading={false}
+                />
+              </div>
+            ))}
       </div>
     </div>
   );
 };
 
-// NewsCard component
-const NewsCard = ({ category, slides, color, loading }) => {
+// ✅ NewsCard component
+const NewsCard = ({ category, slides = [], color = "#0e4094", loading }) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
@@ -102,34 +107,22 @@ const NewsCard = ({ category, slides, color, loading }) => {
       }}
     >
       <div className="card-body">
-        <div className="d-flex justify-content-between align-items-center mb-2  position-relative">
-          <h5 className="card-title news-heading italic-text mb-0">
+        <div className="d-flex justify-content-between align-items-center mb-2 position-relative">
+          <h5 className="card-title news-heading italic-text pb-0 mb-0">
             {loading ? <Skeleton width={150} /> : category}
           </h5>
-          <Link to={"/news-detail"}>
+          <Link to={`/news-listing/${197}`}>
             <img
               src={arrow}
               alt="icon"
-              style={{
-                width: "40px",
-                height: "40px",
-                objectFit: "contain",
-              }}
+              style={{ width: "30px", height: "30px", objectFit: "contain" }}
             />
           </Link>
         </div>
 
         <div className="carousel-arrows text-center">
-          <i
-            ref={prevRef}
-            className="fa fa-chevron-left me-3"
-            style={{ cursor: "pointer" }}
-          ></i>
-          <i
-            ref={nextRef}
-            className="fa fa-chevron-right"
-            style={{ cursor: "pointer" }}
-          ></i>
+          <i ref={prevRef} className="fa fa-chevron-left me-1" style={{ cursor: "pointer" }}></i>
+          <i ref={nextRef} className="fa fa-chevron-right" style={{ cursor: "pointer" }}></i>
         </div>
 
         <Swiper
@@ -149,10 +142,9 @@ const NewsCard = ({ category, slides, color, loading }) => {
           }}
           className="news-card-swiper"
         >
-          {slides.map((slide, index) => (
-            <SwiperSlide key={index}>
-              {loading ? (
-                <>
+          {loading
+            ? Array.from({ length: 2 }).map((_, i) => (
+                <SwiperSlide key={i}>
                   <Skeleton count={3} height={20} />
                   <Skeleton height={170} className="my-2" />
                   <Skeleton width={80} height={15} />
@@ -161,17 +153,20 @@ const NewsCard = ({ category, slides, color, loading }) => {
                     |
                     <Skeleton width={80} height={15} />
                   </div>
-                </>
-              ) : (
-                <>
-                  <p className="card-text news-details">{slide.title}</p>
-                  <img
-                    src={slide.image}
-                    alt="News"
-                    className="news-card-img"
-                  />
+                </SwiperSlide>
+              ))
+            : slides.map((slide, index) => (
+                <SwiperSlide key={index}>
+                  <p className="card-text news-details mb-0">
+                    {slide.title.split(" ").slice(0, 8).join(" ")}
+                    {slide.title.split(" ").length > 8 ? "..." : ""}
+                  </p>
+
+                  <div className="news-card-image-div my-2">
+                    <img src={slide.image} alt="News" className="news-card-img" />
+                  </div>
                   <Link
-                    to="/more-details"
+                    to="/news-detail"
                     className="card-link news-card-link italic-text d-block text-start"
                   >
                     More Details
@@ -179,10 +174,8 @@ const NewsCard = ({ category, slides, color, loading }) => {
                   <p className="mb-0 date-read">
                     {slide.date} | {slide.readingTime}
                   </p>
-                </>
-              )}
-            </SwiperSlide>
-          ))}
+                </SwiperSlide>
+              ))}
         </Swiper>
       </div>
     </div>
