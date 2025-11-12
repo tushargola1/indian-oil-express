@@ -107,7 +107,7 @@ const NewsListing = () => {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" }); // ✅ scroll to top
+    window.scrollTo({ top: 0, behavior: "smooth" }); 
   };
 
   if (isError) {
@@ -124,18 +124,20 @@ const NewsListing = () => {
           {/* ✅ Loader */}
           {isLoading || isFetching ? (
             Array.from({ length: 3 }).map((_, index) => (
-              <div key={index} className="mb-3">
-                <div className="row gy-3">
-                  <div className="col-xl-2 col-lg-12 col-md-12 col-12">
+              <div key={index} className="mb-3 ">
+                <div className="row gy-3 news-item align-items-center justify-content-center mx-1">
+                  <div className="col-xl-2 col-lg-12 col-md-12 col-12 mt-0 mb-1">
                     <Skeleton height={120} />
                   </div>
-                  <div className="col-xl-8 col-lg-12 col-md-12 col-12">
-                    <Skeleton height={20} width="70%" />
-                    <Skeleton count={3} />
+                  <div className="col-xl-8 col-lg-12 col-md-12 col-12 mt-0">
+                    <Skeleton height={15} width="100%" />
+                  <div className="mt-2">
+                      <Skeleton count={2} />
                   </div>
-                  <div className="col-xl-2 col-lg-12 col-md-12 col-12 text-end">
-                    <Skeleton width={80} height={20} />
-                    <Skeleton width={60} height={20} />
+                  </div>
+                  <div className="col-xl-2 col-lg-12 col-md-12 col-12 text-center mt-0">
+                    <Skeleton width={90} height={15} />
+                    <Skeleton width={60} height={15} />
                   </div>
                 </div>
               </div>
