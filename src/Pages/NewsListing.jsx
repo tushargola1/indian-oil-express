@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import mainImg from "../assets/image/banner/1.png";
 import Pagination from "../components/Pagination";
 import CategoriesSidebar from "../innerPage/CategoriesSidebar";
@@ -8,19 +8,29 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { useParams, useLocation } from "react-router-dom";
 
-// ✅ API function (fetch by page)
-const getNewsListing = async (page, ITEMS_PER_PAGE) => {
+const getNewsListing = async (page, ITEMS_PER_PAGE, newsId, newsType) => {
+
   const start = (page - 1) * ITEMS_PER_PAGE;
+
+  const xpress = newsType === "XpressNews";
+  
+  const endpoint = xpress
+    ? "XpressNews/GetXpressNewsFL"
+    : "WebPages/GetWebPagesFL";
+
+  const paramNewsId = xpress ? "xpressNewsTypeId" : "webPageCategoryId"
+
   const res = await axios.post(
-    apiBaseUrl("XpressNews/GetXpressNewsFL"),
+    apiBaseUrl(endpoint),
     {
       searchValue: "",
       sortColumn: "",
       sortDirection: "ASC",
       start,
       length: ITEMS_PER_PAGE,
-      xpressNewsTypeId: 197,
+      [paramNewsId]: Number(newsId),
       leadershipCategoryId: "",
       divisionId: "",
       fromDate: "",
@@ -62,7 +72,7 @@ const NewsItem = ({ imagePath, title, shortDesc, newsDate }) => {
       </div>
       <div className="news-content col-xl-8 col-lg-12 col-md-12 col-12">
         <div className="news-title fw-bold">{title}</div>
-        <div className="news-description text-muted small">{shortDesc}</div>
+        <div className="news-description text-muted small mb-2">{shortDesc}</div>
       </div>
       <div className="news-date-box col-xl-2 col-lg-12 col-md-12 col-12 text-end">
         <div className="news-date-month fw-bold">{formattedMonth}</div>
@@ -76,26 +86,26 @@ const NewsItem = ({ imagePath, title, shortDesc, newsDate }) => {
 
 // ✅ Main Component
 const NewsListing = () => {
+  const { newsId } = useParams();
+  const location = useLocation()
+
+  const newsType = location.state?.type
+
+
+
   const ITEMS_PER_PAGE = 5;
   const [currentPage, setCurrentPage] = useState(() => {
-    // Load from localStorage if available
     return parseInt(localStorage.getItem("currentNewsPage") || "1", 10);
   });
 
-  // ✅ Save current page to localStorage
   useEffect(() => {
     localStorage.setItem("currentNewsPage", currentPage);
   }, [currentPage]);
 
-  // ✅ React Query (fetching based on current page)
-  const {
-    data,
-    isLoading,
-    isError,
-    isFetching,
-  } = useQuery({
-    queryKey: ["news", currentPage],
-    queryFn: () => getNewsListing(currentPage, ITEMS_PER_PAGE),
+  // ✅ React Query (fetching based on current page + URL id)
+  const { data, isLoading, isError, isFetching } = useQuery({
+    queryKey: ["news", currentPage, newsId],
+    queryFn: () => getNewsListing(currentPage, ITEMS_PER_PAGE, newsId, newsType),
     keepPreviousData: true,
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
@@ -107,7 +117,7 @@ const NewsListing = () => {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" }); 
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   if (isError) {
@@ -119,7 +129,10 @@ const NewsListing = () => {
       <div className="row g-3 justify-content-between flex-lg-row flex-md-column-reverse flex-column-reverse">
         {/* MAIN CONTENT */}
         <div className="col-xl-9 col-lg-7 col-md-12 col-12">
-          <h3 className="fw-bold fs-14 mb-3">In Focus</h3>
+          {news.map((item, i) =>
+            i === 0 ? <h4 className="fw-bold">{item.xpressNewsType || item.webPageCategory}</h4> : null
+          )}
+
 
           {/* ✅ Loader */}
           {isLoading || isFetching ? (
@@ -131,9 +144,9 @@ const NewsListing = () => {
                   </div>
                   <div className="col-xl-8 col-lg-12 col-md-12 col-12 mt-0">
                     <Skeleton height={15} width="100%" />
-                  <div className="mt-2">
+                    <div className="mt-2">
                       <Skeleton count={2} />
-                  </div>
+                    </div>
                   </div>
                   <div className="col-xl-2 col-lg-12 col-md-12 col-12 text-center mt-0">
                     <Skeleton width={90} height={15} />

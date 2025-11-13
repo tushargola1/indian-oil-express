@@ -97,7 +97,7 @@ export default function CategoryCard() {
                 >
                   <div className="card-header card-img-heading d-flex align-items-center my-1 justify-content-between">
                     <p className="mb-0 fw-bold">{category.name}</p>
-                    <Link to={"/news-detail"}>
+                    <Link to={`/news-listing/${category.id}`}>
                       <img
                         src={arrow}
                         alt="icon"

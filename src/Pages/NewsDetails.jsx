@@ -4,8 +4,10 @@ import secondImg from "../assets/image/detail2.png";
 import arrow from "../assets/image/arrow.png";
 import { Link } from "react-router-dom";
 import CommentSection from "../components/CommentSection";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { apiBaseUrl } from "../Helper";
+import Cookies from "js-cookie";
 const newsHighlights = [
     {
         category: "In Focus",
@@ -29,6 +31,21 @@ const newsHighlights = [
 
 export default function NewsDetails() {
     const [showComment, setShowComment] = useState(false);
+    useEffect(() =>{
+        getNewsDetails()
+    },[])
+    const getNewsDetails = () =>{
+        
+        axios.get(apiBaseUrl('XpressNews/GetXpressNewsDetails/20') , {
+           headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${Cookies.get("accessToken")}`,
+                },
+        })
+        .then((res) =>{
+            console.log(res.data.data)
+        })
+    }
     return (
         <>
             <div className="container-fluid px-lg-5 px-md-3 px-3 mt-5">

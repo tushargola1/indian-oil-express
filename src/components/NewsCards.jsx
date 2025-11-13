@@ -44,6 +44,7 @@ const fetchTopXpressNews = async () => {
   // Transform API response
   return res.data.data.map((category) => ({
     category: category.name,
+    categoryId: category.id,
     slides: category.list.map((item) => ({
       title: item.title,
       image: item.imagePath,
@@ -86,6 +87,7 @@ const NewsCards = () => {
                   slides={card.slides}
                   color={card.color}
                   loading={false}
+                  categoryId = {card.categoryId}
                 />
               </div>
             ))}
@@ -95,7 +97,7 @@ const NewsCards = () => {
 };
 
 // ✅ NewsCard component
-const NewsCard = ({ category, slides = [], color = "#0e4094", loading }) => {
+const NewsCard = ({ category, slides = [], color = "#0e4094", loading , categoryId}) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
@@ -111,7 +113,7 @@ const NewsCard = ({ category, slides = [], color = "#0e4094", loading }) => {
           <h5 className="card-title news-heading italic-text pb-0 mb-0">
             {loading ? <Skeleton width={150} /> : category}
           </h5>
-          <Link to={`/news-listing/${197}`}>
+          <Link to={`/news-listing/${categoryId}`} state={{type:"XpressNews"}}>
             <img
               src={arrow}
               alt="icon"
