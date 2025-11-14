@@ -9,7 +9,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Cookies from "js-cookie";
-
+import fallback from "../assets/image/fallback.png"
 import arrow from "../assets/image/home-img-card/arrow.png";
 import { apiBaseUrl } from "../Helper";
 
@@ -71,15 +71,15 @@ const NewsCards = () => {
 
   return (
     <div className="container-fluid my-2 px-lg-5 px-md-3 px-3">
-      <div className="row row-cols-xl-6 row-cols-lg-4 row-cols-md-3 row-cols-1 gy-2 justify-content-center align-items-center flex-wrap">
+      <div className="row row-cols-xl-6 row-cols-lg-4 row-cols-md-3 row-cols-1 gy-2  align-items-center flex-wrap">
         {isLoading
-          ? // ✅ Show skeletons while loading
+          ? 
             Array.from({ length: 6 }).map((_, i) => (
               <div className="col news-card-col" key={i}>
                 <NewsCard loading={true} />
               </div>
             ))
-          : // ✅ Show real cards after data loads
+          : 
             newsData.map((card, i) => (
               <div className="col news-card-col" key={i}>
                 <NewsCard
@@ -109,7 +109,7 @@ const NewsCard = ({ category, slides = [], color = "#0e4094", loading , category
       }}
     >
       <div className="card-body">
-        <div className="d-flex justify-content-between align-items-center mb-2 position-relative">
+        <div className="d-flex justify-content-between align-items-center mb-2 position-relative news-card-heading">
           <h5 className="card-title news-heading italic-text pb-0 mb-0">
             {loading ? <Skeleton width={150} /> : category}
           </h5>
@@ -165,7 +165,20 @@ const NewsCard = ({ category, slides = [], color = "#0e4094", loading , category
                   </p>
 
                   <div className="news-card-image-div my-2">
-                    <img src={slide.image} alt="News" className="news-card-img" />
+        {slide.image?.startsWith("https://ioclxpressapp.businesstowork.com") ? (
+  <img
+    src={slide.image}
+    alt="News"
+    className="news-card-img"
+  />
+) : (
+  <img
+    src={fallback}
+    alt="Fallback News"
+    className="news-card-img fallback-img"
+   
+  />
+)}
                   </div>
                   <Link
                     to="/news-detail"

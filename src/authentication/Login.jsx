@@ -11,8 +11,8 @@ export default function Login() {
 
   // ✅ Single state object for form fields
   const [form, setForm] = useState({
-    email: "",
-    password: "",
+    email: "Employee001",
+    password: "HK8_th6-",
   });
 
   const [showPassword, setShowPassword] = useState(false);

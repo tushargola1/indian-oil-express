@@ -7,6 +7,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 import arrow from "../assets/image/home-img-card/arrow.png";
 import { apiBaseUrl } from "../Helper";
+import fallback from "../assets/image/fallback.png";
 
 // 🎨 Color map for categories
 const colors = {
@@ -17,7 +18,16 @@ const colors = {
   "News at a Glance": "#b4f6f8",
 };
 
-// ✅ API function (MUST return the promise)
+// ✅ Category icons array (order matches categoryData)
+import synergy from "../assets/image/category-card-img/image016.png";
+import graduationCap from "../assets/image/home-img-card/cap.png";
+import meeting from "../assets/image/category-card-img/Layer-10b.png";
+import safety from "../assets/image/category-card-img/Layer-10c.png";
+import news from "../assets/image/category-card-img/Layer-10d.png";
+
+const categoryIcons = [synergy, graduationCap, meeting, safety, news ,synergy, graduationCap, meeting ];
+
+// ✅ API function
 const getWebPageData = async () => {
   const res = await axios.get(apiBaseUrl("WebPages/GetTopWebPages"), {
     headers: {
@@ -46,9 +56,8 @@ export default function CategoryCard() {
 
   return (
     <div className="container-fluid mt-4 px-lg-5 px-md-3 px-3">
-      <div className="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 justify-content-center align-items-stretch gy-2">
+      <div className="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-sm-2 row-cols-1 justify-content-center align-items-stretch gy-2">
 
-        {/* 🔄 Show skeletons while loading */}
         {isLoading
           ? Array.from({ length: 5 }).map((_, index) => (
               <div className="col news-card-col news-card-col-img" key={index}>
@@ -63,13 +72,9 @@ export default function CategoryCard() {
                     <Skeleton width={140} height={20} />
                     <Skeleton circle width={30} height={30} />
                   </div>
-
                   <ul className="list-group list-group-flush">
                     {Array.from({ length: 2 }).map((__, i) => (
-                      <li
-                        className="list-group-item bg-transparent"
-                        key={i}
-                      >
+                      <li className="list-group-item bg-transparent" key={i}>
                         <div className="row gy-3 home-img-card-section">
                           <div className="col-md-6 pe-0">
                             <Skeleton height={100} />
@@ -84,8 +89,7 @@ export default function CategoryCard() {
                 </div>
               </div>
             ))
-          : // ✅ Render real data once loaded
-            categoryData.map((category, index) => (
+          : categoryData.map((category, index) => (
               <div className="col news-card-col news-card-col-img" key={index}>
                 <div
                   className="card home-category-img-cards"
@@ -96,16 +100,17 @@ export default function CategoryCard() {
                   }}
                 >
                   <div className="card-header card-img-heading d-flex align-items-center my-1 justify-content-between">
+                    <img
+                      src={categoryIcons[index]}
+                      alt="icon"
+                      style={{ width: "30px", height: "30px", objectFit: "cover" }}
+                    />
                     <p className="mb-0 fw-bold">{category.name}</p>
                     <Link to={`/news-listing/${category.id}`}>
                       <img
                         src={arrow}
                         alt="icon"
-                        style={{
-                          width: "30px",
-                          height: "30px",
-                          objectFit: "contain",
-                        }}
+                        style={{ width: "30px", height: "30px", objectFit: "contain" }}
                       />
                     </Link>
                   </div>
@@ -115,16 +120,24 @@ export default function CategoryCard() {
                       <li className="list-group-item bg-transparent" key={i}>
                         <div className="row gy-3 home-img-card-section">
                           <div className="col-md-6 pe-0">
-                            <img
-                              src={item.imagePath}
-                              alt=""
-                              className="home-img-card-img"
-                            />
+                            {item.imagePath?.startsWith(
+                              "https://ioclxpressapp.businesstowork.com"
+                            ) ? (
+                              <img
+                                src={item.imagePath}
+                                alt=""
+                                className="home-img-card-img"
+                              />
+                            ) : (
+                              <img
+                                src={fallback}
+                                alt="Fallback News"
+                                className="fallback-img2"
+                              />
+                            )}
                           </div>
                           <div className="col-md-6">
-                            <p className="mb-0 home-img-card-content">
-                              {item.title}
-                            </p>
+                            <p className="mb-0 home-img-card-content">{item.title}</p>
                           </div>
                         </div>
                       </li>

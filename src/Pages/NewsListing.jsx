@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useParams, useLocation } from "react-router-dom";
-
+import fallback from '../assets/image/fallback.png'
 const getNewsListing = async (page, ITEMS_PER_PAGE, newsId, newsType) => {
 
   const start = (page - 1) * ITEMS_PER_PAGE;
@@ -64,11 +64,20 @@ const NewsItem = ({ imagePath, title, shortDesc, newsDate }) => {
   return (
     <div className="news-item row gy-xl-0 gy-lg-2 gy-md-3 gy-4 border-bottom  mb-3">
       <div className="news-image col-xl-2 col-lg-12 col-md-12 col-12">
-        <img
-          src={imagePath}
-          alt={title}
-          className="img-fluid rounded"
-        />
+     {imagePath?.startsWith("https://ioclxpressapp.businesstowork.com") ? (
+  <img
+    src={imagePath}
+    alt={title}
+    className="img-fluid "
+  />
+) : (
+  <img
+    src={fallback}
+    alt="Fallback"
+    className="img-fluid  fallback-listing"
+   
+  />
+)}
       </div>
       <div className="news-content col-xl-8 col-lg-12 col-md-12 col-12">
         <div className="news-title fw-bold">{title}</div>

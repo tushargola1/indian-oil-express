@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 import { apiBaseUrl } from "../Helper";
 import axios from "axios";
 import Cookies from "js-cookie";
-
+import fallback from "../assets/image/banner/1.png"
 // Fetch function for React Query
 const fetchBannerData = async () => {
   const response = await axios.post(
@@ -42,7 +42,7 @@ const HomeBanner = () => {
     staleTime: Infinity,
     cacheTime: Infinity,
     refetchOnWindowFocus: false,
-  });0.
+  }); 0.
 
   return (
     <div className="container-fluid my-3 px-lg-5 px-md-3 px-3">
@@ -71,13 +71,41 @@ const HomeBanner = () => {
                 >
                   {bannerData.map((item) => (
                     <SwiperSlide key={item.id}>
-                      <div className="image-wrapDSFDASper">
+                      <div className="image-wrapper">
+                        {/* <div className="image-wrapDSFDASper"> */}
+
+
                         <Link to={item.id}>
-                          <img
+                          {/* <img
                             src={item.imagePath}
                             alt="Banner"
                             className="banner-imgdfad"
+                          /> */}
+                          <img
+                            src={
+                              item.imagePath?.startsWith("https://ioclxpressapp.businesstowork.com")
+                                ? item.imagePath
+                                : fallback
+                            }
+                            alt="Banner"
+                            className="banner-img"
                           />
+                          <div
+                            className="blur-bg"
+                            style={{
+                              backgroundImage: `url(${item.imagePath?.startsWith("https://ioclxpressapp.businesstowork.com")
+                                  ? item.imagePath
+                                  : fallback
+                                })`,
+                            }}
+                          ></div>
+
+                          <div className="bannerContent">
+                            <h3 className="italic-text home-banner-clamp">
+                              {item.shortDesc.split(" ").slice(0, 20).join(" ")}
+                              {item.shortDesc.split(" ").length > 20 ? "..." : ""}
+                            </h3>
+                          </div>
                         </Link>
                       </div>
                     </SwiperSlide>
