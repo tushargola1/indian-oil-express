@@ -97,9 +97,9 @@ localStorage.clear()
       {/* Top Row */}
       <div className="container-fluid  ">
         {/* <div className="row align-items-center  py-2 px-lg-5 px-md-3 px-3"> */}
-        <div className="row align-items-center  py-2 top-nav-header">
+        <div className="row align-items-center  py-2 top-nav-header ">
           {/* Left Logo */}
-          <div className={`col-md-2 col-lg-3 col-6 right-logo-area  `}>
+          <div className={`col-md-2 col-lg-3 col-6 right-logo-area  ps-0`}>
             <div className={`hh`}>
               <Link to='/'>
                 <img
@@ -221,7 +221,7 @@ localStorage.clear()
 
       {/* Navbar with Offcanvas */}
       <nav className="navbar navbar-expand-lg navbar-light bg-white  bottom-navbar py-0">
-        <div className="container-fluid px-0">
+        <div className="container-fluid px-40">
           {/* Toggle Button for Offcanvas */}
           <button
             className="navbar-toggler"
@@ -252,7 +252,7 @@ localStorage.clear()
               ></button>
             </div>
             {/* px-xl-4 px-lg-4 px-md-4 px-4 */}
-            <div className="offcanvas-body d-flex align-items-xl-center align-items-md-start align-items-start  flex-lg-column flex-md-column flex-column" style={{ paddingLeft: '3.9rem' }}>
+            <div className="offcanvas-body d-flex align-items-xl-center align-items-md-start align-items-start  flex-lg-column flex-md-column flex-column" >
               <div className="row align-items-center justify-content-between w-100">
                 <ul className="navbar-nav  pe-3 fw-semibold col-md-8 py-0">
                   <li className="nav-item">

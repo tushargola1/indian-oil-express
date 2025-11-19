@@ -106,7 +106,7 @@ export default function CategoryCard() {
                       style={{ width: "30px", height: "30px", objectFit: "cover" }}
                     />
                     <p className="mb-0 fw-bold">{category.name}</p>
-                    <Link to={`/news-listing/${category.id}`}>
+                    <Link to={`/news-listing/${category.id}` } state={{type:"topWebPage" , clickedId : category.id}}>
                       <img
                         src={arrow}
                         alt="icon"

@@ -1,62 +1,131 @@
+import axios from "axios";
+import Cookies from "js-cookie";
+import { apiBaseUrl } from "../Helper";
+import { useQuery } from "@tanstack/react-query";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import { Link, useLocation } from "react-router-dom";
+import { useMemo } from "react";
 
+// --------------------------
+// API Calls
+// --------------------------
+const getXpressCategories = async () => {
+  const res = await axios.post(
+    apiBaseUrl("XpressNews/GetTopXpressNews"),
+    { showIn: "W" },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${Cookies.get("accessToken")}`,
+      },
+    }
+  );
+  return res.data.data.map((category) => ({
+    id: category.id,
+    category: category.name,
+  }));
+};
 
-const CategoriesSidebar = () => {
-  const categories = [
-    "In Focus",
-    "Spotlight",
-    "News Buzz",
-    "Achiever",
-    "Fostering Values",
-    "Community Connect",
-    "Strengthening",
-    "Strengthening Synergy",
-    "Learning Pathways",
-    "Meetings & Interactions",
-    "Safety & Security",
-    "News at a Glance",
-  ];
+const getWebPageCategories = async () => {
+  const res = await axios.get(apiBaseUrl("WebPages/GetTopWebPages"), {
+    headers: {
+      Authorization: `Bearer ${Cookies.get("accessToken")}`,
+    },
+  });
+
+  return res.data.data.map((item) => ({
+    id: item.id,
+    category: item.name,
+  }));
+};
+
+// --------------------------
+// Component
+// --------------------------
+const CategoriesSidebar = ({ newsType, newsParentId }) => {
+  const location = useLocation();
+
+  // IMPORTANT: read clicked item from Router state
+  const clickedId = location.state?.clickedId;
+
+  // Final active category ID
+  const activeCategoryId = clickedId || Number(newsParentId);
+
+  const fetchCategories =
+    newsType === "XpressNews" ? getXpressCategories : getWebPageCategories;
+
+  const { data: sidebarData = [], isLoading } = useQuery({
+    queryKey: ["sidebarData", newsType],
+    queryFn: fetchCategories,
+    staleTime: Infinity,
+    cacheTime: Infinity,
+    refetchOnWindowFocus: false,
+  });
+
+  // ⚡ FIXED: category ordering always updates correctly
+  const categoriesToDisplay = useMemo(() => {
+    if (!sidebarData || sidebarData.length === 0) return [];
+
+    let list = [...sidebarData];
+
+    const index = list.findIndex((c) => c.id === activeCategoryId);
+
+    if (index > -1) {
+      const [active] = list.splice(index, 1);
+      return [active, ...list];
+    }
+
+    return list;
+  }, [sidebarData, activeCategoryId]);
 
   return (
     <>
-      {/* Sidebar for XL and above */}
+      {/* Desktop Sidebar */}
       <div className="d-none d-xl-block d-lg-block d-md-none categories-sidebar p-0 bg-white">
         <div className="p-3 fw-bold text-white sidebar-header">Categories</div>
+
         <ul className="list-unstyled m-0 mt-3">
-          {categories.map((cat, idx) => (
-            <li
-              key={idx}
-              className={`category-item ${
-                idx === 0 ? "active-category" : ""
-              }`}
-              data-bs-dismiss="modal"
-            >
-              <i className="fa fa-chevron-right me-2 theme-dark-blue"></i> <span className="categoryText">{cat}</span>
-            </li>
-          ))}
+          {isLoading
+            ? Array.from({ length: 5 }).map((_, idx) => (
+                <li key={idx} className="mb-2">
+                  <Skeleton height={20} width="80%" />
+                </li>
+              ))
+            : categoriesToDisplay.map((cat, idx) => (
+                <li
+                  key={cat.id}
+                  className={`category-item ${idx === 0 ? "active-category" : ""}`}
+                >
+                  <Link
+                    to={`/news-listing/${cat.id}`}
+                    state={{ type: newsType, clickedId: cat.id }}
+                    className="d-flex align-items-center text-decoration-none"
+                  >
+                    <i className="fa fa-chevron-right me-2 theme-dark-blue"></i>
+                    <span className="categoryText">{cat.category}</span>
+                  </Link>
+                </li>
+              ))}
         </ul>
       </div>
 
-      {/* Button for smaller screens */}
-      <div className="d-xl-none  mb-3 d-lg-none d-md-flex d-flex justify-content-between align-items-center">
+      {/* Mobile Header */}
+      <div className="d-xl-none mb-3 d-lg-none d-md-flex d-flex justify-content-between align-items-center">
         <div className="p-3 fw-bold text-white sidebar-header col-md-6">
-
-          <h3>
-            Categories
-          </h3>
+          <h3>Categories</h3>
         </div>
-
-        <div
+        <button
           type="button"
-          className=" col-md-6 text-end"
+          className="col-md-6 text-end bg-transparent border-0"
           data-bs-toggle="modal"
           data-bs-target="#categoriesModal"
         >
-<i className="fa-solid fa-ellipsis-vertical"></i>
-        </div>
-        
+          <i className="fa-solid fa-ellipsis-vertical"></i>
+        </button>
       </div>
 
-      {/* Modal for smaller screens */}
+      {/* Mobile Modal */}
       <div
         className="modal fade"
         id="categoriesModal"
@@ -66,32 +135,41 @@ const CategoriesSidebar = () => {
       >
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
+
             <div className="modal-header">
               <h5 className="modal-title fw-bold" id="categoriesModalLabel">
                 Categories
               </h5>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
+              <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
             </div>
+
             <div className="modal-body p-0">
               <ul className="list-unstyled m-0">
-                {categories.map((cat, idx) => (
-                  <li
-                    key={idx}
-                    className={`category-item ${
-                      idx === 0 ? "active-category" : ""
-                    }`}
-                    data-bs-dismiss="modal"
-                  >
-                    <i className="bi bi-chevron-right me-2"></i> {cat}
-                  </li>
-                ))}
+                {isLoading
+                  ? Array.from({ length: 5 }).map((_, idx) => (
+                      <li key={idx} className="mb-2">
+                        <Skeleton height={20} width="80%" />
+                      </li>
+                    ))
+                  : categoriesToDisplay.map((cat, idx) => (
+                      <li
+                        key={cat.id}
+                        className={`category-item ${idx === 0 ? "active-category" : ""}`}
+                      >
+                        <Link
+                          to={`/news-listing/${cat.id}`}
+                          state={{ type: newsType, clickedId: cat.id }}
+                          data-bs-dismiss="modal"
+                          className="d-flex align-items-center text-decoration-none"
+                        >
+                          <i className="fa fa-chevron-right me-2 theme-dark-blue"></i>
+                          <span className="categoryText">{cat.category}</span>
+                        </Link>
+                      </li>
+                    ))}
               </ul>
             </div>
+
           </div>
         </div>
       </div>

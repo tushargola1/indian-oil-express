@@ -113,7 +113,7 @@ const NewsCard = ({ category, slides = [], color = "#0e4094", loading , category
           <h5 className="card-title news-heading italic-text pb-0 mb-0">
             {loading ? <Skeleton width={150} /> : category}
           </h5>
-          <Link to={`/news-listing/${categoryId}`} state={{type:"XpressNews"}}>
+          <Link to={`/news-listing/${categoryId}`} state={{type:"XpressNews" , clickedId : categoryId}} className="news-card-arrow-link">
             <img
               src={arrow}
               alt="icon"

@@ -15,7 +15,7 @@ const getNewsListing = async (page, ITEMS_PER_PAGE, newsId, newsType) => {
   const start = (page - 1) * ITEMS_PER_PAGE;
 
   const xpress = newsType === "XpressNews";
-  
+
   const endpoint = xpress
     ? "XpressNews/GetXpressNewsFL"
     : "WebPages/GetWebPagesFL";
@@ -64,24 +64,27 @@ const NewsItem = ({ imagePath, title, shortDesc, newsDate }) => {
   return (
     <div className="news-item row gy-xl-0 gy-lg-2 gy-md-3 gy-4 border-bottom  mb-3">
       <div className="news-image col-xl-2 col-lg-12 col-md-12 col-12">
-     {imagePath?.startsWith("https://ioclxpressapp.businesstowork.com") ? (
-  <img
-    src={imagePath}
-    alt={title}
-    className="img-fluid "
-  />
-) : (
-  <img
-    src={fallback}
-    alt="Fallback"
-    className="img-fluid  fallback-listing"
-   
-  />
-)}
+        {
+          imagePath?.startsWith("https://ioclxpressapp.businesstowork.com") ? (
+            <img
+              src={imagePath}
+              alt={title}
+              className="img-fluid "
+            />
+          )
+            :
+            (
+              <img
+                src={fallback}
+                alt="Fallback"
+                className="img-fluid  fallback-listing"
+              />
+            )
+        }
       </div>
       <div className="news-content col-xl-8 col-lg-12 col-md-12 col-12">
         <div className="news-title fw-bold">{title}</div>
-        <div className="news-description text-muted small mb-2">{shortDesc}</div>
+        <div className="news-description small mb-2">{shortDesc}</div>
       </div>
       <div className="news-date-box col-xl-2 col-lg-12 col-md-12 col-12 text-end">
         <div className="news-date-month fw-bold">{formattedMonth}</div>
@@ -99,8 +102,9 @@ const NewsListing = () => {
   const location = useLocation()
 
   const newsType = location.state?.type
+  const newsParentId = location.state?.clickedId
 
-
+console.log(newsParentId)
 
   const ITEMS_PER_PAGE = 5;
   const [currentPage, setCurrentPage] = useState(() => {
@@ -126,7 +130,6 @@ const NewsListing = () => {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   if (isError) {
@@ -187,7 +190,7 @@ const NewsListing = () => {
         {/* SIDEBAR */}
         <div className="col-xl-3 col-lg-5 col-md-12 col-12 page-listing-side d-flex flex-column ps-0">
           <div className="sticky-sidebar-listing w-100">
-            <CategoriesSidebar />
+            <CategoriesSidebar  newsType={newsType} newsParentId = {newsParentId} />
           </div>
         </div>
       </div>

@@ -8,6 +8,7 @@ import NewsDetails from "./Pages/NewsDetails";
 import NewsListing from "./Pages/NewsListing";
 import ProtectedRoute from "./authentication/ProtectedRoute";
 import PublicRoute from "./authentication/PublicRoute";
+import ScrollToTop from "./components/ScrollToTop";
 
 function AppContent() {
   const location = useLocation();
@@ -15,6 +16,7 @@ function AppContent() {
 
   return (
     <>
+    <ScrollToTop/>
       {!hideLayout && <Header />}
 
       <Routes>

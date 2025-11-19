@@ -45,7 +45,7 @@ const HomeBanner = () => {
   }); 0.
 
   return (
-    <div className="container-fluid my-3 px-lg-5 px-md-3 px-3">
+    <div className="container-fluid my-3 px-40">
       <div className="row g-3">
 
         {/* BIG LEFT AREA */}

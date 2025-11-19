@@ -893,7 +893,7 @@
         text-align: center;
         width: 100%;
         color: white;
-        border-top: 3px solid #2c2c2c;
+        border-top: 1px solid #fff9f9;
     }
     
     .bannerContent h3{
@@ -2025,3 +2025,14 @@
   -webkit-box-orient: vertical;  
   overflow: hidden;
 } */
+
+/* .ps-40{
+  padding-left:40px !important;
+} */
+.ps-58  {
+  padding-left:58px !important;
+}
+.px-40{
+  padding-left: 40px;
+  padding-right: 40px;
+}
