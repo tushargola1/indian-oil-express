@@ -48,7 +48,7 @@ function AppContent() {
           }
         />
         <Route
-          path="/news-detail"
+          path="/news-detail/:newsId"
           element={
             <ProtectedRoute>
               <NewsDetails />

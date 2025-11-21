@@ -53,7 +53,7 @@ const getNewsListing = async (page, ITEMS_PER_PAGE, newsId, newsType) => {
 };
 
 // ✅ News Item Component
-const NewsItem = ({ imagePath, title, shortDesc, newsDate }) => {
+const NewsItem = ({ imagePath, title, shortDesc, newsDate , byLine }) => {
   const [day, month, year] = newsDate.split(" ")[0].split("-");
   const monthNames = [
     "January", "February", "March", "April", "May", "June",
@@ -84,7 +84,7 @@ const NewsItem = ({ imagePath, title, shortDesc, newsDate }) => {
       </div>
       <div className="news-content col-xl-8 col-lg-12 col-md-12 col-12">
         <div className="news-title fw-bold">{title}</div>
-        <div className="news-description small mb-2">{shortDesc}</div>
+        <div className="news-description small mb-2">{shortDesc ||byLine }</div>
       </div>
       <div className="news-date-box col-xl-2 col-lg-12 col-md-12 col-12 text-end">
         <div className="news-date-month fw-bold">{formattedMonth}</div>

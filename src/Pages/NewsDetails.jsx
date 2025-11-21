@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { apiBaseUrl } from "../Helper";
 import Cookies from "js-cookie";
+import { useQuery } from "@tanstack/react-query";
 const newsHighlights = [
     {
         category: "In Focus",
@@ -28,64 +29,82 @@ const newsHighlights = [
         link: "#"
     }
 ];
+const getNewsDetails = async () => {
+    const url = apiBaseUrl("XpressNews/GetXpressNewsDetails/20");
+
+    const res = await axios.get(url, {
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("accessToken")}`,
+        },
+    });
+
+    // safest return
+    return res?.data?.data ?? null;
+};
 
 export default function NewsDetails() {
     const [showComment, setShowComment] = useState(false);
-    useEffect(() =>{
-        getNewsDetails()
-    },[])
-    const getNewsDetails = () =>{
-        
-        axios.get(apiBaseUrl('XpressNews/GetXpressNewsDetails/20') , {
-           headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${Cookies.get("accessToken")}`,
-                },
-        })
-        .then((res) =>{
-            console.log(res.data.data)
-        })
-    }
+    const { data: newsDetails, isLoading, isError } = useQuery({
+        queryKey: ["newsDetails"],
+        queryFn: getNewsDetails,
+        refetchOnWindowFocus: false,
+        staleTime: 5 * 60 * 1000,
+    });
+
+    console.log(newsDetails)
     return (
         <>
             <div className="container-fluid px-lg-5 px-md-3 px-3 mt-5">
-                <div className="row g-5 align-items-center justify-content-between">
-                    <div className="col-xl-9 col-lg-8 col-md-12 col-12 mt-4">
+                <div className="row g-3 justify-content-between align-items-center">
+                    <div className="col-xl-9 col-lg-8 col-md-12 col-12  ">
                         <div className="detail-page-content">
-                            <h3 className="italic-text">Celebrating service in the Himalayas: Chairman 's heartfelt connect in Kargil & Srinagar</h3>
+                            <h3 className="italic-text">    {newsDetails?.title}</h3>
 
-                            <div className="reader-time-section d-flex align-items-center justify-content-between flex-wrap gap-1">
+                            <div className="reader-time-section d-flex align-items-center justify-content-between flex-wrap gap-1 px-0">
                                 <p className="mb-0">
-                                    Xpress News Network with inputs from Yashpal Kant, CGM (Ops), PSO & Shumeela Farooq, SM (Aviation), Srinagar AFS
+                                    {newsDetails?.shortDesc}
 
                                 </p>
                                 <p className="mb-0 reading-time">
-                                    29-07-2025 | 1 minutes read
+                                    {newsDetails?.newsDate}
                                 </p>
                             </div>
                             <div className="icons-section ">
                                 <p>
                                     <i className="fa-regular fa-thumbs-up me-2"></i>
-                                    <span>15</span>
+                                    <span>{newsDetails?.likesCount}</span>
                                 </p>
                                 <p>
                                     <i className="fa-regular fa-eye me-2"></i>
-                                    <span>250</span>
+                                    <span>{newsDetails?.viewsCount}</span>
 
                                 </p>
-                                <p>
-                                    <i className="fa-solid fa-download"></i>
+                                {newsDetails?.downloadable ? (
+                                    <p style={{ cursor: "pointer" }} onClick={() => handleDownload(newsDetails)}>
+                                        <i className="fa-solid fa-download"></i>
+                                        <span className="ms-1">{newsDetails?.downloadsCount}</span>
+                                    </p>
+                                ) : (
+                                    <p>
+                                        <i className="fa-solid fa-download"></i>
+                                        <span className="ms-1">{newsDetails?.downloadsCount}</span>
+                                    </p>
+                                )}
 
-                                </p>
+
                                 <p>
                                     <i className="fa-brands fa-readme me-2"></i>
                                     <span>35</span>
 
                                 </p>
-                                <p>
-                                    <i className="fa-solid fa-share-nodes"></i>
+                                {
+                                    newsDetails?.shareable && <p>
+                                        <i className="fa-solid fa-share-nodes"></i>
 
-                                </p>
+                                    </p>
+                                }
+
                             </div>
                             <div className="news-details-main-img">
                                 <div className="image-wrapper">
@@ -158,7 +177,7 @@ export default function NewsDetails() {
                             </div>
                         </div>
                     </div>
-                    <div className="col-xl-3 mt-4 col-lg-3 col-md-12 col-12 details-page-right-section right-bar-side">
+                    <div className="col-xl-3 mt-4 col-lg-3 col-md-12 col-12 details-page-right-section right-bar-side detail-page-left-section">
                         {
                             newsHighlights.map((item, index) => (
                                 <div className=" d-flex flex-column banner-2 " key={index}>
@@ -181,11 +200,11 @@ export default function NewsDetails() {
                                             alt="Right Banner"
                                             className="right-bar-side-image mt-auto"
                                         /> */}
-                                         <div className="image-wrapper image-wrapper-sidebar">
-                                    <img src={mainImg} alt="Banner" className="banner-img-details " />
-                                    <div className="blur-bg-details"></div>
-                                   
-                                </div>
+                                        <div className="image-wrapper image-wrapper-sidebar">
+                                            <img src={mainImg} alt="Banner" className="banner-img-details " />
+                                            <div className="blur-bg-details"></div>
+
+                                        </div>
                                     </div>
                                 </div>
                             ))
@@ -194,7 +213,7 @@ export default function NewsDetails() {
                 </div>
 
 
-                <div className="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 justify-content-center align-items-stretch gy-2">
+                <div className="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 justify-content-center align-items-stretch gy-2 mt-lg-0 mt-md-3 mt-5">
 
                     {Array.from({ length: 5 }).map((_, index) => (
                         <div className="col recommanded-story-col" key={index}>

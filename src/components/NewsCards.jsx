@@ -46,6 +46,7 @@ const fetchTopXpressNews = async () => {
     category: category.name,
     categoryId: category.id,
     slides: category.list.map((item) => ({
+      slideId: item.id,
       title: item.title,
       image: item.imagePath,
       date: item.newsDate,
@@ -73,31 +74,31 @@ const NewsCards = () => {
     <div className="container-fluid my-2 px-lg-5 px-md-3 px-3">
       <div className="row row-cols-xl-6 row-cols-lg-4 row-cols-md-3 row-cols-1 gy-2  align-items-center flex-wrap">
         {isLoading
-          ? 
-            Array.from({ length: 6 }).map((_, i) => (
-              <div className="col news-card-col" key={i}>
-                <NewsCard loading={true} />
-              </div>
-            ))
-          : 
-            newsData.map((card, i) => (
-              <div className="col news-card-col" key={i}>
-                <NewsCard
-                  category={card.category}
-                  slides={card.slides}
-                  color={card.color}
-                  loading={false}
-                  categoryId = {card.categoryId}
-                />
-              </div>
-            ))}
+          ?
+          Array.from({ length: 6 }).map((_, i) => (
+            <div className="col news-card-col" key={i}>
+              <NewsCard loading={true} />
+            </div>
+          ))
+          :
+          newsData.map((card, i) => (
+            <div className="col news-card-col" key={i}>
+              <NewsCard
+                category={card.category}
+                slides={card.slides}
+                color={card.color}
+                loading={false}
+                categoryId={card.categoryId}
+              />
+            </div>
+          ))}
       </div>
     </div>
   );
 };
 
 // ✅ NewsCard component
-const NewsCard = ({ category, slides = [], color = "#0e4094", loading , categoryId}) => {
+const NewsCard = ({ category, slides = [], color = "#0e4094", loading, categoryId }) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
@@ -113,7 +114,7 @@ const NewsCard = ({ category, slides = [], color = "#0e4094", loading , category
           <h5 className="card-title news-heading italic-text pb-0 mb-0">
             {loading ? <Skeleton width={150} /> : category}
           </h5>
-          <Link to={`/news-listing/${categoryId}`} state={{type:"XpressNews" , clickedId : categoryId}} className="news-card-arrow-link">
+          <Link to={`/news-listing/${categoryId}`} state={{ type: "XpressNews", clickedId: categoryId }} className="news-card-arrow-link">
             <img
               src={arrow}
               alt="icon"
@@ -146,51 +147,57 @@ const NewsCard = ({ category, slides = [], color = "#0e4094", loading , category
         >
           {loading
             ? Array.from({ length: 2 }).map((_, i) => (
-                <SwiperSlide key={i}>
-                  <Skeleton count={3} height={20} />
-                  <Skeleton height={170} className="my-2" />
+              <SwiperSlide key={i}>
+                <Skeleton count={3} height={20} />
+                <Skeleton height={170} className="my-2" />
+                <Skeleton width={80} height={15} />
+                <div className="d-flex align-items-center gap-3">
                   <Skeleton width={80} height={15} />
-                  <div className="d-flex align-items-center gap-3">
-                    <Skeleton width={80} height={15} />
-                    |
-                    <Skeleton width={80} height={15} />
-                  </div>
-                </SwiperSlide>
-              ))
+                  |
+                  <Skeleton width={80} height={15} />
+                </div>
+              </SwiperSlide>
+            ))
             : slides.map((slide, index) => (
-                <SwiperSlide key={index}>
+              <SwiperSlide key={index}>
+                <Link to={`/news-detail/${slide.slideId}`}>
+
                   <p className="card-text news-details mb-0">
                     {slide.title.split(" ").slice(0, 8).join(" ")}
                     {slide.title.split(" ").length > 8 ? "..." : ""}
                   </p>
 
                   <div className="news-card-image-div my-2">
-        {slide.image?.startsWith("https://ioclxpressapp.businesstowork.com") ? (
-  <img
-    src={slide.image}
-    alt="News"
-    className="news-card-img"
-  />
-) : (
-  <img
-    src={fallback}
-    alt="Fallback News"
-    className="news-card-img fallback-img"
-   
-  />
-)}
+                    {slide.image?.startsWith("https://ioclxpressapp.businesstowork.com") ? (
+                      <img
+                        src={slide.image}
+                        alt="News"
+                        className="news-card-img"
+                      />
+                    ) : (
+                      <img
+                        src={fallback}
+                        alt="Fallback News"
+                        className="news-card-img fallback-img"
+
+                      />
+                    )}
                   </div>
-                  <Link
-                    to="/news-detail"
-                    className="card-link news-card-link italic-text d-block text-start"
-                  >
-                    More Details
-                  </Link>
-                  <p className="mb-0 date-read">
-                    {slide.date} | {slide.readingTime}
-                  </p>
-                </SwiperSlide>
-              ))}
+                </Link>
+                {/* <Link
+                  to="/news-detail"
+                  className="card-link news-card-link italic-text d-block text-start"
+                >
+                  More Details
+                </Link> */}
+                <p className="mb-0 date-read">
+                  {slide.date}
+                  {slide.date && slide.readingTime && " | "}
+                  {slide.readingTime}
+                </p>
+
+              </SwiperSlide>
+            ))}
         </Swiper>
       </div>
     </div>

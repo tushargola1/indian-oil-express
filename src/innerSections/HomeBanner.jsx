@@ -45,15 +45,15 @@ const HomeBanner = () => {
   }); 0.
 
   return (
-    <div className="container-fluid my-3 px-40">
+    <div className="container-fluid my-3 px-40 ">
       <div className="row g-3">
 
         {/* BIG LEFT AREA */}
-        <div className="col-xl-9 col-lg-7 col-md-12 col-12">
+        <div className="col-xl-9 col-lg-7 col-md-12 col-12 ">
           <div className="row gy-3 banner1 ">
 
             {/* LEFT IMAGE FADE CAROUSEL */}
-            <div className="col-xl-8 col-lg-12 col-md-12 col-12 position-relative pe-2">
+            <div className="col-xl-8 col-lg-12 col-md-12 col-12 position-relative pe-2 ">
               {isLoading ? (
                 <Skeleton height={400} width="100%" />
               ) : isError ? (

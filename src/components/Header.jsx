@@ -126,7 +126,7 @@ localStorage.clear()
           </div>
 
           {/* Right Links + Social */}
-          <div className="col-md-4 col-lg-3 col-6">
+          <div className="col-md-4 col-lg-3 col-6 pe-0">
             <div className="right-content d-none d-md-block d-lg-block right-nav">
               <div className="d-flex  align-items-center gap-3 justify-content-end">
                 <div className=" top-content-navbar d-flex justify-content-start">

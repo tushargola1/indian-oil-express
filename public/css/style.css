@@ -79,7 +79,7 @@
             text-align: center;
     }
     .center-logo img{
-            width: 450px;
+            width: 400px;
             z-index: 1;
             position: relative;
             background: white;
@@ -94,6 +94,7 @@
     }
     .top-nav-header{
       padding-left: 40px;
+       padding-right: 40px;
     }
     .bottom-navbar::before{
         content: '';
@@ -622,7 +623,7 @@
         color: var(--dark-blue);
         font-weight: 600;
         margin-bottom: 25px;
-        /* border-bottom: 4px solid var(--orange-color); */d
+        /* border-bottom: 4px solid var(--orange-color); */
         padding-bottom: 5px;
         display: inline-block;
     }
@@ -998,7 +999,7 @@
     .date-read{
         color: black;
         font-weight: 500;
-        font-size: 12px;
+        font-size: 14px;
     }
     
     /* footer  */
@@ -1265,8 +1266,12 @@
     .detail-page-content h3{
       /* font-size: 1.8rem; */
       color: black;
+
     }
-    
+    .detail-page-left-section{
+      border-left: 1px solid var(--dark-blue);
+    }
+          
     .reader-time-section p{font-size: 1.1rem;color: black;font-weight: 500;}
     
     .reader-time-section {
@@ -1280,15 +1285,18 @@
     }
     .icons-section{
           display: flex;
-        justify-content: end;
-        gap: 30px;
-        align-items: center;
-        padding: 15px 0;
+          justify-content: end;
+          gap: 20px;
+          align-items: center;
+          padding: 10px 0;
     }
     .icons-section p i{
-      font-size: 1.5rem;
+      font-size: 1.1rem;
       color: var(--orange-color);
       cursor: pointer;
+    }
+       .icons-section p span{
+      font-size: 1.1rem;
     }
     .icons-section p {
       font-size: 1.4rem;
