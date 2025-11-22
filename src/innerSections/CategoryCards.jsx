@@ -120,24 +120,30 @@ export default function CategoryCard() {
                       <li className="list-group-item bg-transparent" key={i}>
                         <div className="row gy-3 home-img-card-section">
                           <div className="col-md-6 pe-0">
-                            {item.imagePath?.startsWith(
-                              "https://ioclxpressapp.businesstowork.com"
-                            ) ? (
-                              <img
-                                src={item.imagePath}
-                                alt=""
-                                className="home-img-card-img"
-                              />
-                            ) : (
-                              <img
-                                src={fallback}
-                                alt="Fallback News"
-                                className="fallback-img2"
-                              />
-                            )}
+                            <Link to={`/news-detail/${item.id}`}>
+                               {item.imagePath?.startsWith(
+                                "https://ioclxpressapp.businesstowork.com"
+                              ) ? (
+                                <img
+                                  src={item.imagePath}
+                                  alt=""
+                                  className="home-img-card-img"
+                                />
+                              ) : (
+                                <img
+                                  src={fallback}
+                                  alt="Fallback News"
+                                  className="fallback-img2"
+                                />
+                              )}
+                            </Link>
+                           
                           </div>
                           <div className="col-md-6">
+                                <Link to={`/news-detail/${item.id}`}>
                             <p className="mb-0 home-img-card-content">{item.title}</p>
+                            </Link>
+
                           </div>
                         </div>
                       </li>

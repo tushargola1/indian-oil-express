@@ -9,9 +9,8 @@ import { useQuery } from "@tanstack/react-query";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useParams, useLocation } from "react-router-dom";
-import fallback from '../assets/image/fallback.png'
+import fallback from "../assets/image/fallback.png";
 const getNewsListing = async (page, ITEMS_PER_PAGE, newsId, newsType) => {
-
   const start = (page - 1) * ITEMS_PER_PAGE;
 
   const xpress = newsType === "XpressNews";
@@ -20,7 +19,7 @@ const getNewsListing = async (page, ITEMS_PER_PAGE, newsId, newsType) => {
     ? "XpressNews/GetXpressNewsFL"
     : "WebPages/GetWebPagesFL";
 
-  const paramNewsId = xpress ? "xpressNewsTypeId" : "webPageCategoryId"
+  const paramNewsId = xpress ? "xpressNewsTypeId" : "webPageCategoryId";
 
   const res = await axios.post(
     apiBaseUrl(endpoint),
@@ -53,38 +52,40 @@ const getNewsListing = async (page, ITEMS_PER_PAGE, newsId, newsType) => {
 };
 
 // ✅ News Item Component
-const NewsItem = ({ imagePath, title, shortDesc, newsDate , byLine }) => {
+const NewsItem = ({ imagePath, title, shortDesc, newsDate, byLine }) => {
   const [day, month, year] = newsDate.split(" ")[0].split("-");
   const monthNames = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
   const formattedMonth = monthNames[parseInt(month) - 1];
 
   return (
     <div className="news-item row gy-xl-0 gy-lg-2 gy-md-3 gy-4 border-bottom  mb-3">
       <div className="news-image col-xl-2 col-lg-12 col-md-12 col-12">
-        {
-          imagePath?.startsWith("https://ioclxpressapp.businesstowork.com") ? (
-            <img
-              src={imagePath}
-              alt={title}
-              className="img-fluid "
-            />
-          )
-            :
-            (
-              <img
-                src={fallback}
-                alt="Fallback"
-                className="img-fluid  fallback-listing"
-              />
-            )
-        }
+        {imagePath?.startsWith("https://ioclxpressapp.businesstowork.com") ? (
+          <img src={imagePath} alt={title} className="img-fluid " />
+        ) : (
+          <img
+            src={fallback}
+            alt="Fallback"
+            className="img-fluid  fallback-listing"
+          />
+        )}
       </div>
       <div className="news-content col-xl-8 col-lg-12 col-md-12 col-12">
         <div className="news-title fw-bold">{title}</div>
-        <div className="news-description small mb-2">{shortDesc ||byLine }</div>
+        <div className="news-description small mb-2">{shortDesc || byLine}</div>
       </div>
       <div className="news-date-box col-xl-2 col-lg-12 col-md-12 col-12 text-end">
         <div className="news-date-month fw-bold">{formattedMonth}</div>
@@ -99,12 +100,12 @@ const NewsItem = ({ imagePath, title, shortDesc, newsDate , byLine }) => {
 // ✅ Main Component
 const NewsListing = () => {
   const { newsId } = useParams();
-  const location = useLocation()
+  const location = useLocation();
 
-  const newsType = location.state?.type
-  const newsParentId = location.state?.clickedId
+  const newsType = location.state?.type;
+  const newsParentId = location.state?.clickedId;
 
-console.log(newsParentId)
+  console.log(newsParentId);
 
   const ITEMS_PER_PAGE = 5;
   const [currentPage, setCurrentPage] = useState(() => {
@@ -118,7 +119,8 @@ console.log(newsParentId)
   // ✅ React Query (fetching based on current page + URL id)
   const { data, isLoading, isError, isFetching } = useQuery({
     queryKey: ["news", currentPage, newsId],
-    queryFn: () => getNewsListing(currentPage, ITEMS_PER_PAGE, newsId, newsType),
+    queryFn: () =>
+      getNewsListing(currentPage, ITEMS_PER_PAGE, newsId, newsType),
     keepPreviousData: true,
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
@@ -142,9 +144,12 @@ console.log(newsParentId)
         {/* MAIN CONTENT */}
         <div className="col-xl-9 col-lg-7 col-md-12 col-12">
           {news.map((item, i) =>
-            i === 0 ? <h4 className="fw-bold">{item.xpressNewsType || item.webPageCategory}</h4> : null
+            i === 0 ? (
+              <h4 className="fw-bold">
+                {item.xpressNewsType || item.webPageCategory}
+              </h4>
+            ) : null
           )}
-
 
           {/* ✅ Loader */}
           {isLoading || isFetching ? (
@@ -190,7 +195,10 @@ console.log(newsParentId)
         {/* SIDEBAR */}
         <div className="col-xl-3 col-lg-5 col-md-12 col-12 page-listing-side d-flex flex-column ps-0">
           <div className="sticky-sidebar-listing w-100">
-            <CategoriesSidebar  newsType={newsType} newsParentId = {newsParentId} />
+            <CategoriesSidebar
+              newsType={newsType}
+              newsParentId={newsParentId}
+            />
           </div>
         </div>
       </div>
