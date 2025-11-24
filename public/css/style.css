@@ -2176,12 +2176,15 @@ p{
 /* Tooltip Styles */
 .tooltip-content {
   position: absolute;
-  top: 102%;
+  /* display: flex; */
+  /* flex-wrap: nowrap; */
+  /* flex-direction: row; */
+  top: 100%;
   left: 50%;
   transform: translateX(-50%) scale(0.8);
   background: white;
-  border-radius: 15px;
-  padding: 22px;
+  border-radius: 100px;
+  /* padding: 15px; */
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
   opacity: 0;
   visibility: hidden;
@@ -2193,6 +2196,8 @@ p{
   pointer-events: none;
   backdrop-filter: blur(10px);
   background: rgba(255, 255, 255, 0.9);
+  /* width: 100%; */
+  /* min-width: 365px; */
 }
 
 .tooltip-container:hover .tooltip-content {
@@ -2206,13 +2211,17 @@ p{
 .social-icons {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
+  gap: 10px;
+  /* flex-wrap: wrap; */
+  padding: 10px 15px;
+  border-radius: 100px;
 }
 
 .social-icon {
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -2225,7 +2234,9 @@ p{
   position: relative;
   overflow: hidden;
 }
-
+.social-icon.active{
+  background: var(--orange-color);
+}
 .social-icon::before {
   content: "";
   position: absolute;
@@ -2233,7 +2244,7 @@ p{
   background: radial-gradient(
     circle at center,
     rgba(255, 255, 255, 0.8) 0%,
-    rgba(255, 255, 255, 0) 70%
+    rgba(255, 255, 255, 0) 40%
   );
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -2360,8 +2371,9 @@ p{
   }
 
   .tooltip-content {
-    width: 240px;
-    padding: 18px;
+    width: max-content;
+    padding: 10px 15px;
+    border-radius: 100px;
   }
 
   .social-icon {

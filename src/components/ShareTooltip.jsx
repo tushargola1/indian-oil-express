@@ -1,7 +1,6 @@
 import React from "react";
 
-const ShareTooltip = ({ userReactions = [] }) => {
-  // Default empty array ensures map never fails
+const ShareTooltip = ({ userReactions = [], onReactionClick }) => {
   const reactionIcons = {
     Like: "fa-thumbs-up",
     Love: "fa-heart",
@@ -11,11 +10,11 @@ const ShareTooltip = ({ userReactions = [] }) => {
     Angry: "fa-face-angry",
   };
 
+
   return (
     <div className="tooltip-container">
       <div className="button-contentd">
         <i className="fa-regular fa-thumbs-up me-2"></i>
-
       </div>
 
       <div className="tooltip-content">
@@ -25,17 +24,19 @@ const ShareTooltip = ({ userReactions = [] }) => {
             const faClass = `${iconClass} ${reactionIcons[reaction.name]}`;
 
             return (
-              <div key={reaction.id} className="social-icon">
+              <div
+                key={reaction.id}
+                className={`social-icon ${reaction.isReacted ? "active" : ""}`}
+                onClick={() => onReactionClick?.(reaction.id)}   // 👈 SEND ID
+                style={{ cursor: "pointer" }}
+              >
                 <i
                   className={faClass}
                   style={{
                     fontSize: "24px",
-                    color: reaction.isReacted ? "#6e8efb" : "#555",
+                    color: reaction.isReacted ? "#fff" : "#555",
                   }}
                 ></i>
-                <div style={{ fontSize: "12px", marginTop: "4px" }}>
-                  {reaction.total}
-                </div>
               </div>
             );
           })}
