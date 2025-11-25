@@ -75,7 +75,7 @@ const HomeBanner = () => {
                         {/* <div className="image-wrapDSFDASper"> */}
 
 
-                        <Link to={item.id}>
+                        <Link to={`/news-detail/${item.id}`}>
                           {/* <img
                             src={item.imagePath}
                             alt="Banner"
@@ -137,7 +137,7 @@ const HomeBanner = () => {
                       <div>
                         <p>{item.shortDesc}</p>
                         <div className="d-flex align-items-center gap-3 mt-3">
-                          <Link to={item.id} className="arrow-btn">
+                          <Link to={`/news-detail/${item.id}`} className="arrow-btn">
                             <img src={arrow} alt="arrow" />
                           </Link>
                           <p className="mb-0 date-read">{item.newsDate} | {item.readTime}</p>

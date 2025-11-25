@@ -50,7 +50,7 @@ const getNewsDetails = async (newsId) => {
 
 export default function NewsDetails() {
     const { newsId } = useParams();
-
+    const [readTime , setReadTime] = useState(0)
     const {
         data: newsDetails,
         isLoading,
@@ -63,7 +63,13 @@ export default function NewsDetails() {
         refetchOnWindowFocus: false,
         staleTime: Infinity,
         cacheTime: Infinity,
+         onSuccess: (data) => {
+        if (data?.totalReadTime) {
+            setReadTime(data.totalReadTime);
+        }
+    }
     });
+
     const handleReaction = async (reactionId) => {
         try {
             const res = await axios.post(
@@ -87,10 +93,12 @@ export default function NewsDetails() {
     };
 
     useEffect(() => {
-        axios.post(apiBaseUrl('XpressNews/AddView'),
+        if (!newsId) return;
+        axios.post(
+            apiBaseUrl("XpressNews/AddView"),
             {
                 xpressNewsId: newsId,
-                ipAddress: "::1"
+                ipAddress: "::1",
             },
             {
                 headers: {
@@ -98,19 +106,28 @@ export default function NewsDetails() {
                     Authorization: `Bearer ${Cookies.get("accessToken")}`,
                 },
             }
-
         )
             .then((res) => {
-                console.log(res.data.data)
+                console.log("AddView Success:", res.data.data);
             })
             .catch((err) => {
-                console.log("Reaction API failed:", err)
-            })
-    }, [])
+                console.log("AddView API failed:", err);
+            });
+
+    }, [newsId]);
+    const handleReadTime = () => {
+        axios.post(apiBaseUrl("XpressNews/AddReadTime"),
+            {
+                "xpressNewsId": newsId,
+                "readTime": readTime,
+                "ipAddress": "::1"
+            }
+        )
+    }
 
     const handleDownload = async () => {
         try {
-             const res = await axios.post(apiBaseUrl('XpressNews/AddDownload'),
+            const res = await axios.post(apiBaseUrl('XpressNews/AddDownload'),
                 {
                     "xpressNewsId": newsId,
                     "ipAddress": "::1"
@@ -124,11 +141,11 @@ export default function NewsDetails() {
             )
             refetch();
         }
-        catch(error){
+        catch (error) {
             console.error("Reaction API failed:", error);
         }
-       
-        
+
+
     }
 
     return (
@@ -313,21 +330,25 @@ export default function NewsDetails() {
                   alt="Right Banner"
                   className="right-bar-side-image  mt-4 mb-3"
                 /> */}
-                                {item.imagePath?.startsWith(
-                                    "https://ioclxpressapp.businesstowork.com"
-                                ) ? (
-                                    <img
-                                        src={item.imagePath}
-                                        alt="News"
-                                        className="recommended-details-img"
-                                    />
-                                ) : (
-                                    <img
-                                        src={fallback}
-                                        alt="Fallback News"
-                                        className="news-card-img fallback-img"
-                                    />
-                                )}
+                                <Link
+                                    to={`/news-detail/${item.id}`}
+                                >
+                                    {item.imagePath?.startsWith(
+                                        "https://ioclxpressapp.businesstowork.com"
+                                    ) ? (
+                                        <img
+                                            src={item.imagePath}
+                                            alt="News"
+                                            className="recommended-details-img"
+                                        />
+                                    ) : (
+                                        <img
+                                            src={fallback}
+                                            alt="Fallback News"
+                                            className="news-card-img fallback-img"
+                                        />
+                                    )}
+                                </Link>
                                 <Link
                                     className="arrow-btn text-start"
                                     to={`/news-detail/${item.id}`}
