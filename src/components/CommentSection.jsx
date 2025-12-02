@@ -1,63 +1,47 @@
 import React, { useState, useEffect, useRef } from "react";
 
-export default function CommentSection() {
+export default function CommentSection({ comments: apiComments }) {
   const containerRef = useRef(null);
   const [replyingTo, setReplyingTo] = useState(null);
   const [replyText, setReplyText] = useState("");
 
-  const [comments, setComments] = useState([
-    {
-      id: 1,
-      name: "Ligia dos Santos",
-      img: "https://i.ibb.co/MVJHGkC/g.webp",
-      time: "3 d",
-      text: "I finally fit into my old clothes again! Best feeling ever 😍",
-      likes: 3,
-      dislikes: 0,
-      liked: false,
-      disliked: false,
-      replies: [
-        {
-          id: 2,
-          name: "Marta Ribeiro",
-          img: "https://i.ibb.co/frSP8QJ/d.webp",
-          time: "2 d",
-          text: "Does it work for guys too? 😅",
-          likes: 2,
-          dislikes: 0,
-          liked: false,
-          disliked: false,
-          replies: [
-            {
-              id: 3,
-              name: "Simone Silva",
-              img: "https://i.ibb.co/JC5D5F7/e.webp",
-              time: "1 d",
-              text: "Yup, Marta! Works for anyone tryin to lose weight.",
-              likes: 1,
-              dislikes: 0,
-              liked: false,
-              disliked: false,
-              replies: [],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: 4,
-      name: "Marcelo Essado",
-      img: "https://i.ibb.co/LJx9SHT/h.webp",
-      time: "2 d",
-      text: "Makes all the difference!",
-      likes: 4,
-      dislikes: 0,
-      liked: false,
-      disliked: false,
-      replies: [],
-    },
-  ]);
+  // 🔥 Convert API Response → Your UI Format
+  const normalizeComments = (items) => {
+    return items.map((c) => ({
+      id: c.id,
+      name: c.name,
+      img: c.profileImage
+        ? `/uploads/${c.profileImage}`
+        : "https://i.ibb.co/2YkZVZD/user.png",
 
+      time: c.commentDate,
+      text: c.comment,
+
+      likes: 0,
+      dislikes: 0,
+      liked: false,
+      disliked: false,
+
+      replies:
+        c.children && c.children.length > 0
+          ? normalizeComments(c.children)
+          : [],
+    }));
+  };
+
+  // 👇 State for UI comments
+  const [comments, setComments] = useState([]);
+
+  // 👇 Load API response into UI state
+  useEffect(() => {
+    if (apiComments?.length) {
+      setComments(normalizeComments(apiComments));
+    }
+  }, [apiComments]);
+
+  // =============================
+  //       LIKE / DISLIKE
+  // =============================
   const toggleLike = (id, isReply = false) => {
     setComments((prev) =>
       prev.map((comment) => {
@@ -129,6 +113,9 @@ export default function CommentSection() {
       return reply;
     });
 
+  // =============================
+  //           REPLY
+  // =============================
   const handleReplyClick = (id) => {
     setReplyingTo(id);
     setReplyText("");
@@ -174,6 +161,9 @@ export default function CommentSection() {
     setReplyText("");
   };
 
+  // =============================
+  //   RENDER NESTED REPLIES
+  // =============================
   const renderReplies = (replies) =>
     replies.map((reply) => (
       <div className="af7" key={reply.id}>
@@ -218,71 +208,75 @@ export default function CommentSection() {
             )}
           </div>
         </div>
+
         {reply.replies && reply.replies.length > 0 && (
           <div className="af7 ms-5">{renderReplies(reply.replies)}</div>
         )}
       </div>
     ));
 
+  // =============================
+  //    COMMENT LINE CONNECTORS
+  // =============================
   useEffect(() => {
     const manageCommentHierarchy = () => {
-      try {
-        if (!containerRef.current) return;
+      if (!containerRef.current) return;
 
-        const containers = containerRef.current.querySelectorAll(".af9 .af7");
+      const containers = containerRef.current.querySelectorAll(".af9 .af7");
 
-        containers.forEach((container) => {
-          const existingLines = container.querySelectorAll(".ag6");
-          existingLines.forEach((line) => line.remove());
-        });
+      containers.forEach((container) => {
+        const existingLines = container.querySelectorAll(".ag6");
+        existingLines.forEach((line) => line.remove());
+      });
 
-        containers.forEach((container) => {
-          const relevantChildren = Array.from(container.children).filter(
-            (child) =>
-              !["ag6", "ag8", "ag9"].some((cls) =>
-                child.classList.contains(cls)
-              )
-          );
+      containers.forEach((container) => {
+        const relevantChildren = Array.from(container.children).filter(
+          (child) =>
+            !["ag6", "ag8", "ag9"].some((cls) =>
+              child.classList.contains(cls)
+            )
+        );
 
-          if (
-            relevantChildren.length > 1 &&
-            !container.parentElement.closest(".ag6")
-          ) {
-            let totalHeight = 0;
-            const spacing = 4;
-            for (let i = 0; i < relevantChildren.length - 1; i++) {
-              totalHeight += relevantChildren[i].offsetHeight + spacing;
-            }
-            totalHeight -= spacing;
-
-            const newVerticalLine = document.createElement("div");
-            newVerticalLine.className = "ag6";
-            newVerticalLine.style.height = `${totalHeight}px`;
-            container.appendChild(newVerticalLine);
-
-            relevantChildren.slice(1).forEach((child) => {
-              if (!child.querySelector(".ag8")) {
-                const bgLine = document.createElement("div");
-                bgLine.className = "ag8";
-                child.appendChild(bgLine);
-              }
-              if (!child.querySelector(".ag9")) {
-                const fgLine = document.createElement("div");
-                fgLine.className = "ag9";
-                child.appendChild(fgLine);
-              }
-            });
+        if (
+          relevantChildren.length > 1 &&
+          !container.parentElement.closest(".ag6")
+        ) {
+          let totalHeight = 0;
+          const spacing = 4;
+          for (let i = 0; i < relevantChildren.length - 1; i++) {
+            totalHeight += relevantChildren[i].offsetHeight + spacing;
           }
-        });
-      } catch (error) {
-        console.error("Error adding comment hierarchy:", error);
-      }
+          totalHeight -= spacing;
+
+          const newVerticalLine = document.createElement("div");
+          newVerticalLine.className = "ag6";
+          newVerticalLine.style.height = `${totalHeight}px`;
+          container.appendChild(newVerticalLine);
+
+          relevantChildren.slice(1).forEach((child) => {
+            if (!child.querySelector(".ag8")) {
+              const bgLine = document.createElement("div");
+              bgLine.className = "ag8";
+              child.appendChild(bgLine);
+            }
+            if (!child.querySelector(".ag9")) {
+              const fgLine = document.createElement("div");
+              fgLine.className = "ag9";
+              child.appendChild(fgLine);
+            }
+          });
+        }
+      });
     };
 
     manageCommentHierarchy();
     window.addEventListener("resize", manageCommentHierarchy);
     return () => window.removeEventListener("resize", manageCommentHierarchy);
   }, [comments]);
+
+  // =============================
+  //           UI
+  // =============================
   return (
     <section className="aa0" ref={containerRef}>
       <div className="ah2">
@@ -291,6 +285,7 @@ export default function CommentSection() {
             Comments (<span className="ag4">{comments.length}</span>)
           </span>
         </div>
+
         <div className="ah0">
           <div className="af9">
             {comments.map((comment) => (
@@ -307,10 +302,12 @@ export default function CommentSection() {
                     </div>
                     <div className="ac1">
                       <u onClick={() => toggleLike(comment.id)} style={{ cursor: "pointer" }}>
-                        <i className={comment.liked ? "fa-solid fa-thumbs-up" : "fa-regular fa-thumbs-up"}></i> {comment.likes}
+                        <i className={comment.liked ? "fa-solid fa-thumbs-up" : "fa-regular fa-thumbs-up"}></i>{" "}
+                        {comment.likes}
                       </u>
                       <u onClick={() => toggleDislike(comment.id)} style={{ cursor: "pointer" }}>
-                        <i className={comment.disliked ? "fa-solid fa-thumbs-down" : "fa-regular fa-thumbs-down"}></i> {comment.dislikes}
+                        <i className={comment.disliked ? "fa-solid fa-thumbs-down" : "fa-regular fa-thumbs-down"}></i>{" "}
+                        {comment.dislikes}
                       </u>
                       <u onClick={() => handleReplyClick(comment.id)} style={{ cursor: "pointer" }}>
                         <i className="fa-regular fa-comment"></i> Reply

@@ -71,10 +71,12 @@ header {
 }
 
 .sprint-logo {
+  visibility: hidden;
   height: 50px;
 }
 .indianOil-logo {
   height: 80px;
+  visibility: hidden;
   margin-bottom: 38px;
 }
 .center-logo {
@@ -84,6 +86,7 @@ header {
 .center-logo img {
   width: 400px;
   z-index: 1;
+  visibility: hidden;
   position: relative;
   background: white;
 }
@@ -1399,7 +1402,7 @@ p.reading-time {
 }
 
 .details-right-category-sidebar{
-  padding: 20px 0 20px 20px;
+  padding: 10px 0 20px 20px;
 }
 @media (max-width:999px) {
   .details-right-category-sidebar{
