@@ -51,7 +51,9 @@ export default function CommentSection({ comments: apiComments }) {
             liked: !comment.liked,
             disliked: false,
             likes: comment.liked ? comment.likes - 1 : comment.likes + 1,
-            dislikes: comment.disliked ? comment.dislikes - 1 : comment.dislikes,
+            dislikes: comment.disliked
+              ? comment.dislikes - 1
+              : comment.dislikes,
           };
         }
 
@@ -81,7 +83,9 @@ export default function CommentSection({ comments: apiComments }) {
             ...comment,
             disliked: !comment.disliked,
             liked: false,
-            dislikes: comment.disliked ? comment.dislikes - 1 : comment.dislikes + 1,
+            dislikes: comment.disliked
+              ? comment.dislikes - 1
+              : comment.dislikes + 1,
             likes: comment.liked ? comment.likes - 1 : comment.likes,
           };
         }
@@ -168,7 +172,22 @@ export default function CommentSection({ comments: apiComments }) {
     replies.map((reply) => (
       <div className="af7" key={reply.id}>
         <div className="ag5">
-          <img src={reply.img} width="56" height="56" alt={reply.name} />
+               {reply?.img?.startsWith(
+                    "https://ioclxpressapp.businesstowork.com"
+                  ) ? (
+                    <img
+                      src={reply.img}
+                      width="56"
+                      height="56"
+                      alt={reply.name}
+                    />
+                  ) : (
+                    <>
+                      <div className="circle-user-comment  z-4">
+                        <i class="fa-solid fa-user bg-dark w-100 p-4 rounded-circle"></i>
+                      </div>
+                    </>
+                  )}
           <div className="ac2">
             <div className="ac5">
               <div className="d-flex justify-content-between">
@@ -178,13 +197,36 @@ export default function CommentSection({ comments: apiComments }) {
               <p className="ac3">{reply.text}</p>
             </div>
             <div className="ac1">
-              <u onClick={() => toggleLike(reply.id, true)} style={{ cursor: "pointer" }}>
-                <i className={reply.liked ? "fa-solid fa-thumbs-up" : "fa-regular fa-thumbs-up"}></i> {reply.likes}
+              <u
+                onClick={() => toggleLike(reply.id, true)}
+                style={{ cursor: "pointer" }}
+              >
+                <i
+                  className={
+                    reply.liked
+                      ? "fa-solid fa-thumbs-up"
+                      : "fa-regular fa-thumbs-up"
+                  }
+                ></i>{" "}
+                {reply.likes}
               </u>
-              <u onClick={() => toggleDislike(reply.id, true)} style={{ cursor: "pointer" }}>
-                <i className={reply.disliked ? "fa-solid fa-thumbs-down" : "fa-regular fa-thumbs-down"}></i> {reply.dislikes}
+              <u
+                onClick={() => toggleDislike(reply.id, true)}
+                style={{ cursor: "pointer" }}
+              >
+                <i
+                  className={
+                    reply.disliked
+                      ? "fa-solid fa-thumbs-down"
+                      : "fa-regular fa-thumbs-down"
+                  }
+                ></i>{" "}
+                {reply.dislikes}
               </u>
-              <u onClick={() => handleReplyClick(reply.id)} style={{ cursor: "pointer" }}>
+              <u
+                onClick={() => handleReplyClick(reply.id)}
+                style={{ cursor: "pointer" }}
+              >
                 <i className="fa-regular fa-comment"></i> Reply
               </u>
             </div>
@@ -198,10 +240,16 @@ export default function CommentSection({ comments: apiComments }) {
                   value={replyText}
                   onChange={(e) => setReplyText(e.target.value)}
                 />
-                <button className="btn btn-primary btn-sm me-2" onClick={() => handleReplySubmit(reply.id, true)}>
+                <button
+                  className="btn btn-primary btn-sm me-2"
+                  onClick={() => handleReplySubmit(reply.id, true)}
+                >
                   Submit
                 </button>
-                <button className="btn btn-secondary btn-sm" onClick={() => setReplyingTo(null)}>
+                <button
+                  className="btn btn-secondary btn-sm"
+                  onClick={() => setReplyingTo(null)}
+                >
                   Cancel
                 </button>
               </div>
@@ -232,9 +280,7 @@ export default function CommentSection({ comments: apiComments }) {
       containers.forEach((container) => {
         const relevantChildren = Array.from(container.children).filter(
           (child) =>
-            !["ag6", "ag8", "ag9"].some((cls) =>
-              child.classList.contains(cls)
-            )
+            !["ag6", "ag8", "ag9"].some((cls) => child.classList.contains(cls))
         );
 
         if (
@@ -250,7 +296,7 @@ export default function CommentSection({ comments: apiComments }) {
 
           const newVerticalLine = document.createElement("div");
           newVerticalLine.className = "ag6";
-          newVerticalLine.style.height = `${totalHeight}px`;
+          newVerticalLine.style.height = `95%`;
           container.appendChild(newVerticalLine);
 
           relevantChildren.slice(1).forEach((child) => {
@@ -291,7 +337,23 @@ export default function CommentSection({ comments: apiComments }) {
             {comments.map((comment) => (
               <div className="af7" key={comment.id}>
                 <div className="ag5">
-                  <img src={comment.img} width="56" height="56" alt={comment.name} />
+                  {comment?.img?.startsWith(
+                    "https://ioclxpressapp.businesstowork.com"
+                  ) ? (
+                    <img
+                      src={comment.img}
+                      width="56"
+                      height="56"
+                      alt={comment.name}
+                    />
+                  ) : (
+                    <>
+                      <div className="circle-user-comment  z-4">
+                        <i class="fa-solid fa-user bg-dark w-100 p-4 rounded-circle"></i>
+                      </div>
+                    </>
+                  )}
+
                   <div className="ac2">
                     <div className="ac5">
                       <div className="d-flex justify-content-between">
@@ -301,19 +363,39 @@ export default function CommentSection({ comments: apiComments }) {
                       <p className="ac3">{comment.text}</p>
                     </div>
                     <div className="ac1">
-                      <u onClick={() => toggleLike(comment.id)} style={{ cursor: "pointer" }}>
-                        <i className={comment.liked ? "fa-solid fa-thumbs-up" : "fa-regular fa-thumbs-up"}></i>{" "}
+                      <u
+                        onClick={() => toggleLike(comment.id)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        <i
+                          className={
+                            comment.liked
+                              ? "fa-solid fa-thumbs-up"
+                              : "fa-regular fa-thumbs-up"
+                          }
+                        ></i>{" "}
                         {comment.likes}
                       </u>
-                      <u onClick={() => toggleDislike(comment.id)} style={{ cursor: "pointer" }}>
-                        <i className={comment.disliked ? "fa-solid fa-thumbs-down" : "fa-regular fa-thumbs-down"}></i>{" "}
+                      <u
+                        onClick={() => toggleDislike(comment.id)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        <i
+                          className={
+                            comment.disliked
+                              ? "fa-solid fa-thumbs-down"
+                              : "fa-regular fa-thumbs-down"
+                          }
+                        ></i>{" "}
                         {comment.dislikes}
                       </u>
-                      <u onClick={() => handleReplyClick(comment.id)} style={{ cursor: "pointer" }}>
+                      <u
+                        onClick={() => handleReplyClick(comment.id)}
+                        style={{ cursor: "pointer" }}
+                      >
                         <i className="fa-regular fa-comment"></i> Reply
                       </u>
                     </div>
-
                     {replyingTo === comment.id && (
                       <div className="mb-4 add-remove-btn">
                         <textarea
@@ -323,17 +405,22 @@ export default function CommentSection({ comments: apiComments }) {
                           value={replyText}
                           onChange={(e) => setReplyText(e.target.value)}
                         />
-                        <button className="btn btn-primary btn-sm me-2" onClick={() => handleReplySubmit(comment.id)}>
+                        <button
+                          className="btn btn-primary btn-sm me-2"
+                          onClick={() => handleReplySubmit(comment.id)}
+                        >
                           Submit
                         </button>
-                        <button className="btn btn-secondary btn-sm" onClick={() => setReplyingTo(null)}>
+                        <button
+                          className="btn btn-secondary btn-sm"
+                          onClick={() => setReplyingTo(null)}
+                        >
                           Cancel
                         </button>
                       </div>
                     )}
                   </div>
                 </div>
-
                 {comment.replies && renderReplies(comment.replies)}
               </div>
             ))}

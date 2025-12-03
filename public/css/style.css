@@ -1360,7 +1360,7 @@ p.reading-time {
   /* font-size: 1rem; */
 }
 .day-time {
-  font-size: 1.2rem !important;
+  font-size: 16px !important;
 }
 .details-page-button {
   border: 0;
@@ -1553,8 +1553,8 @@ p.reading-time {
 }
 
 .ac2 .ac4 {
-  line-height: 16px;
-  font-size: 20px;
+  /* line-height: 16px; */
+  font-size: 16px;
   margin: 0;
   font-weight: 600;
   cursor: pointer;
@@ -1571,7 +1571,7 @@ p.reading-time {
 }
 
 .ac2 .ac1 u {
-  font-size: 20px;
+  font-size: 16px;
   text-decoration: none;
   color: #65676b;
 }
@@ -1620,8 +1620,8 @@ p.reading-time {
 .ac2 .ac3 {
   margin: 0;
   line-height: 21.3328px;
-  font-size: 21px;
-  margin-top: 15px;
+  font-size: 17px;
+  margin-top: 8px;
 }
 
 .ag6 {
@@ -1655,6 +1655,7 @@ p.reading-time {
   border-start-start-radius: 10.5px;
   left: -28px;
   top: -16px;
+  display: none;
   z-index: 1;
 }
 .af7 .af7 .af7 .ag9,
@@ -1666,6 +1667,7 @@ p.reading-time {
 }
 .ag8 {
   position: absolute;
+  display: none;
   height: 48px;
   width: 64px;
   background-color: #ffffff;
@@ -1678,7 +1680,7 @@ p.reading-time {
 }
 .af7 .af7 .af7 .ag8,
 .af7 .af7 .ag5 .ag8 {
-  left: -20px;
+  left: -7px;
 }
 .ag5 > .ag7 ~ .ag8 {
   top: -39px;
@@ -1724,6 +1726,8 @@ p.reading-time {
 
 .textarea-box {
   width: 700px;
+  max-width: 600px;
+  min-width: 200px;
 }
 
 @media (max-width: 1024px) {
@@ -1753,6 +1757,13 @@ p.reading-time {
 .ac1 u i.fa-solid.fa-thumbs-up,
 .ac1 u i.fa-solid.fa-thumbs-down {
   color: var(--orange-color);
+}
+
+.circle-user-comment{
+  z-index: 4;
+}
+.circle-user-comment i{
+color: white;
 }
 
 /* listing page  */
@@ -2487,3 +2498,4 @@ p{
   height: 50px;
   max-height: 70px;
 }
+
