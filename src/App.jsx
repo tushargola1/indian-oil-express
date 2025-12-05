@@ -9,6 +9,7 @@ import NewsListing from "./Pages/NewsListing";
 import ProtectedRoute from "./authentication/ProtectedRoute";
 import PublicRoute from "./authentication/PublicRoute";
 import ScrollToTop from "./components/ScrollToTop";
+import SearchPage from "./innerPage/SearchPage";
 
 function AppContent() {
   const location = useLocation();
@@ -56,10 +57,10 @@ function AppContent() {
           }
         />
         <Route
-          path="/news-listing/:newsId"
+          path="/search"
           element={
             <ProtectedRoute>
-              <NewsListing />
+              <SearchPage />
             </ProtectedRoute>
           }
         />

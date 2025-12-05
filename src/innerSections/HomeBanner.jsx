@@ -1,22 +1,22 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade, Controller } from "swiper/modules";
-
 import "swiper/css";
 import "swiper/css/effect-fade";
-
-import announcement from "../assets/image/banner/announcement.png";
-import arrow from "../assets/image/arrow.png";
-
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Link } from "react-router-dom";
-import { apiBaseUrl } from "../Helper";
 import axios from "axios";
 import Cookies from "js-cookie";
-import fallback from "../assets/image/banner/1.png"
-// Fetch function for React Query
+import { apiBaseUrl } from "../Helper";
+
+// import announcement from "../assets/image/banner/announcement.png";
+import fallback from "../assets/image/banner/1.png";
+import pdfIcon from "../assets/image/pdf.png"; 
+import arrow from "../assets/image/arrow.png";
+
+// Fetch Banner Data
 const fetchBannerData = async () => {
   const response = await axios.post(
     apiBaseUrl("XpressNews/GetTopXpressNewsFHPS"),
@@ -31,32 +31,70 @@ const fetchBannerData = async () => {
   return response.data.data;
 };
 
+// Fetch Announcements
+const fetchAnnouncements = async () => {
+  const response = await axios.get(
+    apiBaseUrl("Announcements/GetAnnouncements/3"),
+    // { showIn: "W" },
+    {
+      headers: {
+        Authorization: `Bearer ${Cookies.get("accessToken")}`,
+      },
+    }
+  );
+  return response.data.data
+};
+
 const HomeBanner = () => {
   const [imageSwiper, setImageSwiper] = useState(null);
   const [textSwiper, setTextSwiper] = useState(null);
+  const rightSideRef = useRef(null);
+  const leftSideRef = useRef(null);
+  const [rightHeight, setRightHeight] = useState("auto");
 
-  // TanStack Query for banner data
-  const { data: bannerData, isLoading, isError } = useQuery({
+  // Banner Data
+  const { data: bannerData, isLoading: isBannerLoading, isError: isBannerError } = useQuery({
     queryKey: ["bannerData"],
     queryFn: fetchBannerData,
     staleTime: Infinity,
     cacheTime: Infinity,
     refetchOnWindowFocus: false,
-  }); 0.
+  });
+
+  // Announcement Data
+  const { data: announcements, isLoading: isAnnouncementLoading, isError: isAnnouncementError } = useQuery({
+    queryKey: ["announcements"],
+    queryFn: fetchAnnouncements,
+    staleTime: Infinity,
+    cacheTime: Infinity,
+    refetchOnWindowFocus: false,
+  });
+
+  // Match Right Side Height to Left Content
+  useEffect(() => {
+    if (leftSideRef.current) {
+      setRightHeight(leftSideRef.current.clientHeight);
+    }
+    const handleResize = () => {
+      if (leftSideRef.current) {
+        setRightHeight(leftSideRef.current.clientHeight);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [bannerData]);
 
   return (
-    <div className="container-fluid my-3 px-40 ">
+    <div className="container-fluid my-3 px-40">
       <div className="row g-3">
-
-        {/* BIG LEFT AREA */}
-        <div className="col-xl-9 col-lg-7 col-md-12 col-12 ">
-          <div className="row gy-3 banner1 ">
-
+        {/* LEFT BIG BANNER AREA */}
+        <div className="col-xl-9 col-lg-7 col-md-12 col-12" ref={leftSideRef}>
+          <div className="row gy-3 banner1">
             {/* LEFT IMAGE FADE CAROUSEL */}
-            <div className="col-xl-8 col-lg-12 col-md-12 col-12 position-relative pe-2 ">
-              {isLoading ? (
+            <div className="col-xl-8 col-lg-12 col-md-12 col-12 position-relative pe-2">
+              {isBannerLoading ? (
                 <Skeleton height={400} width="100%" />
-              ) : isError ? (
+              ) : isBannerError ? (
                 <p>❌ Failed to load banners</p>
               ) : (
                 <Swiper
@@ -72,15 +110,7 @@ const HomeBanner = () => {
                   {bannerData.map((item) => (
                     <SwiperSlide key={item.id}>
                       <div className="image-wrapper">
-                        {/* <div className="image-wrapDSFDASper"> */}
-
-
                         <Link to={`/news-detail/${item.id}`}>
-                          {/* <img
-                            src={item.imagePath}
-                            alt="Banner"
-                            className="banner-imgdfad"
-                          /> */}
                           <img
                             src={
                               item.imagePath?.startsWith("https://ioclxpressapp.businesstowork.com")
@@ -99,7 +129,6 @@ const HomeBanner = () => {
                                 })`,
                             }}
                           ></div>
-
                           <div className="bannerContent">
                             <h3 className="italic-text home-banner-clamp">
                               {item.shortDesc.split(" ").slice(0, 20).join(" ")}
@@ -114,11 +143,11 @@ const HomeBanner = () => {
               )}
             </div>
 
-            {/* RIGHT TEXT FADE CAROUSEL (SYNCED) */}
+            {/* RIGHT TEXT FADE CAROUSEL */}
             <div className="col-xl-4 col-lg-12 col-md-12 col-12 banner-right-content">
-              {isLoading ? (
+              {isBannerLoading ? (
                 <Skeleton count={10} />
-              ) : isError ? (
+              ) : isBannerError ? (
                 <p>❌ Failed to load banners</p>
               ) : (
                 <Swiper
@@ -148,13 +177,52 @@ const HomeBanner = () => {
                 </Swiper>
               )}
             </div>
-
           </div>
         </div>
 
-        {/* RIGHT SMALL STATIC BANNER */}
-        <div className="col-xl-3 col-lg-5 col-md-12 col-12 right-bar-side d-flex flex-column">
-          <img src={announcement} alt="" className="announcement-img" />
+        {/* RIGHT ANNOUNCEMENTS */}
+        <div
+          className="col-xl-3 col-lg-5 col-md-12 col-12 right-bar-side d-flex flex-column"
+          ref={rightSideRef}
+          // style={{ height: rightHeight, overflowY: "auto", gap: "10px" }}
+        >
+          {/* <img src={announcement} alt="" className="announcement-img mb-2" /> */}
+
+          {isAnnouncementLoading ? (
+            <Skeleton count={5} height={60} />
+          ) : isAnnouncementError ? (
+            <p>❌ Failed to load announcements</p>
+          ) : (
+            <div className="announcement-list d-flex flex-column gap-2 w-100">
+              {announcements.map((item) => (
+                <Link
+                  key={item.id}
+                  to={`/announcement-detail/${item.id}`}
+                  className="announcement-item d-flex justify-content-between align-items-center p-2 border rounded"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    textDecoration: "none",
+                    color: "#000",
+                  }}
+                >
+                  <p
+                    className="mb-0 announcement-title"
+                    style={{
+                      display: "-webkit-box",
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {item.title}
+                  </p>
+                  <img src={pdfIcon} alt="PDF" style={{ width: 20, height: 20 }} className="ms-4"/>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
