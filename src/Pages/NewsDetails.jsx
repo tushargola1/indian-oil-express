@@ -108,20 +108,20 @@ export default function NewsDetails() {
     staleTime: 1000 * 60 * 5, // 5 minutes cache
   });
 
-// GET ALL COMMENTS
-const {
-  data: allComments = [],
-  isLoading: isLoadingComments,
-  isError: isErrorComments,
-  refetch: refetchComments,
-} = useQuery({
-  queryKey: ["getAllComments", newsId],
-  queryFn: () => getAllComments(newsId),
-  enabled: !!newsId,
-  refetchOnWindowFocus: false,
-  staleTime: Infinity,
-  cacheTime: Infinity,
-});
+  // GET ALL COMMENTS
+  const {
+    data: allComments = [],
+    isLoading: isLoadingComments,
+    isError: isErrorComments,
+    refetch: refetchComments,
+  } = useQuery({
+    queryKey: ["getAllComments", newsId],
+    queryFn: () => getAllComments(newsId),
+    enabled: !!newsId,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+    cacheTime: Infinity,
+  });
 
   // ============================================
   // ⭐ AddView — Call Only Once
@@ -348,13 +348,15 @@ const {
                   dangerouslySetInnerHTML={{ __html: newsDetails?.description }}
                 />
                 <button
-                  className="  px-3 py-2 details-page-button"
-                  onClick={() => setShowComment(true)}
+                  className="px-3 py-2 details-page-button mt-4"
+                  onClick={() => setShowComment((prev) => !prev)}
                 >
-                  Read Comments
+                  {showComment ? "Hide Comments" : "Read Comments"}
                 </button>
 
-                {showComment && <CommentSection comments={allComments} />}
+                {showComment && (
+                  <CommentSection comments={allComments} newsId={newsId} />
+                )}
               </div>
               {/* <div className="news-details-main-img">
                 <div className="image-wrapper">
