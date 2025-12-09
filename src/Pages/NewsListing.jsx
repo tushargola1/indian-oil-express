@@ -73,15 +73,24 @@ const NewsItem = ({ imagePath, title, shortDesc, newsDate, byLine }) => {
   return (
     <div className="news-item row gy-xl-0 gy-lg-2 gy-md-3 gy-4 border-bottom  mb-3">
       <div className="news-image col-xl-2 col-lg-12 col-md-12 col-12">
-        {imagePath?.startsWith("https://ioclxpressapp.businesstowork.com") ? (
-          <img src={imagePath} alt={title} className="img-fluid " />
-        ) : (
-          <img
-            src={fallback}
-            alt="Fallback"
-            className="img-fluid  fallback-listing"
-          />
-        )}
+        <img
+          src={
+            imagePath?.startsWith("https://ioclxpressapp.businesstowork.com")
+              ? imagePath
+              : fallback
+          }
+          alt={title || "News"}
+          className={`img-fluid ${
+            !imagePath?.startsWith("https://ioclxpressapp.businesstowork.com")
+              ? "fallback-listing"
+              : ""
+          }`}
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = fallback;
+            e.target.className = "img-fluid fallback-listing"; // ensure fallback styling
+          }}
+        />
       </div>
       <div className="news-content col-xl-8 col-lg-12 col-md-12 col-12">
         <div className="news-title fw-bold">{title}</div>

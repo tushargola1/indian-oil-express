@@ -25,7 +25,16 @@ import meeting from "../assets/image/category-card-img/Layer-10b.png";
 import safety from "../assets/image/category-card-img/Layer-10c.png";
 import news from "../assets/image/category-card-img/Layer-10d.png";
 
-const categoryIcons = [synergy, graduationCap, meeting, safety, news ,synergy, graduationCap, meeting ];
+const categoryIcons = [
+  synergy,
+  graduationCap,
+  meeting,
+  safety,
+  news,
+  synergy,
+  graduationCap,
+  meeting,
+];
 
 // ✅ API function
 const getWebPageData = async () => {
@@ -51,13 +60,14 @@ export default function CategoryCard() {
   });
 
   if (isError) {
-    return <p className="text-center text-danger">❌ Failed to load categories.</p>;
+    return (
+      <p className="text-center text-danger">❌ Failed to load categories.</p>
+    );
   }
 
   return (
     <div className="container-fluid mt-4 px-lg-5 px-md-3 px-3">
       <div className="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-sm-2 row-cols-1 justify-content-center align-items-stretch gy-2">
-
         {isLoading
           ? Array.from({ length: 5 }).map((_, index) => (
               <div className="col news-card-col news-card-col-img" key={index}>
@@ -103,14 +113,25 @@ export default function CategoryCard() {
                     <img
                       src={categoryIcons[index]}
                       alt="icon"
-                      style={{ width: "30px", height: "30px", objectFit: "cover" }}
+                      style={{
+                        width: "30px",
+                        height: "30px",
+                        objectFit: "cover",
+                      }}
                     />
                     <p className="mb-0 fw-bold">{category.name}</p>
-                    <Link to={`/news-listing/${category.id}` } state={{type:"topWebPage" , clickedId : category.id}}>
+                    <Link
+                      to={`/news-listing/${category.id}`}
+                      state={{ type: "topWebPage", clickedId: category.id }}
+                    >
                       <img
                         src={arrow}
                         alt="icon"
-                        style={{ width: "30px", height: "30px", objectFit: "contain" }}
+                        style={{
+                          width: "30px",
+                          height: "30px",
+                          objectFit: "contain",
+                        }}
                       />
                     </Link>
                   </div>
@@ -120,14 +141,19 @@ export default function CategoryCard() {
                       <li className="list-group-item bg-transparent" key={i}>
                         <div className="row gy-3 home-img-card-section">
                           <div className="col-md-6 pe-0">
-                            <Link to={`/news-detail/${item.id}`}>
-                               {item.imagePath?.startsWith(
+                            <Link to={`/news-detail/${item.id}`} state={{ type: "topWebPage", clickedId: category.id }}>
+                              {item.imagePath?.startsWith(  
                                 "https://ioclxpressapp.businesstowork.com"
                               ) ? (
                                 <img
                                   src={item.imagePath}
                                   alt=""
                                   className="home-img-card-img"
+                                  onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = fallback;
+                                    e.target.className = "fallback-img2"; // apply fallback class
+                                  }}
                                 />
                               ) : (
                                 <img
@@ -137,13 +163,13 @@ export default function CategoryCard() {
                                 />
                               )}
                             </Link>
-                           
                           </div>
                           <div className="col-md-6">
-                                <Link to={`/news-detail/${item.id}`}>
-                            <p className="mb-0 home-img-card-content">{item.title}</p>
+                            <Link to={`/news-detail/${item.id}`}>
+                              <p className="mb-0 home-img-card-content">
+                                {item.title}
+                              </p>
                             </Link>
-
                           </div>
                         </div>
                       </li>

@@ -1,92 +1,109 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import searchImage from "../assets/image/search.png"; // make sure path is correct
+import { useSearchParams } from "react-router-dom";
+import searchImage from "../assets/image/search.png";
+import { apiBaseUrl } from "../Helper";
+
+const DEBOUNCE_DELAY = 500;  // delay in ms
 
 const SearchPage = () => {
-  const [keyword, setKeyword] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const paramQ = searchParams.get("query") || "";
+
+  const [keyword, setKeyword] = useState(paramQ);
+  const [debouncedKeyword, setDebouncedKeyword] = useState(paramQ);
+
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [hasSearched, setHasSearched] = useState(false); // track if user clicked search
+  const [hasSearched, setHasSearched] = useState(false);
 
-  const handleSearch = async () => {
-    if (!keyword.trim()) return;
-    setIsLoading(true);
-    setHasSearched(true);
+  // Update debouncedKeyword after user stops typing for DEBOUNCE_DELAY ms
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedKeyword(keyword);
+    }, DEBOUNCE_DELAY);
 
-    try {
-      const res = await axios.post(
-        "https://ioclxpressapp.businesstowork.com/api/Announcements/GetGlobalSearchResults",
-        { keyword, count: 12 },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${Cookies.get("accessToken")}`,
-          },
-        }
-      );
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [keyword]);
 
-      setResults(res.data?.data || []);
-    } catch (err) {
-      console.log(err);
-      setResults([]);
-    }
+  // Search API — runs when debouncedKeyword changes and is non-empty
+  useEffect(() => {
+    if (!debouncedKeyword.trim()) return;
 
-    setIsLoading(false);
+    const doSearch = async (term) => {
+      setIsLoading(true);
+      setHasSearched(true);
+      try {
+        const res = await axios.post(apiBaseUrl("Announcements/GetGlobalSearchResults"),
+          { keyword: term, count: 12 },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${Cookies.get("accessToken")}`,
+            },
+          }
+        );
+        setResults(res.data?.data || []);
+      } catch (err) {
+        console.error(err);
+        setResults([]);
+      }
+      setIsLoading(false);
+    };
+
+    doSearch(debouncedKeyword);
+  }, [debouncedKeyword]);
+
+  const onInputChange = (e) => {
+    const val = e.target.value;
+    setKeyword(val);
+    setSearchParams({ query: val }, { replace: true });
   };
 
-  const clearSearch = () => {
+  const onClear = () => {
     setKeyword("");
     setResults([]);
     setHasSearched(false);
+    setSearchParams({}, { replace: true });
   };
 
   return (
     <div className="container-fluid px-lg-5 px-md-3 px-3 py-4">
-
       {/* Search Bar */}
       <div className="row mb-4">
         <div className="col-md-6 mx-auto d-flex search-bar">
-
           <div className={`search-wrapper ${keyword ? "has-text" : ""}`}>
-            {/* Search Icon */}
             <i className="fa-solid fa-magnifying-glass search-icon"></i>
-
             <input
               type="text"
               className="form-control search-input"
               placeholder="Search news..."
               value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+              onChange={onInputChange}
             />
-
-            {/* Clear Icon */}
             {keyword && (
-              <i
-                className="fa-solid fa-xmark clear-icon"
-                onClick={clearSearch}
-              ></i>
+              <i className="fa-solid fa-xmark clear-icon" onClick={onClear}></i>
             )}
           </div>
-
-          <button
-            className="btn dark-blue-bg-color text-white ms-2"
-            onClick={handleSearch}
-          >
-            Search
-          </button>
         </div>
       </div>
 
-      {/* Results or Placeholder */}
+      {/* Results / Placeholder */}
       {!hasSearched ? (
-        // Centered placeholder image
-        <div className="d-flex justify-content-center align-items-center" style={{ height: "48vh" }}>
-          <img src={searchImage} alt="Search placeholder" style={{ maxWidth: "300px", width: "100%" }} />
+        <div
+          className="d-flex justify-content-center align-items-center"
+          style={{ height: "48vh" }}
+        >
+          <img
+            src={searchImage}
+            alt="Search placeholder"
+            style={{ maxWidth: "300px", width: "100%" }}
+          />
         </div>
       ) : (
-        // Results or Loader
         <div className="row row-cols-xl-6 row-cols-lg-4 row-cols-md-3 row-cols-1 gy-4">
           {isLoading &&
             Array.from({ length: 6 }).map((_, i) => (
@@ -94,7 +111,6 @@ const SearchPage = () => {
                 <SearchSkeleton />
               </div>
             ))}
-
           {!isLoading &&
             results.map((item) => (
               <div className="col" key={item.id}>
@@ -109,31 +125,19 @@ const SearchPage = () => {
 
 export default SearchPage;
 
-/* ---------------------- Card ----------------------- */
-
-const SearchCard = ({ item }) => {
-  return (
-    <div className="search-card shadow-sm">
-      <h6 className="fw-bold clamp-2 search-title">{item.title}</h6>
-
-      <p
-        className="clamp-4 search-desc"
-        dangerouslySetInnerHTML={{
-          __html: item.description + "...",
-        }}
-      ></p>
-
-      <a
-        href={item.url}
-        className="btn dark-blue-bg-color text-white mt-auto w-100"
-      >
-        View Details
-      </a>
-    </div>
-  );
-};
-
-/* ------------------- Skeleton ---------------------- */
+// SearchCard & SearchSkeleton same as before
+const SearchCard = ({ item }) => (
+  <div className="search-card shadow-sm">
+    <h6 className="fw-bold clamp-2 search-title">{item.title}</h6>
+    <p
+      className="clamp-4 search-desc"
+      dangerouslySetInnerHTML={{ __html: item.description + "..." }}
+    ></p>
+    <a href={item.url} className="btn dark-blue-bg-color text-white mt-auto w-100">
+      View Details
+    </a>
+  </div>
+);
 
 const SearchSkeleton = () => (
   <div className="search-card skeleton-card">

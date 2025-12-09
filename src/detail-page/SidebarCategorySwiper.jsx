@@ -6,6 +6,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import mainImg from "../assets/image/banner/1.png";
 import arrow from "../assets/image/arrow.png";
+import fallback from "../assets/image/fallback.png";
 
 export default function SidebarCategorySwiper({ items }) {
   if (!items || items.length === 0) return null;
@@ -14,7 +15,10 @@ export default function SidebarCategorySwiper({ items }) {
     <div className="sidebar-category-swiper">
       {items.map((item, index) => {
         return (
-          <div className="d-flex flex-column banner-2" key={`category-${index}`}>
+          <div
+            className="d-flex flex-column banner-2"
+            key={`category-${index}`}
+          >
             {/* Header with category & arrow */}
             <div className="d-flex justify-content-between align-items-center mb-2">
               <div className="dark-blue-bg-color text-white details-right-category-heading">
@@ -34,8 +38,7 @@ export default function SidebarCategorySwiper({ items }) {
               spaceBetween={20}
               slidesPerView={1}
               loop={true}
-                    className="sidebarCategorySwiper w-100"
-
+              className="sidebarCategorySwiper w-100"
             >
               {item.slides?.map((slide, slideIndex) => (
                 <SwiperSlide key={`category-${index}-slide-${slideIndex}`}>
@@ -43,10 +46,15 @@ export default function SidebarCategorySwiper({ items }) {
                     <h4 className="clamp-2">{slide.title}</h4>
                     <div className="image-wrapper image-wrapper-sidebar">
                       <img
-                        src={slide.image || mainImg}
+                        src={slide.image || fallback}
                         alt={slide.title}
                         className="banner-img-details"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = fallback; // fallback image
+                        }}
                       />
+
                       <div className="blur-bg-details"></div>
                     </div>
                   </div>

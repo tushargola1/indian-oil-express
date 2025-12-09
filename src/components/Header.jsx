@@ -9,8 +9,10 @@ import Cookies from "js-cookie";
 export default function Header() {
   const navigate = useNavigate();
   const [showLocationMenu, setShowLocationMenu] = useState(false);
-  const [issticky, setIsSticky] = useState(false)
+  const [issticky, setIsSticky] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+ const [query, setQuery] = useState("");
+
   const locationMenuRef = useRef(null);
 
   const toggleLocationMenu = () => {
@@ -35,7 +37,7 @@ export default function Header() {
 
   const handleLogout = (e) => {
     e.preventDefault();
-localStorage.clear()
+    localStorage.clear();
     Swal.fire({
       title: "Are you sure?",
       text: "You will be logged out of your session!",
@@ -92,6 +94,12 @@ localStorage.clear()
     };
   }, []);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!query.trim()) return;
+    // navigate to /search with query param ?query=...
+    navigate(`/search?query=${encodeURIComponent(query.trim())}`);
+  };
   return (
     <header className={`border-bottom shadow-sm  `}>
       {/* Top Row */}
@@ -101,14 +109,14 @@ localStorage.clear()
           {/* Left Logo */}
           <div className={`col-md-2 col-lg-3 col-6 right-logo-area  ps-0`}>
             <div className={`hh`}>
-              <Link to='/'>
+              <Link to="/">
                 <img
                   src={indianOil}
                   alt="Indian Oil"
                   className="indianOil-logo d-xl-block d-md-block d-none"
                 />
               </Link>
-              <Link to='/'>
+              <Link to="/">
                 <img
                   src={sprintLogo}
                   alt="Indian Oil"
@@ -157,11 +165,12 @@ localStorage.clear()
                  <i className="fa fa-bars dark-blue-color"></i>
                 </a> */}
                 </div>
-                <div className="location-wrapper " ref={locationMenuRef}  >
+                <div className="location-wrapper " ref={locationMenuRef}>
                   <div className="share-btn" onClick={toggleLocationMenu}>
                     <i
-                      className={`fa ${showLocationMenu ? "fa-times" : "fa-bars"
-                        } dark-blue-color fs-4`}
+                      className={`fa ${
+                        showLocationMenu ? "fa-times" : "fa-bars"
+                      } dark-blue-color fs-4`}
                     ></i>
                   </div>
 
@@ -252,7 +261,7 @@ localStorage.clear()
               ></button>
             </div>
             {/* px-xl-4 px-lg-4 px-md-4 px-4 */}
-            <div className="offcanvas-body d-flex align-items-xl-center align-items-md-start align-items-start  flex-lg-column flex-md-column flex-column" >
+            <div className="offcanvas-body d-flex align-items-xl-center align-items-md-start align-items-start  flex-lg-column flex-md-column flex-column">
               <div className="row align-items-center justify-content-between w-100">
                 <ul className="navbar-nav  pe-3 fw-semibold col-md-8 py-0">
                   <li className="nav-item">
@@ -324,13 +333,14 @@ localStorage.clear()
 
                 {/* Search Box Inside Offcanvas */}
                 <div className="col-md-2 px-0">
-                  <form className="d-flex navbar-form">
+                  <form className="d-flex navbar-form" onSubmit={handleSubmit}>
                     <input
                       className="form-control me-2"
                       type="search"
                       placeholder="Search..."
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
                     />
-
                     <button className="btn btn-transparent" type="submit">
                       <i className="fas fa-search text-white"></i>
                     </button>

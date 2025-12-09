@@ -34,7 +34,7 @@ const fetchBannerData = async () => {
 // Fetch Announcements
 const fetchAnnouncements = async () => {
   const response = await axios.get(
-    apiBaseUrl("Announcements/GetAnnouncements/3"),
+    apiBaseUrl("Announcements/GetAnnouncements"),
     // { showIn: "W" },
     {
       headers: {
@@ -93,7 +93,7 @@ const HomeBanner = () => {
             {/* LEFT IMAGE FADE CAROUSEL */}
             <div className="col-xl-8 col-lg-12 col-md-12 col-12 position-relative pe-2">
               {isBannerLoading ? (
-                <Skeleton height={400} width="100%" />
+                <Skeleton height={"100%"} width="100%" />
               ) : isBannerError ? (
                 <p>❌ Failed to load banners</p>
               ) : (
@@ -146,7 +146,7 @@ const HomeBanner = () => {
             {/* RIGHT TEXT FADE CAROUSEL */}
             <div className="col-xl-4 col-lg-12 col-md-12 col-12 banner-right-content">
               {isBannerLoading ? (
-                <Skeleton count={10} />
+                <Skeleton count={8} />
               ) : isBannerError ? (
                 <p>❌ Failed to load banners</p>
               ) : (
@@ -189,7 +189,7 @@ const HomeBanner = () => {
           {/* <img src={announcement} alt="" className="announcement-img mb-2" /> */}
 
           {isAnnouncementLoading ? (
-            <Skeleton count={5} height={60} />
+            <Skeleton count={8} height={20} />
           ) : isAnnouncementError ? (
             <p>❌ Failed to load announcements</p>
           ) : (
@@ -197,7 +197,7 @@ const HomeBanner = () => {
               {announcements.map((item) => (
                 <Link
                   key={item.id}
-                  to={`/announcement-detail/${item.id}`}
+                  to={`/announcement/${item.id}`}
                   className="announcement-item d-flex justify-content-between align-items-center p-2 border rounded"
                   style={{
                     display: "flex",

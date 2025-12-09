@@ -160,14 +160,14 @@ const NewsCard = ({ category, slides = [], color = "#0e4094", loading, categoryI
             ))
             : slides.map((slide, index) => (
               <SwiperSlide key={index}>
-                <Link to={`/news-detail/${slide.slideId}`}>
+                <Link to={`/news-detail/${slide.slideId}`} state={{ type: "XpressNews", clickedId: categoryId }}>
 
                   <p className="card-text news-details mb-0">
                     {slide.title.split(" ").slice(0, 8).join(" ")}
                     {slide.title.split(" ").length > 8 ? "..." : ""}
                   </p>
 
-                  <div className="news-card-image-div my-2">
+                  {/* <div className="news-card-image-div my-2">
                     {slide.image?.startsWith("https://ioclxpressapp.businesstowork.com") ? (
                       <img
                         src={slide.image}
@@ -182,7 +182,28 @@ const NewsCard = ({ category, slides = [], color = "#0e4094", loading, categoryI
 
                       />
                     )}
-                  </div>
+                  </div> */}
+                  <div className="news-card-image-div my-2">
+  <img
+    src={
+      slide.image?.startsWith("https://ioclxpressapp.businesstowork.com")
+        ? slide.image
+        : fallback
+    }
+    alt="News"
+    className={
+      slide.image?.startsWith("https://ioclxpressapp.businesstowork.com")
+        ? "news-card-img"
+        : "news-card-img fallback-img"
+    }
+    onError={(e) => {
+      e.target.onerror = null;
+      e.target.src = fallback;
+      e.target.className = "news-card-img fallback-img"; // switch to fallback class
+    }}
+  />
+</div>
+
                 </Link>
                 {/* <Link
                   to="/news-detail"

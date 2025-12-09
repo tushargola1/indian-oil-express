@@ -10,6 +10,7 @@ import ProtectedRoute from "./authentication/ProtectedRoute";
 import PublicRoute from "./authentication/PublicRoute";
 import ScrollToTop from "./components/ScrollToTop";
 import SearchPage from "./innerPage/SearchPage";
+import Announcements from "./detail-page/announcements";
 
 function AppContent() {
   const location = useLocation();
@@ -61,6 +62,22 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <SearchPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/announcement/:announcementId"
+          element={
+            <ProtectedRoute>
+              <Announcements />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/news-listing/:newsId"
+          element={
+            <ProtectedRoute>
+              <NewsListing />
             </ProtectedRoute>
           }
         />

@@ -1,6 +1,6 @@
 import mainImg from "../assets/image/banner/1.png";
 import arrow from "../assets/image/arrow.png";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { apiBaseUrl } from "../Helper";
@@ -28,31 +28,46 @@ const getNewsDetails = async (newsId) => {
   return res?.data?.data ?? null;
 };
 
-const fetchTopXpressNews = async () => {
-  const res = await axios.post(
-    apiBaseUrl("XpressNews/GetTopXpressNews"),
-    { showIn: "W" }, // or your filter
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${Cookies.get("accessToken")}`,
-      },
-    }
-  );
+// Fetch top news conditionally based on newsType
+const fetchTopNews = async (newsType, newsId) => {
+  if (newsType === "XpressNews") {
+    const res = await axios.post(
+      apiBaseUrl("XpressNews/GetTopXpressNews"),
+      { showIn: "W" },
+      { headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` } }
+    );
 
-  // Transform API response to match your frontend structure
-  return res.data.data.map((category) => ({
-    category: category.name,
-    categoryId: category.id,
-    slides: category.list.map((item) => ({
-      slideId: item.id,
-      title: item.title,
-      image: item.imagePath,
-      date: item.newsDate,
-      readingTime: item.readTime,
-    })),
-  }));
+    return res.data.data.map((category) => ({
+      category: category.name,
+      categoryId: category.id,
+      slides: category.list.map((item) => ({
+        slideId: item.id,
+        title: item.title,
+        image: item.imagePath,
+        date: item.newsDate,
+        readingTime: item.readTime,
+      })),
+    }));
+  } else {
+    // Correct GET with query params
+    const res = await axios.get(apiBaseUrl("WebPages/GetTopWebPages"), {
+      headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` },
+      params: { showIn: "W" }, // query params
+    });
+
+    // Normalize data for SidebarCategorySwiper
+    return (res?.data?.data || []).map((item) => ({
+      category: item.name,
+      categoryId: item.id,
+      slides: (item.list || []).map((slide) => ({
+        slideId: slide.id,
+        title: slide.title,
+        image: slide.imagePath,
+      })),
+    }));
+  }
 };
+
 
 const getAllComments = async (newsId) => {
   const res = await axios.get(
@@ -69,9 +84,13 @@ const getAllComments = async (newsId) => {
 };
 
 export default function NewsDetails() {
+  const location = useLocation();
+
   const { newsId } = useParams();
   const [readTime, setReadTime] = useState(0);
   const [showComment, setShowComment] = useState(false);
+
+  const newsType = location?.state?.type || "XpressNews";
 
   // ============================================
   // ⭐ Fetch News Details
@@ -95,18 +114,18 @@ export default function NewsDetails() {
     },
   });
 
-  // top xpress news
-  const {
-    data: topXpressNews = [], // this will be your newsHighlights
-    isLoading: isLoadingHighlights,
-    isError: isErrorHighlights,
-    refetch: refetchHighlights,
-  } = useQuery({
-    queryKey: ["topXpressNews"], // unique key
-    queryFn: fetchTopXpressNews,
+
+  // ======================
+  // Fetch top/recommended news
+  // ======================
+  const { data: topNews = [] } = useQuery({
+    queryKey: ["topNews", newsType, newsId],
+    queryFn: () => fetchTopNews(newsType, newsId),
+    // enabled: !!newsType,
+    staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5, // 5 minutes cache
   });
+
 
   // GET ALL COMMENTS
   const {
@@ -244,26 +263,48 @@ export default function NewsDetails() {
   // ============================================
   // ⭐ Download (kept same)
   // ============================================
-  const handleDownload = async () => {
-    try {
-      await axios.post(
-        apiBaseUrl("XpressNews/AddDownload"),
-        {
-          xpressNewsId: newsId,
-          ipAddress: "::1",
+const handleDownload = async () => {
+  try {
+    // 1) Call the download GET API
+    const downloadRes = await axios.get(
+      apiBaseUrl(`XpressNews/Download/${newsId}`),
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("accessToken")}`,
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${Cookies.get("accessToken")}`,
-          },
-        }
-      );
-      refetch();
-    } catch (error) {
-      console.error("Download API failed:", error);
-    }
-  };
+        responseType: "blob", // if API returns a file
+      }
+    );
+
+    // If you expect a file blob, trigger download in browser
+    const url = window.URL.createObjectURL(new Blob([downloadRes.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `${newsDetails?.title || "file"}.pdf`); // or correct file name
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    // 2) If download was successful (status 200 etc.), call AddDownload to update count
+    await axios.post(
+      apiBaseUrl("XpressNews/AddDownload"),
+      { xpressNewsId: newsId, ipAddress: "::1" },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("accessToken")}`,
+        },
+      }
+    );
+
+    // Optionally refetch or update local state to refresh download count
+    refetch();
+  } catch (error) {
+    console.error("Download or count update failed:", error);
+  }
+};
+
 
   return (
     <>
@@ -296,7 +337,7 @@ export default function NewsDetails() {
                     <span className="ms-1">{newsDetails?.downloadsCount}</span>
                   </p>
                 ) : (
-                  <p>
+                  <p >
                     <i className="fa-solid fa-download"></i>
                     <span className="ms-2">{newsDetails?.downloadsCount}</span>
                   </p>
@@ -319,21 +360,25 @@ export default function NewsDetails() {
                     alt="Banner"
                     className="banner-img-details"
                   /> */}
-                  {newsDetails?.imagePath?.startsWith(
-                    "https://ioclxpressapp.businesstowork.com"
-                  ) ? (
-                    <img
-                      src={newsDetails?.imagePath}
-                      alt="News"
-                      className="news-card-img "
-                    />
-                  ) : (
-                    <img
-                      src={fallback}
-                      alt="Fallback News"
-                      className="news-card-img fallback-img fallback-details"
-                    />
-                  )}
+                  {newsDetails?.imagePath?.startsWith("https://ioclxpressapp.businesstowork.com") ? (
+  <img
+    src={newsDetails?.imagePath}
+    alt="News"
+    className="news-card-img"
+    onError={(e) => {
+      e.target.onerror = null;
+      e.target.src = fallback;
+      e.target.className = "news-card-img fallback-img fallback-details";
+    }}
+  />
+) : (
+  <img
+    src={fallback}
+    alt="Fallback News"
+    className="news-card-img fallback-img fallback-details"
+  />
+)}
+
                   <div className="blur-bg-details"></div>
                   {newsDetails?.byLine && (
                     <div className="bannerContent-details">
@@ -390,9 +435,7 @@ export default function NewsDetails() {
             </div>
           </div>
           <div className="col-xl-3 mt-4 col-lg-3 col-md-12 col-12 details-page-right-section right-bar-side detail-page-left-section">
-            {topXpressNews.length > 0 && (
-              <SidebarCategorySwiper items={topXpressNews} />
-            )}
+        {topNews.length > 0 && <SidebarCategorySwiper items={topNews} />}
           </div>
         </div>
         <div className="d-flex align-items-center justify-content-between  flex-wrap mt-3">
@@ -418,23 +461,27 @@ export default function NewsDetails() {
                   alt="Right Banner"
                   className="right-bar-side-image  mt-4 mb-3"
                 /> */}
-                <Link to={`/news-detail/${item.id}`}>
-                  {item.imagePath?.startsWith(
-                    "https://ioclxpressapp.businesstowork.com"
-                  ) ? (
-                    <img
-                      src={item.imagePath}
-                      alt="News"
-                      className="recommended-details-img"
-                    />
-                  ) : (
-                    <img
-                      src={fallback}
-                      alt="Fallback News"
-                      className="news-card-img fallback-img"
-                    />
-                  )}
-                </Link>
+             <Link to={`/news-detail/${item.id}`}>
+  {item.imagePath?.startsWith("https://ioclxpressapp.businesstowork.com") ? (
+    <img
+      src={item.imagePath}
+      alt="News"
+      className="recommended-details-img"
+      onError={(e) => {
+        e.target.onerror = null;
+        e.target.src = fallback;
+        e.target.className = "news-card-img fallback-img";
+      }}
+    />
+  ) : (
+    <img
+      src={fallback}
+      alt="Fallback News"
+      className="news-card-img fallback-img"
+    />
+  )}
+</Link>
+
                 <Link
                   className="arrow-btn text-start"
                   to={`/news-detail/${item.id}`}
