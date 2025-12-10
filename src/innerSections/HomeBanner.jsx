@@ -1,49 +1,25 @@
+// React & Router
 import { useState, useRef, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+
+// Swiper components
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade, Controller } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-fade";
+
+// UI Components
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import Cookies from "js-cookie";
-import { apiBaseUrl } from "../Helper";
 
-// import announcement from "../assets/image/banner/announcement.png";
+// Assets
 import fallback from "../assets/image/banner/1.png";
-import pdfIcon from "../assets/image/pdf.png"; 
+import pdfIcon from "../assets/image/pdf.png";
 import arrow from "../assets/image/arrow.png";
 
-// Fetch Banner Data
-const fetchBannerData = async () => {
-  const response = await axios.post(
-    apiBaseUrl("XpressNews/GetTopXpressNewsFHPS"),
-    { showIn: "W" },
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${Cookies.get("accessToken")}`,
-      },
-    }
-  );
-  return response.data.data;
-};
-
-// Fetch Announcements
-const fetchAnnouncements = async () => {
-  const response = await axios.get(
-    apiBaseUrl("Announcements/GetAnnouncements"),
-    // { showIn: "W" },
-    {
-      headers: {
-        Authorization: `Bearer ${Cookies.get("accessToken")}`,
-      },
-    }
-  );
-  return response.data.data
-};
+// API Functions
+import { fetchAnnouncements, fetchBannerData } from "../components/ApiFunctions";
 
 const HomeBanner = () => {
   const [imageSwiper, setImageSwiper] = useState(null);
@@ -55,7 +31,7 @@ const HomeBanner = () => {
   // Banner Data
   const { data: bannerData, isLoading: isBannerLoading, isError: isBannerError } = useQuery({
     queryKey: ["bannerData"],
-    queryFn: fetchBannerData,
+    queryFn: () => fetchBannerData(),
     staleTime: Infinity,
     cacheTime: Infinity,
     refetchOnWindowFocus: false,
@@ -64,7 +40,7 @@ const HomeBanner = () => {
   // Announcement Data
   const { data: announcements, isLoading: isAnnouncementLoading, isError: isAnnouncementError } = useQuery({
     queryKey: ["announcements"],
-    queryFn: fetchAnnouncements,
+    queryFn: () => fetchAnnouncements(),
     staleTime: Infinity,
     cacheTime: Infinity,
     refetchOnWindowFocus: false,
@@ -124,8 +100,8 @@ const HomeBanner = () => {
                             className="blur-bg"
                             style={{
                               backgroundImage: `url(${item.imagePath?.startsWith("https://ioclxpressapp.businesstowork.com")
-                                  ? item.imagePath
-                                  : fallback
+                                ? item.imagePath
+                                : fallback
                                 })`,
                             }}
                           ></div>
@@ -184,7 +160,7 @@ const HomeBanner = () => {
         <div
           className="col-xl-3 col-lg-5 col-md-12 col-12 right-bar-side d-flex flex-column"
           ref={rightSideRef}
-          // style={{ height: rightHeight, overflowY: "auto", gap: "10px" }}
+        // style={{ height: rightHeight, overflowY: "auto", gap: "10px" }}
         >
           {/* <img src={announcement} alt="" className="announcement-img mb-2" /> */}
 
@@ -218,7 +194,7 @@ const HomeBanner = () => {
                   >
                     {item.title}
                   </p>
-                  <img src={pdfIcon} alt="PDF" style={{ width: 20, height: 20 }} className="ms-4"/>
+                  <img src={pdfIcon} alt="PDF" style={{ width: 20, height: 20 }} className="ms-4" />
                 </Link>
               ))}
             </div>

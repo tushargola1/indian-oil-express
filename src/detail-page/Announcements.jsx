@@ -22,12 +22,12 @@ const fetchAnnouncementDetails = async (announcementId) => {
 
 const Announcements = () => {
     const {announcementId} = useParams();
-const { data: announcement, isLoading, isError } = useQuery({
-  queryKey: ["announcement", announcementId],
-  queryFn: () => fetchAnnouncementDetails(announcementId),
-  staleTime: Infinity,
-  cacheTime: Infinity,
-  refetchOnWindowFocus: false,
+    const { data: announcement, isLoading, isError } = useQuery({
+    queryKey: ["announcement", announcementId],
+    queryFn: () => fetchAnnouncementDetails(announcementId),
+    staleTime: Infinity,
+    cacheTime: Infinity,
+    refetchOnWindowFocus: false,
 });
 
 

@@ -133,7 +133,7 @@ const SearchCard = ({ item }) => (
       className="clamp-4 search-desc"
       dangerouslySetInnerHTML={{ __html: item.description + "..." }}
     ></p>
-    <a href={item.url} className="btn dark-blue-bg-color text-white mt-auto w-100">
+    <a href={`/news-detail/${item.entityId}`} className="btn dark-blue-bg-color text-white mt-auto w-100">
       View Details
     </a>
   </div>

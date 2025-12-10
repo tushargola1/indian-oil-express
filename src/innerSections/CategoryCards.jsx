@@ -24,6 +24,7 @@ import graduationCap from "../assets/image/home-img-card/cap.png";
 import meeting from "../assets/image/category-card-img/Layer-10b.png";
 import safety from "../assets/image/category-card-img/Layer-10c.png";
 import news from "../assets/image/category-card-img/Layer-10d.png";
+import { getWebPageData } from "../components/ApiFunctions";
 
 const categoryIcons = [
   synergy,
@@ -36,15 +37,7 @@ const categoryIcons = [
   meeting,
 ];
 
-// ✅ API function
-const getWebPageData = async () => {
-  const res = await axios.get(apiBaseUrl("WebPages/GetTopWebPages"), {
-    headers: {
-      Authorization: `Bearer ${Cookies.get("accessToken")}`,
-    },
-  });
-  return res.data.data;
-};
+
 
 export default function CategoryCard() {
   const {
@@ -53,7 +46,7 @@ export default function CategoryCard() {
     isError,
   } = useQuery({
     queryKey: ["categoryData"],
-    queryFn: getWebPageData,
+    queryFn: () =>getWebPageData(),
     staleTime: Infinity,
     cacheTime: Infinity,
     refetchOnWindowFocus: false,

@@ -1,66 +1,36 @@
+
+// React & Router
 import { useRef } from "react";
 import { Link } from "react-router-dom";
+
+// Swiper (Carousel)
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
+
+// UI & Loading
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+
+// Data & Utilities
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Cookies from "js-cookie";
-import fallback from "../assets/image/fallback.png"
+
+// Assets
+import fallback from "../assets/image/fallback.png";
 import arrow from "../assets/image/home-img-card/arrow.png";
-import { apiBaseUrl } from "../Helper";
 
-// ✅ API function
-const fetchTopXpressNews = async () => {
-  const res = await axios.post(
-    apiBaseUrl("XpressNews/GetTopXpressNews"),
-    { showIn: "W" },
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${Cookies.get("accessToken")}`,
-      },
-    }
-  );
+// API
+import { fetchTopXpressNews } from "./ApiFunctions";
 
-  const getCategoryColor = (name) => {
-    switch (name) {
-      case "Spotlight":
-        return "#69a9b9";
-      case "News Buzz":
-        return "#61a884";
-      case "Achievers":
-        return "#f37127";
-      case "Community Connect":
-        return "#f28bb6";
-      default:
-        return "#0e4094";
-    }
-  };
-
-  // Transform API response
-  return res.data.data.map((category) => ({
-    category: category.name,
-    categoryId: category.id,
-    slides: category.list.map((item) => ({
-      slideId: item.id,
-      title: item.title,
-      image: item.imagePath,
-      date: item.newsDate,
-      readingTime: item.readTime,
-    })),
-    color: getCategoryColor(category.name),
-  }));
-};
 
 const NewsCards = () => {
   // ✅ Use React Query for caching and fetching
   const { data: newsData = [], isLoading, error } = useQuery({
     queryKey: ["topXpressNews"],
-    queryFn: fetchTopXpressNews,
+    queryFn: () => fetchTopXpressNews(),
     staleTime: Infinity,
     cacheTime: Infinity,
     refetchOnWindowFocus: false,
@@ -184,25 +154,25 @@ const NewsCard = ({ category, slides = [], color = "#0e4094", loading, categoryI
                     )}
                   </div> */}
                   <div className="news-card-image-div my-2">
-  <img
-    src={
-      slide.image?.startsWith("https://ioclxpressapp.businesstowork.com")
-        ? slide.image
-        : fallback
-    }
-    alt="News"
-    className={
-      slide.image?.startsWith("https://ioclxpressapp.businesstowork.com")
-        ? "news-card-img"
-        : "news-card-img fallback-img"
-    }
-    onError={(e) => {
-      e.target.onerror = null;
-      e.target.src = fallback;
-      e.target.className = "news-card-img fallback-img"; // switch to fallback class
-    }}
-  />
-</div>
+                    <img
+                      src={
+                        slide.image?.startsWith("https://ioclxpressapp.businesstowork.com")
+                          ? slide.image
+                          : fallback
+                      }
+                      alt="News"
+                      className={
+                        slide.image?.startsWith("https://ioclxpressapp.businesstowork.com")
+                          ? "news-card-img"
+                          : "news-card-img fallback-img"
+                      }
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = fallback;
+                        e.target.className = "news-card-img fallback-img"; // switch to fallback class
+                      }}
+                    />
+                  </div>
 
                 </Link>
                 {/* <Link
