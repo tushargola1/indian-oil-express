@@ -52,7 +52,7 @@ const NewsCards = () => {
           ))
           :
           newsData.map((card, i) => (
-            <div className="col news-card-col" key={i}>
+            <div className="col news-card-col m-1" key={i}>
               <NewsCard
                 category={card.category}
                 slides={card.slides}
@@ -79,7 +79,7 @@ const NewsCard = ({ category, slides = [], color = "#0e4094", loading, categoryI
         background: `linear-gradient(180deg, ${color} -17%, rgba(255, 255, 255, 1) 26%)`,
       }}
     >
-      <div className="card-body">
+      <div className="card-body p-2">
         <div className="d-flex justify-content-between align-items-center mb-2 position-relative news-card-heading">
           <h5 className="card-title news-heading italic-text pb-0 mb-0">
             {loading ? <Skeleton width={150} /> : category}
@@ -181,7 +181,7 @@ const NewsCard = ({ category, slides = [], color = "#0e4094", loading, categoryI
                 >
                   More Details
                 </Link> */}
-                <p className="mb-0 date-read">
+                <p className="mb-0 date-read custome_read">
                   {slide.date}
                   {slide.date && slide.readingTime && " | "}
                   {slide.readingTime}
