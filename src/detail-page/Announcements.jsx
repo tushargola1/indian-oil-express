@@ -1,24 +1,21 @@
-import axios from "axios";
+// ===================== React =====================
 import React from "react";
-import { Document, Page, pdfjs } from "react-pdf";
-import { apiBaseUrl } from "../Helper";
-import Cookies from "js-cookie";
-import { useQuery } from "@tanstack/react-query";
+
+// ===================== Routing =====================
 import { useParams } from "react-router-dom";
 
-// PDF.js worker
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+// ===================== Data & API =====================
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import { fetchAnnouncementDetails } from "../components/ApiFunctions";
+import { apiBaseUrl } from "../Helper";
+import Cookies from "js-cookie";
 
-// Fetch announcement details from API
-const fetchAnnouncementDetails = async (announcementId) => {
-  const res = await axios.get(apiBaseUrl(`Announcements/GetVM/${announcementId}`), {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${Cookies.get("accessToken")}`,
-    },
-  });
-  return res.data?.data;
-};
+// ===================== PDF Viewer =====================
+import { Document, Page, pdfjs } from "react-pdf";
+
+// ===================== PDF.js Worker Setup =====================
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const Announcements = () => {
     const {announcementId} = useParams();

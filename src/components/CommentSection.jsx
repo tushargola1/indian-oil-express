@@ -1,7 +1,11 @@
+// ===================== React =====================
 import React, { useState, useEffect, useRef } from "react";
+
+// ===================== HTTP & Utilities =====================
 import axios from "axios";
 import Cookies from "js-cookie";
 import { apiBaseUrl } from "../Helper";
+
 
 export default function CommentSection({ comments: apiComments, newsId }) {
   const containerRef = useRef(null);

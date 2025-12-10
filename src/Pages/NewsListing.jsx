@@ -1,55 +1,26 @@
+// ===================== React =====================
 import { useEffect, useState } from "react";
-import mainImg from "../assets/image/banner/1.png";
+
+// ===================== Routing =====================
+import { useParams, useLocation } from "react-router-dom";
+
+// ===================== API & Data =====================
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useQuery } from "@tanstack/react-query";
+import { apiBaseUrl } from "../Helper";
+import { getNewsListing } from "../components/ApiFunctions";
+
+// ===================== UI Components =====================
 import Pagination from "../components/Pagination";
 import CategoriesSidebar from "../innerPage/CategoriesSidebar";
-import { apiBaseUrl } from "../Helper";
-import Cookies from "js-cookie";
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { useParams, useLocation } from "react-router-dom";
+
+// ===================== Assets =====================
+import mainImg from "../assets/image/banner/1.png";
 import fallback from "../assets/image/fallback.png";
-const getNewsListing = async (page, ITEMS_PER_PAGE, newsId, newsType) => {
-  const start = (page - 1) * ITEMS_PER_PAGE;
 
-  const xpress = newsType === "XpressNews";
-
-  const endpoint = xpress
-    ? "XpressNews/GetXpressNewsFL"
-    : "WebPages/GetWebPagesFL";
-
-  const paramNewsId = xpress ? "xpressNewsTypeId" : "webPageCategoryId";
-
-  const res = await axios.post(
-    apiBaseUrl(endpoint),
-    {
-      searchValue: "",
-      sortColumn: "",
-      sortDirection: "ASC",
-      start,
-      length: ITEMS_PER_PAGE,
-      [paramNewsId]: Number(newsId),
-      leadershipCategoryId: "",
-      divisionId: "",
-      fromDate: "",
-      toDate: "",
-      showIn: "W",
-    },
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${Cookies.get("accessToken")}`,
-      },
-    }
-  );
-
-  // ✅ Return structured response
-  return {
-    data: res.data.data.data || [],
-    totalRecords: res.data.data.recordsFiltered || 0,
-  };
-};
 
 // ✅ News Item Component
 const NewsItem = ({ imagePath, title, shortDesc, newsDate, byLine }) => {
@@ -80,11 +51,10 @@ const NewsItem = ({ imagePath, title, shortDesc, newsDate, byLine }) => {
               : fallback
           }
           alt={title || "News"}
-          className={`img-fluid ${
-            !imagePath?.startsWith("https://ioclxpressapp.businesstowork.com")
+          className={`img-fluid ${!imagePath?.startsWith("https://ioclxpressapp.businesstowork.com")
               ? "fallback-listing"
               : ""
-          }`}
+            }`}
           onError={(e) => {
             e.target.onerror = null;
             e.target.src = fallback;
@@ -114,7 +84,6 @@ const NewsListing = () => {
   const newsType = location.state?.type;
   const newsParentId = location.state?.clickedId;
 
-  console.log(newsParentId);
 
   const ITEMS_PER_PAGE = 5;
   const [currentPage, setCurrentPage] = useState(() => {

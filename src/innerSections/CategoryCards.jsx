@@ -1,15 +1,24 @@
+// ===================== React & Router Imports =====================
 import { Link } from "react-router-dom";
+
+// ===================== State & Data Fetching =====================
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Cookies from "js-cookie";
+
+// ===================== UI & Loading Components =====================
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
+// ===================== Assets =====================
 import arrow from "../assets/image/home-img-card/arrow.png";
-import { apiBaseUrl } from "../Helper";
 import fallback from "../assets/image/fallback.png";
 
-// 🎨 Color map for categories
+// ===================== Helper Functions =====================
+import { apiBaseUrl } from "../Helper";
+import { getWebPageData } from "../components/ApiFunctions";
+
+// ===================== Category Colors =====================
 const colors = {
   "Strengthening Synergy": "#eed6c5",
   "Learning Pathways": "#eee5c5",
@@ -18,13 +27,12 @@ const colors = {
   "News at a Glance": "#b4f6f8",
 };
 
-// ✅ Category icons array (order matches categoryData)
+// ===================== Category Icons =====================
 import synergy from "../assets/image/category-card-img/image016.png";
 import graduationCap from "../assets/image/home-img-card/cap.png";
 import meeting from "../assets/image/category-card-img/Layer-10b.png";
 import safety from "../assets/image/category-card-img/Layer-10c.png";
 import news from "../assets/image/category-card-img/Layer-10d.png";
-import { getWebPageData } from "../components/ApiFunctions";
 
 const categoryIcons = [
   synergy,
@@ -36,6 +44,7 @@ const categoryIcons = [
   graduationCap,
   meeting,
 ];
+
 
 
 

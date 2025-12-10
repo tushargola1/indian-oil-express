@@ -1,44 +1,23 @@
+// ===================== HTTP & Utilities =====================
 import axios from "axios";
 import Cookies from "js-cookie";
 import { apiBaseUrl } from "../Helper";
-import { useQuery } from "@tanstack/react-query";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
-import { Link, useLocation } from "react-router-dom";
 import { useMemo } from "react";
 
-// --------------------------
-// API Calls
-// --------------------------
-const getXpressCategories = async () => {
-  const res = await axios.post(
-    apiBaseUrl("XpressNews/GetTopXpressNews"),
-    { showIn: "W" },
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${Cookies.get("accessToken")}`,
-      },
-    }
-  );
-  return res.data.data.map((category) => ({
-    id: category.id,
-    category: category.name,
-  }));
-};
+// ===================== Data Fetching =====================
+import { useQuery } from "@tanstack/react-query";
+import { 
+  getWebPageCategories, 
+  getXpressCategories 
+} from "../components/ApiFunctions";
 
-const getWebPageCategories = async () => {
-  const res = await axios.get(apiBaseUrl("WebPages/GetTopWebPages"), {
-    headers: {
-      Authorization: `Bearer ${Cookies.get("accessToken")}`,
-    },
-  });
+// ===================== UI Components =====================
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
-  return res.data.data.map((item) => ({
-    id: item.id,
-    category: item.name,
-  }));
-};
+// ===================== Routing =====================
+import { Link, useLocation } from "react-router-dom";
+
 
 // --------------------------
 // Component
@@ -88,25 +67,25 @@ const CategoriesSidebar = ({ newsType, newsParentId }) => {
         <ul className="list-unstyled m-0 mt-3">
           {isLoading
             ? Array.from({ length: 5 }).map((_, idx) => (
-                <li key={idx} className="mb-2">
-                  <Skeleton height={20} width="80%" />
-                </li>
-              ))
+              <li key={idx} className="mb-2">
+                <Skeleton height={20} width="80%" />
+              </li>
+            ))
             : categoriesToDisplay.map((cat, idx) => (
-                <li
-                  key={cat.id}
-                  className={`category-item ${idx === 0 ? "active-category" : ""}`}
+              <li
+                key={cat.id}
+                className={`category-item ${idx === 0 ? "active-category" : ""}`}
+              >
+                <Link
+                  to={`/news-listing/${cat.id}`}
+                  state={{ type: newsType, clickedId: cat.id }}
+                  className="d-flex align-items-center text-decoration-none"
                 >
-                  <Link
-                    to={`/news-listing/${cat.id}`}
-                    state={{ type: newsType, clickedId: cat.id }}
-                    className="d-flex align-items-center text-decoration-none"
-                  >
-                    <i className="fa fa-chevron-right me-2 theme-dark-blue"></i>
-                    <span className="categoryText">{cat.category}</span>
-                  </Link>
-                </li>
-              ))}
+                  <i className="fa fa-chevron-right me-2 theme-dark-blue"></i>
+                  <span className="categoryText">{cat.category}</span>
+                </Link>
+              </li>
+            ))}
         </ul>
       </div>
 
@@ -147,26 +126,26 @@ const CategoriesSidebar = ({ newsType, newsParentId }) => {
               <ul className="list-unstyled m-0">
                 {isLoading
                   ? Array.from({ length: 5 }).map((_, idx) => (
-                      <li key={idx} className="mb-2">
-                        <Skeleton height={20} width="80%" />
-                      </li>
-                    ))
+                    <li key={idx} className="mb-2">
+                      <Skeleton height={20} width="80%" />
+                    </li>
+                  ))
                   : categoriesToDisplay.map((cat, idx) => (
-                      <li
-                        key={cat.id}
-                        className={`category-item ${idx === 0 ? "active-category" : ""}`}
+                    <li
+                      key={cat.id}
+                      className={`category-item ${idx === 0 ? "active-category" : ""}`}
+                    >
+                      <Link
+                        to={`/news-listing/${cat.id}`}
+                        state={{ type: newsType, clickedId: cat.id }}
+                        data-bs-dismiss="modal"
+                        className="d-flex align-items-center text-decoration-none"
                       >
-                        <Link
-                          to={`/news-listing/${cat.id}`}
-                          state={{ type: newsType, clickedId: cat.id }}
-                          data-bs-dismiss="modal"
-                          className="d-flex align-items-center text-decoration-none"
-                        >
-                          <i className="fa fa-chevron-right me-2 theme-dark-blue"></i>
-                          <span className="categoryText">{cat.category}</span>
-                        </Link>
-                      </li>
-                    ))}
+                        <i className="fa fa-chevron-right me-2 theme-dark-blue"></i>
+                        <span className="categoryText">{cat.category}</span>
+                      </Link>
+                    </li>
+                  ))}
               </ul>
             </div>
 

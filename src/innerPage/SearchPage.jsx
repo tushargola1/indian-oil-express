@@ -1,9 +1,16 @@
+// ===================== React =====================
 import React, { useEffect, useState } from "react";
+
+// ===================== HTTP & Utilities =====================
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useSearchParams } from "react-router-dom";
-import searchImage from "../assets/image/search.png";
 import { apiBaseUrl } from "../Helper";
+
+// ===================== Routing =====================
+import { useSearchParams } from "react-router-dom";
+
+// ===================== Assets =====================
+import searchImage from "../assets/image/search.png";
 
 const DEBOUNCE_DELAY = 500;  // delay in ms
 

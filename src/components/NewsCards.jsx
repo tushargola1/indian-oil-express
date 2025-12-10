@@ -1,28 +1,27 @@
-
-// React & Router
+// ===================== React & Router =====================
 import { useRef } from "react";
 import { Link } from "react-router-dom";
 
-// Swiper (Carousel)
+// ===================== Swiper (Carousel) =====================
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 
-// UI & Loading
+// ===================== UI & Loading Components =====================
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-// Data & Utilities
+// ===================== Data & Utilities =====================
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-// Assets
+// ===================== Assets =====================
 import fallback from "../assets/image/fallback.png";
 import arrow from "../assets/image/home-img-card/arrow.png";
 
-// API
+// ===================== API Functions =====================
 import { fetchTopXpressNews } from "./ApiFunctions";
 
 

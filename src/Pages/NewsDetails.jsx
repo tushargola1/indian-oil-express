@@ -1,87 +1,39 @@
-import mainImg from "../assets/image/banner/1.png";
-import arrow from "../assets/image/arrow.png";
-import { Link, useLocation, useParams } from "react-router-dom";
+// ===================== React =====================
 import { useEffect, useState } from "react";
+
+// ===================== Routing =====================
+import { Link, useLocation, useParams } from "react-router-dom";
+
+// ===================== Data & API =====================
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 import { apiBaseUrl } from "../Helper";
 import Cookies from "js-cookie";
-import { useQuery } from "@tanstack/react-query";
-import fallback from "../assets/image/fallback.png";
+import { 
+  addReadTime, 
+  addView, 
+  downloadNews, 
+  fetchTopNews, 
+  getAllComments, 
+  getNewsDetails, 
+  likeDislike 
+} from "../components/ApiFunctions";
+
+// ===================== UI Components =====================
 import ShareTooltip from "../components/ShareTooltip";
 import CommentSection from "../components/CommentSection";
+import SidebarCategorySwiper from "../detail-page/SidebarCategorySwiper";
 
+// ===================== Swiper (Carousel) =====================
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
-import SidebarCategorySwiper from "../detail-page/SidebarCategorySwiper";
 
-const getNewsDetails = async (newsId) => {
-  const url = apiBaseUrl(`XpressNews/GetXpressNewsDetails/${newsId}`);
+// ===================== Assets =====================
+import mainImg from "../assets/image/banner/1.png";
+import arrow from "../assets/image/arrow.png";
+import fallback from "../assets/image/fallback.png";
 
-  const res = await axios.get(url, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${Cookies.get("accessToken")}`,
-    },
-  });
-
-  return res?.data?.data ?? null;
-};
-
-// Fetch top news conditionally based on newsType
-const fetchTopNews = async (newsType, newsId) => {
-  if (newsType === "XpressNews") {
-    const res = await axios.post(
-      apiBaseUrl("XpressNews/GetTopXpressNews"),
-      { showIn: "W" },
-      { headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` } }
-    );
-
-    return res.data.data.map((category) => ({
-      category: category.name,
-      categoryId: category.id,
-      slides: category.list.map((item) => ({
-        slideId: item.id,
-        title: item.title,
-        image: item.imagePath,
-        date: item.newsDate,
-        readingTime: item.readTime,
-      })),
-    }));
-  } else {
-    // Correct GET with query params
-    const res = await axios.get(apiBaseUrl("WebPages/GetTopWebPages"), {
-      headers: { Authorization: `Bearer ${Cookies.get("accessToken")}` },
-      params: { showIn: "W" }, // query params
-    });
-
-    // Normalize data for SidebarCategorySwiper
-    return (res?.data?.data || []).map((item) => ({
-      category: item.name,
-      categoryId: item.id,
-      slides: (item.list || []).map((slide) => ({
-        slideId: slide.id,
-        title: slide.title,
-        image: slide.imagePath,
-      })),
-    }));
-  }
-};
-
-
-const getAllComments = async (newsId) => {
-  const res = await axios.get(
-    apiBaseUrl(`XpressNews/GetXpressNewsComments/20`),
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${Cookies.get("accessToken")}`,
-      },
-    }
-  );
-
-  return res?.data?.data ?? []; // <-- ALWAYS ARRAY
-};
 
 export default function NewsDetails() {
   const location = useLocation();
@@ -147,41 +99,15 @@ export default function NewsDetails() {
   // ============================================
   useEffect(() => {
     if (!newsId) return;
-
     const viewKey = `view_sent_${newsId}`;
+    if (localStorage.getItem(viewKey)) return;
 
-    // already sent?
-    if (localStorage.getItem(viewKey)) {
-      console.log("AddView already sent → skipping");
-      return;
-    }
-
-    axios
-      .post(
-        apiBaseUrl("XpressNews/AddView"),
-        {
-          xpressNewsId: newsId,
-          ipAddress: "::1",
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${Cookies.get("accessToken")}`,
-          },
-        }
-      )
-      .then((res) => {
-        console.log("AddView Success:", res.data.data);
-
-        // prevent it from firing again
+    addView(newsId)
+      .then(() => {
         localStorage.setItem(viewKey, "true");
-
-        // 🔥 refetch news details immediately
         refetch();
       })
-      .catch((err) => {
-        console.log("AddView API failed:", err);
-      });
+      .catch(console.error);
   }, [newsId, refetch]);
 
   // ============================================
@@ -208,103 +134,43 @@ export default function NewsDetails() {
     return () => clearTimeout(timer);
   }, [readTime, newsId]);
 
+  // Read time
   const handleReadTime = async () => {
     const readKey = `read_time_sent_${newsId}`;
+    if (localStorage.getItem(readKey)) return;
 
     try {
-      const res = await axios.post(
-        apiBaseUrl("XpressNews/AddReadTime"),
-        {
-          xpressNewsId: newsId,
-          readTime: readTime,
-          ipAddress: "::1",
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${Cookies.get("accessToken")}`,
-          },
-        }
-      );
-
-      console.log("ReadTime sent:", res.data);
-      localStorage.setItem(readKey, "true"); // prevent repeats
+      await addReadTime(newsId, readTime);
+      localStorage.setItem(readKey, "true");
     } catch (error) {
-      console.error("AddReadTime API failed:", error);
+      console.error(error);
     }
   };
 
-  // ============================================
-  // ⭐ Reaction API
-  // ============================================
-  const handleReaction = async (reactionId) => {
-    try {
-      await axios.post(
-        apiBaseUrl("XpressNews/LikeDislike"),
-        {
-          xpressNewsId: newsId,
-          likeTypeId: reactionId,
-          ipAddress: "::1",
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${Cookies.get("accessToken")}`,
-          },
-        }
-      );
 
+  // Reaction
+  const handleReaction = (reactionId) => {
+    likeDislike(newsId, reactionId).then(() => refetch());
+  };
+
+  // Download
+  const handleDownload = async () => {
+    try {
+      const fileBlob = await downloadNews(newsId);
+      const url = window.URL.createObjectURL(new Blob([fileBlob]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `${newsDetails?.title || "file"}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      await addDownload(newsId);
       refetch();
     } catch (error) {
-      console.error("Reaction API failed:", error);
+      console.error(error);
     }
   };
-
-  // ============================================
-  // ⭐ Download (kept same)
-  // ============================================
-const handleDownload = async () => {
-  try {
-    // 1) Call the download GET API
-    const downloadRes = await axios.get(
-      apiBaseUrl(`XpressNews/Download/${newsId}`),
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${Cookies.get("accessToken")}`,
-        },
-        responseType: "blob", // if API returns a file
-      }
-    );
-
-    // If you expect a file blob, trigger download in browser
-    const url = window.URL.createObjectURL(new Blob([downloadRes.data]));
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", `${newsDetails?.title || "file"}.pdf`); // or correct file name
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    // 2) If download was successful (status 200 etc.), call AddDownload to update count
-    await axios.post(
-      apiBaseUrl("XpressNews/AddDownload"),
-      { xpressNewsId: newsId, ipAddress: "::1" },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${Cookies.get("accessToken")}`,
-        },
-      }
-    );
-
-    // Optionally refetch or update local state to refresh download count
-    refetch();
-  } catch (error) {
-    console.error("Download or count update failed:", error);
-  }
-};
-
 
   return (
     <>
@@ -313,7 +179,6 @@ const handleDownload = async () => {
           <div className="col-xl-9 col-lg-8 col-md-12 col-12  ">
             <div className="detail-page-content">
               <h5 className="italic-text fw-bold"> {newsDetails?.title}</h5>
-
               <div className="reader-time-section d-flex align-items-center justify-content-between flex-wrap gap-1 px-0">
                 <p className="mb-0">{newsDetails?.shortDesc}</p>
                 <p className="mb-0 reading-time">{newsDetails?.newsDate}</p>
@@ -361,23 +226,23 @@ const handleDownload = async () => {
                     className="banner-img-details"
                   /> */}
                   {newsDetails?.imagePath?.startsWith("https://ioclxpressapp.businesstowork.com") ? (
-  <img
-    src={newsDetails?.imagePath}
-    alt="News"
-    className="news-card-img"
-    onError={(e) => {
-      e.target.onerror = null;
-      e.target.src = fallback;
-      e.target.className = "news-card-img fallback-img fallback-details";
-    }}
-  />
-) : (
-  <img
-    src={fallback}
-    alt="Fallback News"
-    className="news-card-img fallback-img fallback-details"
-  />
-)}
+                    <img
+                      src={newsDetails?.imagePath}
+                      alt="News"
+                      className="news-card-img"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = fallback;
+                        e.target.className = "news-card-img fallback-img fallback-details";
+                      }}
+                    />
+                  ) : (
+                    <img
+                      src={fallback}
+                      alt="Fallback News"
+                      className="news-card-img fallback-img fallback-details"
+                    />
+                  )}
 
                   <div className="blur-bg-details"></div>
                   {newsDetails?.byLine && (
@@ -435,7 +300,7 @@ const handleDownload = async () => {
             </div>
           </div>
           <div className="col-xl-3 mt-4 col-lg-3 col-md-12 col-12 details-page-right-section right-bar-side detail-page-left-section">
-        {topNews.length > 0 && <SidebarCategorySwiper items={topNews} />}
+            {topNews.length > 0 && <SidebarCategorySwiper items={topNews} />}
           </div>
         </div>
         <div className="d-flex align-items-center justify-content-between  flex-wrap mt-3">
@@ -461,26 +326,26 @@ const handleDownload = async () => {
                   alt="Right Banner"
                   className="right-bar-side-image  mt-4 mb-3"
                 /> */}
-             <Link to={`/news-detail/${item.id}`}>
-  {item.imagePath?.startsWith("https://ioclxpressapp.businesstowork.com") ? (
-    <img
-      src={item.imagePath}
-      alt="News"
-      className="recommended-details-img"
-      onError={(e) => {
-        e.target.onerror = null;
-        e.target.src = fallback;
-        e.target.className = "news-card-img fallback-img";
-      }}
-    />
-  ) : (
-    <img
-      src={fallback}
-      alt="Fallback News"
-      className="news-card-img fallback-img"
-    />
-  )}
-</Link>
+                <Link to={`/news-detail/${item.id}`}>
+                  {item.imagePath?.startsWith("https://ioclxpressapp.businesstowork.com") ? (
+                    <img
+                      src={item.imagePath}
+                      alt="News"
+                      className="recommended-details-img"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = fallback;
+                        e.target.className = "news-card-img fallback-img";
+                      }}
+                    />
+                  ) : (
+                    <img
+                      src={fallback}
+                      alt="Fallback News"
+                      className="news-card-img fallback-img"
+                    />
+                  )}
+                </Link>
 
                 <Link
                   className="arrow-btn text-start"
