@@ -15,7 +15,6 @@ import arrow from "../assets/image/home-img-card/arrow.png";
 import fallback from "../assets/image/fallback.png";
 
 // ===================== Helper Functions =====================
-import { apiBaseUrl } from "../Helper";
 import { getWebPageData } from "../components/ApiFunctions";
 
 // ===================== Category Colors =====================

@@ -14,8 +14,6 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 // ===================== Data & Utilities =====================
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import Cookies from "js-cookie";
 
 // ===================== Assets =====================
 import fallback from "../assets/image/fallback.png";

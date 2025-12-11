@@ -5,10 +5,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 
 // ===================== Data & API =====================
-import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import { apiBaseUrl } from "../Helper";
-import Cookies from "js-cookie";
 import { 
   addReadTime, 
   addView, 
@@ -25,12 +22,10 @@ import CommentSection from "../components/CommentSection";
 import SidebarCategorySwiper from "../detail-page/SidebarCategorySwiper";
 
 // ===================== Swiper (Carousel) =====================
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 
 // ===================== Assets =====================
-import mainImg from "../assets/image/banner/1.png";
 import arrow from "../assets/image/arrow.png";
 import fallback from "../assets/image/fallback.png";
 

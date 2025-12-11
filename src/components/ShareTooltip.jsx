@@ -1,4 +1,3 @@
-import React from "react";
 
 const ShareTooltip = ({ userReactions = [], onReactionClick }) => {
   const reactionIcons = {

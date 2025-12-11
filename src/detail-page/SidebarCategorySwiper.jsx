@@ -1,10 +1,8 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import mainImg from "../assets/image/banner/1.png";
 import arrow from "../assets/image/arrow.png";
 import fallback from "../assets/image/fallback.png";
 

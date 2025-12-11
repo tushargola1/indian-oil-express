@@ -1,7 +1,4 @@
 // ===================== HTTP & Utilities =====================
-import axios from "axios";
-import Cookies from "js-cookie";
-import { apiBaseUrl } from "../Helper";
 import { useMemo } from "react";
 
 // ===================== Data Fetching =====================
@@ -17,7 +14,6 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 // ===================== Routing =====================
 import { Link, useLocation } from "react-router-dom";
-
 
 // --------------------------
 // Component

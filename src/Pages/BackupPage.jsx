@@ -1,14 +1,13 @@
 
 import mainImg from "../assets/image/banner/1.png";
-import secondImg from "../assets/image/detail2.png";
 import arrow from "../assets/image/arrow.png";
 import { Link } from "react-router-dom";
 import CommentSection from "../components/CommentSection";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { apiBaseUrl } from "../Helper";
 import Cookies from "js-cookie";
-import { useQueries, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 const newsHighlights = [
     {
         category: "In Focus",

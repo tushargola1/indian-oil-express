@@ -5,10 +5,7 @@ import { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 
 // ===================== API & Data =====================
-import axios from "axios";
-import Cookies from "js-cookie";
 import { useQuery } from "@tanstack/react-query";
-import { apiBaseUrl } from "../Helper";
 import { getNewsListing } from "../components/ApiFunctions";
 
 // ===================== UI Components =====================
@@ -18,7 +15,6 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 // ===================== Assets =====================
-import mainImg from "../assets/image/banner/1.png";
 import fallback from "../assets/image/fallback.png";
 
 

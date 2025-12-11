@@ -1,16 +1,9 @@
-// ===================== React =====================
-import React from "react";
-
 // ===================== Routing =====================
 import { useParams } from "react-router-dom";
 
 // ===================== Data & API =====================
-import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAnnouncementDetails } from "../components/ApiFunctions";
-import { apiBaseUrl } from "../Helper";
-import Cookies from "js-cookie";
-
 // ===================== PDF Viewer =====================
 import { Document, Page, pdfjs } from "react-pdf";
 

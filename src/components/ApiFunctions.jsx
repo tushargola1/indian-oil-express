@@ -14,7 +14,6 @@ const headers = {
   Authorization: `Bearer ${Cookies.get("accessToken")}`,
 };
 
-
 // login api 
 export const loginApi = (email, password) => {
   const rawBody = JSON.stringify({
@@ -81,7 +80,6 @@ export const fetchAnnouncementDetails = async (announcementId) => {
   });
   return res.data?.data;
 };
-
 
 // top xpress news
 export const fetchTopXpressNews = async () => {
@@ -150,9 +148,7 @@ export const getNewsDetails = async (newsId) => {
   return res?.data?.data ?? null;
 };
 
-
 // get details page sidebar data
-
 export const fetchTopNews = async (newsType, newsId) => {
   if (newsType === "XpressNews") {
     const res = await axios.post(
@@ -192,8 +188,6 @@ export const fetchTopNews = async (newsType, newsId) => {
   }
 };
 
-
-
 // get all comments
 export const getAllComments = async (newsId) => {
   const res = await axios.get(
@@ -208,7 +202,6 @@ export const getAllComments = async (newsId) => {
 
   return res?.data?.data ?? []; // <-- ALWAYS ARRAY
 };
-
 
 // Add a view
 export const addView = async (newsId) => {
@@ -301,10 +294,7 @@ export const getNewsListing = async (page, ITEMS_PER_PAGE, newsId, newsType) => 
   };
 };
 
-// --------------------------
 // listing page sidebar categories
-// --------------------------
-
 export const getXpressCategories = async () => {
   const res = await axios.post(
     apiBaseUrl("XpressNews/GetTopXpressNews"),
