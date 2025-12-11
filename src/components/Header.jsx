@@ -103,9 +103,9 @@ export default function Header() {
   return (
     <header className={`border-bottom shadow-sm  `}>
       {/* Top Row */}
-      <div className="container-fluid  ">
+      <div className="container-fluid my-3 px-40">
         {/* <div className="row align-items-center  py-2 px-lg-5 px-md-3 px-3"> */}
-        <div className="row align-items-center  py-2 top-nav-header ">
+        <div className="row align-items-center  py-2 top-nav-header-">
           {/* Left Logo */}
           <div className={`col-md-2 col-lg-3 col-6 right-logo-area  ps-0`}>
             <div className={`hh`}>
@@ -230,7 +230,8 @@ export default function Header() {
 
       {/* Navbar with Offcanvas */}
       <nav className="navbar navbar-expand-lg navbar-light bg-white  bottom-navbar py-0">
-        <div className="container-fluid px-40">
+        <div className="container-fluid px-40 py-md-1 py-sm-1 py-1">
+          <div className="row">
           {/* Toggle Button for Offcanvas */}
           <button
             className="navbar-toggler"
@@ -332,7 +333,7 @@ export default function Header() {
                 </ul>
 
                 {/* Search Box Inside Offcanvas */}
-                <div className="col-md-2 px-0">
+                <div className="col-lg-2 px-0 mt-sm-2 mt-lg-0 mt-md-2 mt-xl-0">
                   <form className="d-flex navbar-form" onSubmit={handleSubmit}>
                     <input
                       className="form-control me-2"
@@ -346,7 +347,7 @@ export default function Header() {
                     </button>
                   </form>
                 </div>
-                <div className="col-md-2 px-0">
+                <div className="col-lg-2 px-0">
                   <div className="orange-color-bg-color bulletin-section ">
                     <div className="d-flex justify-content-between align-items-center gap-4 bulletin-section-content px-2">
                       <div>
@@ -368,6 +369,7 @@ export default function Header() {
               </div>
             </div>
           </div>
+        </div>
         </div>
       </nav>
     </header>

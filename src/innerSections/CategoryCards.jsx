@@ -68,7 +68,7 @@ export default function CategoryCard() {
   }
 
   return (
-    <div className="container-fluid mt-4 px-lg-5 px-md-3 px-3">
+    <div className="container-fluid my-3 px-40">
       <div className="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-sm-2 row-cols-1 justify-content-center align-items-stretch gy-2">
         {isLoading
           ? Array.from({ length: 5 }).map((_, index) => (
