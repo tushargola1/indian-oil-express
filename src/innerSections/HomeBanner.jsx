@@ -67,7 +67,7 @@ const HomeBanner = () => {
         <div className="col-xl-9 col-lg-7 col-md-12 col-12" ref={leftSideRef}>
           <div className="row gy-3 banner1">
             {/* LEFT IMAGE FADE CAROUSEL */}
-            <div className="col-xl-8 col-lg-12 col-md-12 col-12 position-relative pe-2">
+            <div className="col-xl-8 col-lg-12 col-md-12 col-12 position-relative p-0">
               {isBannerLoading ? (
                 <Skeleton height={"100%"} width="100%" />
               ) : isBannerError ? (

@@ -38,7 +38,7 @@ const NewsCards = () => {
   }
 
   return (
-    <div className="container-fluid my-2 px-lg-5 px-md-3 px-3">
+    <div className="container-fluid my-3 px-40">
       <div className="row row-cols-xl-6 row-cols-lg-4 row-cols-md-3 row-cols-1 gy-2  align-items-center flex-wrap">
         {isLoading
           ?
@@ -49,7 +49,7 @@ const NewsCards = () => {
           ))
           :
           newsData.map((card, i) => (
-            <div className="col news-card-col m-1" key={i}>
+            <div className="col news-card-col" key={i}>
               <NewsCard
                 category={card.category}
                 slides={card.slides}
@@ -133,23 +133,6 @@ const NewsCard = ({ category, slides = [], color = "#0e4094", loading, categoryI
                     {slide.title.split(" ").slice(0, 8).join(" ")}
                     {slide.title.split(" ").length > 8 ? "..." : ""}
                   </p>
-
-                  {/* <div className="news-card-image-div my-2">
-                    {slide.image?.startsWith("https://ioclxpressapp.businesstowork.com") ? (
-                      <img
-                        src={slide.image}
-                        alt="News"
-                        className="news-card-img"
-                      />
-                    ) : (
-                      <img
-                        src={fallback}
-                        alt="Fallback News"
-                        className="news-card-img fallback-img"
-
-                      />
-                    )}
-                  </div> */}
                   <div className="news-card-image-div my-2">
                     <img
                       src={
@@ -172,12 +155,7 @@ const NewsCard = ({ category, slides = [], color = "#0e4094", loading, categoryI
                   </div>
 
                 </Link>
-                {/* <Link
-                  to="/news-detail"
-                  className="card-link news-card-link italic-text d-block text-start"
-                >
-                  More Details
-                </Link> */}
+
                 <p className="mb-0 date-read custome_read">
                   {slide.date}
                   {slide.date && slide.readingTime && " | "}
