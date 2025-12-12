@@ -101,13 +101,13 @@ export default function Header() {
     navigate(`/search?query=${encodeURIComponent(query.trim())}`);
   };
   return (
-    <header className={`border-bottom shadow-sm  `}>
+    <header className={`border-bottom shadow-sm custome_mobile_header`}>
       {/* Top Row */}
-      <div className="container-fluid my-3 px-40">
+      <div className="container-fluid order-1 custome_top_header">
         {/* <div className="row align-items-center  py-2 px-lg-5 px-md-3 px-3"> */}
-        <div className="row align-items-center  py-2 top-nav-header-">
+        <div className="row align-items-center  py-2 top-nav-header">
           {/* Left Logo */}
-          <div className={`col-md-2 col-lg-3 col-6 right-logo-area  ps-0`}>
+          <div className={`col-md-2 col-lg-3 col-6 right-logo-area  ps-0 d-md-block d-sm-none`}>
             <div className={`hh`}>
               <Link to="/">
                 <img
@@ -120,7 +120,7 @@ export default function Header() {
                 <img
                   src={sprintLogo}
                   alt="Indian Oil"
-                  className="sprint-logo   d-xl-none d-md-none d-block"
+                  className="sprint-logo d-xl-none d-md-none d-none d-sm-none"
                 />
               </Link>
             </div>
@@ -134,7 +134,7 @@ export default function Header() {
           </div>
 
           {/* Right Links + Social */}
-          <div className="col-md-4 col-lg-3 col-6 pe-0">
+          <div className="col-md-4 col-lg-3 col-6 pe-0 custome_right">
             <div className="right-content d-none d-md-block d-lg-block right-nav">
               <div className="d-flex  align-items-center gap-3 justify-content-end">
                 <div className=" top-content-navbar d-flex justify-content-start">
@@ -229,9 +229,9 @@ export default function Header() {
       </div>
 
       {/* Navbar with Offcanvas */}
-      <nav className="navbar navbar-expand-lg navbar-light bg-white  bottom-navbar py-0">
-        <div className="container-fluid px-40 py-md-1 py-sm-1 py-1">
-          <div className="row">
+      <nav className="navbar navbar-expand-lg navbar-light bg-white  bottom-navbar py-0 header_bottom_border">
+        <div className="container-fluid px-40 py-md-1 py-sm-1 py-xl-0">
+      
           {/* Toggle Button for Offcanvas */}
           <button
             className="navbar-toggler"
@@ -370,7 +370,7 @@ export default function Header() {
             </div>
           </div>
         </div>
-        </div>
+        
       </nav>
     </header>
   );
