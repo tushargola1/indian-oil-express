@@ -2986,4 +2986,49 @@ content: "";
     opacity: 0.8;
 }
 }
+/* end */
+
+/* 12-12-25 */
+.custom-card {
+  border: 1px solid #ddd;
+  border-bottom: 3px solid #ff7f2a;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+  border-radius: 6px;
+  background: #fff;
+}
+
+.toggle-btn {
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  transition: transform 0.3s ease;
+}
+
+.toggle-btn.active {
+  transform: rotate(180deg);
+}
+
+.read-more-btn {
+  background-color: #ff7f2a;
+  color: white;
+  padding: 4px 14px;
+  border-radius: 3px;
+  font-weight: bold;
+  border: none;
+}
+
+.read-more-btn:hover {
+  background-color: #e26b1f;
+}
+.custome_heading{
+border-bottom: 2px solid #000000;
+padding-bottom: 10px;
+}
+
+/* .custome_para{
+  border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+} */
+
+
 /* end  */

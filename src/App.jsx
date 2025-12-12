@@ -9,6 +9,7 @@ const Login = lazy(() => import("./authentication/Login"));
 const ForgetPassword = lazy(() => import("./authentication/ForgetPassword"));
 const NewsDetails = lazy(() => import("./Pages/NewsDetails"));
 const NewsListing = lazy(() => import("./Pages/NewsListing"));
+const Expresslisting = lazy(() => import("./Pages/Expresslisting"));
 const ProtectedRoute = lazy(() => import("./authentication/ProtectedRoute"));
 const PublicRoute = lazy(() => import("./authentication/PublicRoute"));
 const ScrollToTop = lazy(() => import("./components/ScrollToTop"));
@@ -94,6 +95,14 @@ function AppContent() {
             element={
               <ProtectedRoute>
                 <NewsListing />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/Expresslisting/"
+            element={
+              <ProtectedRoute>
+                <Expresslisting />
               </ProtectedRoute>
             }
           />
