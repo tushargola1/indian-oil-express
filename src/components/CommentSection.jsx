@@ -284,7 +284,7 @@ export default function CommentSection({ comments: apiComments, newsId }) {
               onChange={(e) => setNewCommentText(e.target.value)}
             />
             <button
-              className="btn dark-blue-bg-color text-white submit-btn"
+              className="btn dark-blue-bg-color text-white submit-btn rounded-0"
               disabled={loading}
               onClick={handleAddComment}
             >
@@ -310,7 +310,7 @@ export default function CommentSection({ comments: apiComments, newsId }) {
                 onChange={(e) => setReplyText(e.target.value)}
               />
               <button
-                className="btn dark-blue-bg-color text-white submit-btn btn-sm me-2"
+                className="btn dark-blue-bg-color text-white submit-btn btn-sm me-2 rounded-0"
                 onClick={() => handleReplySubmit(replyingTo)}
                 disabled={loading}
               >

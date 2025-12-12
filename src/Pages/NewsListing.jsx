@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 
 // ===================== Routing =====================
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, Link } from "react-router-dom";
 
 // ===================== API & Data =====================
 import { useQuery } from "@tanstack/react-query";
@@ -19,7 +19,7 @@ import fallback from "../assets/image/fallback.png";
 
 
 // ✅ News Item Component
-const NewsItem = ({ imagePath, title, shortDesc, newsDate, byLine }) => {
+const NewsItem = ({id, imagePath, title, shortDesc, newsDate, byLine }) => {
   const [day, month, year] = newsDate.split(" ")[0].split("-");
   const monthNames = [
     "January",
@@ -40,6 +40,8 @@ const NewsItem = ({ imagePath, title, shortDesc, newsDate, byLine }) => {
   return (
     <div className="news-item row gy-xl-0 gy-lg-2 gy-md-3 gy-4 border-bottom  mb-3">
       <div className="news-image col-xl-2 col-lg-12 col-md-12 col-12">
+        <Link to={`/news-detail/${id}`}>
+
         <img
           src={
             imagePath?.startsWith("https://ioclxpressapp.businesstowork.com")
@@ -57,9 +59,13 @@ const NewsItem = ({ imagePath, title, shortDesc, newsDate, byLine }) => {
             e.target.className = "img-fluid fallback-listing"; // ensure fallback styling
           }}
         />
+        </Link>
+
       </div>
       <div className="news-content col-xl-8 col-lg-12 col-md-12 col-12">
+        <Link to={`/news-detail/${id}`}>
         <div className="news-title fw-bold">{title}</div>
+        </Link>
         <div className="news-description small mb-2">{shortDesc || byLine}</div>
       </div>
       <div className="news-date-box col-xl-2 col-lg-12 col-md-12 col-12 text-end">
@@ -93,8 +99,7 @@ const NewsListing = () => {
   // ✅ React Query (fetching based on current page + URL id)
   const { data, isLoading, isError, isFetching } = useQuery({
     queryKey: ["news", currentPage, newsId],
-    queryFn: () =>
-      getNewsListing(currentPage, ITEMS_PER_PAGE, newsId, newsType),
+    queryFn: () =>getNewsListing(currentPage, ITEMS_PER_PAGE, newsId, newsType),
     keepPreviousData: true,
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
@@ -113,7 +118,7 @@ const NewsListing = () => {
   }
 
   return (
-    <div className="container-fluid px-lg-5 px-md-3 px-3 mt-5">
+    <div className="container-fluid px-30 px-md-3 px-3 mt-5">
       <div className="row g-3 justify-content-between flex-lg-row flex-md-column-reverse flex-column-reverse">
         {/* MAIN CONTENT */}
         <div className="col-xl-9 col-lg-7 col-md-12 col-12">

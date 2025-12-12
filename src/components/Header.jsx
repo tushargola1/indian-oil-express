@@ -6,12 +6,19 @@ import indianOil from "../assets/image/logos/indianOil.png";
 import { useEffect, useRef, useState } from "react";
 import CalendarModal from "../modal/CalendarModal";
 import Cookies from "js-cookie";
+import axios from "axios";
+import { apiBaseUrl } from "../Helper";
+import { useQuery } from "@tanstack/react-query";
+import { getWeekendXpress } from "./ApiFunctions";
+
+
+
 export default function Header() {
   const navigate = useNavigate();
   const [showLocationMenu, setShowLocationMenu] = useState(false);
   const [issticky, setIsSticky] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
- const [query, setQuery] = useState("");
+  const [query, setQuery] = useState("");
 
   const locationMenuRef = useRef(null);
 
@@ -94,6 +101,14 @@ export default function Header() {
     };
   }, []);
 
+  const { data: weekendXpress = [], isLoading, error } = useQuery({
+    queryKey: ["weekendXpress"],
+    queryFn: () => getWeekendXpress(),
+    staleTime: Infinity,
+    cacheTime: Infinity,
+    refetchOnWindowFocus: false,
+  });
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!query.trim()) return;
@@ -168,9 +183,8 @@ export default function Header() {
                 <div className="location-wrapper " ref={locationMenuRef}>
                   <div className="share-btn" onClick={toggleLocationMenu}>
                     <i
-                      className={`fa ${
-                        showLocationMenu ? "fa-times" : "fa-bars"
-                      } dark-blue-color fs-4`}
+                      className={`fa ${showLocationMenu ? "fa-times" : "fa-bars"
+                        } dark-blue-color fs-4`}
                     ></i>
                   </div>
 
@@ -230,8 +244,8 @@ export default function Header() {
 
       {/* Navbar with Offcanvas */}
       <nav className="navbar navbar-expand-lg navbar-light bg-white  bottom-navbar py-0 header_bottom_border">
-        <div className="container-fluid px-40 py-md-1 py-sm-1 py-xl-0">
-      
+        <div className="container-fluid px-30 py-md-1 py-sm-1 py-xl-0">
+
           {/* Toggle Button for Offcanvas */}
           <button
             className="navbar-toggler"
@@ -270,44 +284,41 @@ export default function Header() {
                       Leader's Speak
                     </a>
                   </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="#">
-                      WeekendXpress
-                    </a>
-                  </li>
-                  <li className="nav-item dropdown">
+               <li className="nav-item dropdown">
+  <a
+    className="nav-link dropdown-toggle"
+    href="#"
+    id="yourCompanyDropdown"
+    role="button"
+    aria-expanded="false"
+  >
+    WeekendXpress
+  </a>
+
+  <ul className="dropdown-menu" aria-labelledby="yourCompanyDropdown">
+    {weekendXpress.map((item) => (
+      <li key={item.id} >
+        <a className="dropdown-item" href="#">
+          {item.text}
+        </a>
+      </li>
+    ))}
+  </ul>
+</li>
+
+                  <li className="nav-item ">
                     {" "}
                     {/* ADDED */}
                     <a
-                      className="nav-link dropdown-toggle"
+                      className="nav-link "
                       href="#"
-                      id="yourCompanyDropdown"
-                      role="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
+                     
                     >
                       SpecialXpress
                     </a>
-                    <ul
-                      className="dropdown-menu"
-                      aria-labelledby="yourCompanyDropdown"
-                    >
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          About Us
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          Our Team
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          Careers
-                        </a>
-                      </li>
-                    </ul>
+                   
+
+
                   </li>
 
                   <li className="nav-item">
@@ -370,7 +381,7 @@ export default function Header() {
             </div>
           </div>
         </div>
-        
+
       </nav>
     </header>
   );

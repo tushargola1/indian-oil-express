@@ -4,3 +4,5 @@ export function apiBaseUrl(url = "") {
   const cleanUrl = url.replace(/^\//, "");
   return url ? `${cleanBase}/${cleanUrl}` : cleanBase;
 }
+
+export const reactionUrl = "https://ioclxpressapp.businesstowork.com/img/LikeEmojis/" 

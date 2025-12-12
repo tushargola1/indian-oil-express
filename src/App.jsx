@@ -97,6 +97,15 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
+
+           <Route
+            path="WeekendXpress/news-listing/:newsId"
+            element={
+              <ProtectedRoute>
+                <NewsListing />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </Suspense>
 
