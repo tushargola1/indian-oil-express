@@ -169,7 +169,7 @@ export default function NewsDetails() {
 
   return (
     <>
-      <div className="container-fluid px-lg-5 px-md-3 px-3 mt-5">
+      <div className="container-fluid px-30 px-md-3 px-3 mt-5">
         <div className="row g-3 justify-content-between ">
           <div className="col-xl-9 col-lg-8 col-md-12 col-12  ">
             <div className="detail-page-content">
@@ -252,8 +252,11 @@ export default function NewsDetails() {
                 <div
                   dangerouslySetInnerHTML={{ __html: newsDetails?.description }}
                 />
+                {/* <p>
+                  {newsDetails?.description }
+                </p> */}
                 <button
-                  className="px-3 py-2 details-page-button mt-4"
+                  className="px-3 py-2 details-page-button mt-4 "
                   onClick={() => setShowComment((prev) => !prev)}
                 >
                   {showComment ? "Hide Comments" : "Read Comments"}
@@ -263,35 +266,7 @@ export default function NewsDetails() {
                   <CommentSection comments={allComments} newsId={newsId} />
                 )}
               </div>
-              {/* <div className="news-details-main-img">
-                <div className="image-wrapper">
-                  <img
-                    src={secondImg}
-                    alt="Banner"
-                    className="banner-img-details"
-                  />
-                
-                </div>
-              </div>
-              <div className="news-details-content-section mb-4">
-                {Array.from({ length: 1 }).map((_, index) => (
-                  <div key={index}>
-                    <p>
-                      On the auspicious eve of Rakshabandhan, Mr Sahney visited
-                      the strategically critical Zoji La Pass, renowned for its
-                      challenging terrain and extreme weather. There, he met
-                      IndianOil' s dedicated team of Advance Winter Stocking
-                      (AWS) drivers and TT crew who ensure uninterrupted fuel
-                      supply to the nation's farthest corners. In a symbolic
-                      tribute and deeply touching moment, Mr Sahney tied Rakhis
-                      on the wrists Of drivers, recognising them as true
-                      guardians of the nation's energy security, and distributed
-                      sweets, adding festive warmth to the high-altitude post.
-                    </p>
-                  </div>
-                ))}
-              
-              </div> */}
+             
             </div>
           </div>
           <div className="col-xl-3 mt-4 col-lg-3 col-md-12 col-12 details-page-right-section right-bar-side detail-page-left-section">
@@ -309,7 +284,7 @@ export default function NewsDetails() {
             <p className="mb-0 hashtag-text">#RHQ</p>
           </div>
         </div>
-        <div className="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 justify-content-center align-items-stretch gy-2 mt-lg-0 mt-md-1 mt-0">
+        <div className="row px-2 row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 justify-content-center align-items-stretch gy-2 mt-lg-0 mt-md-1 mt-0 ">
           {newsDetails?.recommendedXpressNews.map((item, index) => (
             <div className="col recommanded-story-col" key={index}>
               <div className="details-right-category">

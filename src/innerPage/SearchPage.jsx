@@ -78,7 +78,7 @@ const SearchPage = () => {
   };
 
   return (
-    <div className="container-fluid px-lg-5 px-md-3 px-3 py-4">
+    <div className="container-fluid px-30 px-md-3 px-3 py-4">
       {/* Search Bar */}
       <div className="row mb-4">
         <div className="col-md-6 mx-auto d-flex search-bar">

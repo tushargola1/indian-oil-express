@@ -14,6 +14,17 @@ const headers = {
   Authorization: `Bearer ${Cookies.get("accessToken")}`,
 };
 
+
+// header weekend xpress nav dropdown
+export const getWeekendXpress = async () => {
+  const res = await axios.get(apiBaseUrl('WeekendXpressTypes/GetDropdown'), {
+    headers: {
+      Authorization: `Bearer ${Cookies.get("accessToken")}`,
+    },
+  })
+  return res?.data?.data
+}
+
 // login api 
 export const loginApi = (email, password) => {
   const rawBody = JSON.stringify({

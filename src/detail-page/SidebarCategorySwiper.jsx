@@ -18,7 +18,7 @@ export default function SidebarCategorySwiper({ items }) {
             key={`category-${index}`}
           >
             {/* Header with category & arrow */}
-            <div className="d-flex justify-content-between align-items-center mb-2">
+            <div className="d-flex justify-content-between align-items-center mb-2 pe-2">
               <div className="dark-blue-bg-color text-white details-right-category-heading">
                 {item.category}
               </div>

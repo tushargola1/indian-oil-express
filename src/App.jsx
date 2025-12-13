@@ -98,11 +98,20 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
+<<<<<<< HEAD
            <Route
             path="/Expresslisting/"
             element={
               <ProtectedRoute>
                 <Expresslisting />
+=======
+
+           <Route
+            path="WeekendXpress/news-listing/:newsId"
+            element={
+              <ProtectedRoute>
+                <NewsListing />
+>>>>>>> 8fbbf7d66c3c3d6666fd6ad323e23b62fa4e5a71
               </ProtectedRoute>
             }
           />
