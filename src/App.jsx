@@ -9,6 +9,7 @@ const Login = lazy(() => import("./authentication/Login"));
 const ForgetPassword = lazy(() => import("./authentication/ForgetPassword"));
 const NewsDetails = lazy(() => import("./Pages/NewsDetails"));
 const NewsListing = lazy(() => import("./Pages/NewsListing"));
+const Expresslisting = lazy(() => import("./Pages/Expresslisting"));
 const ProtectedRoute = lazy(() => import("./authentication/ProtectedRoute"));
 const PublicRoute = lazy(() => import("./authentication/PublicRoute"));
 const ScrollToTop = lazy(() => import("./components/ScrollToTop"));
@@ -97,12 +98,20 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
+<<<<<<< HEAD
+           <Route
+            path="/Expresslisting/"
+            element={
+              <ProtectedRoute>
+                <Expresslisting />
+=======
 
            <Route
             path="WeekendXpress/news-listing/:newsId"
             element={
               <ProtectedRoute>
                 <NewsListing />
+>>>>>>> 8fbbf7d66c3c3d6666fd6ad323e23b62fa4e5a71
               </ProtectedRoute>
             }
           />
