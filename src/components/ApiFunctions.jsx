@@ -217,7 +217,7 @@ export const fetchTopNews = async (newsType, newsId) => {
 // get all comments
 export const getAllComments = async (newsId) => {
   const res = await axios.get(
-    apiBaseUrl(`XpressNews/GetXpressNewsComments/20`),
+    apiBaseUrl(`XpressNews/GetXpressNewsComments/${newsId}`),
     {
       headers: {
         "Content-Type": "application/json",

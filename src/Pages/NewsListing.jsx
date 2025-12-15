@@ -19,7 +19,7 @@ import fallback from "../assets/image/fallback.png";
 
 
 // ✅ News Item Component
-const NewsItem = ({id, imagePath, title, shortDesc, newsDate, byLine }) => {
+const NewsItem = ({ id, imagePath, title, shortDesc, newsDate, byLine }) => {
   const [day, month, year] = newsDate.split(" ")[0].split("-");
   const monthNames = [
     "January",
@@ -42,29 +42,29 @@ const NewsItem = ({id, imagePath, title, shortDesc, newsDate, byLine }) => {
       <div className="news-image col-xl-2 col-lg-12 col-md-12 col-12">
         <Link to={`/news-detail/${id}`}>
 
-        <img
-          src={
-            imagePath?.startsWith("https://ioclxpressapp.businesstowork.com")
-              ? imagePath
-              : fallback
-          }
-          alt={title || "News"}
-          className={`img-fluid ${!imagePath?.startsWith("https://ioclxpressapp.businesstowork.com")
+          <img
+            src={
+              imagePath?.startsWith("https://ioclxpressapp.businesstowork.com")
+                ? imagePath
+                : fallback
+            }
+            alt={title || "News"}
+            className={`img-fluid ${!imagePath?.startsWith("https://ioclxpressapp.businesstowork.com")
               ? "fallback-listing"
               : ""
-            }`}
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src = fallback;
-            e.target.className = "img-fluid fallback-listing"; // ensure fallback styling
-          }}
-        />
+              }`}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = fallback;
+              e.target.className = "img-fluid fallback-listing"; // ensure fallback styling
+            }}
+          />
         </Link>
 
       </div>
       <div className="news-content col-xl-8 col-lg-12 col-md-12 col-12">
         <Link to={`/news-detail/${id}`}>
-        <div className="news-title fw-bold">{title}</div>
+          <div className="news-title fw-bold">{title}</div>
         </Link>
         <div className="news-description small mb-2">{shortDesc || byLine}</div>
       </div>
@@ -86,8 +86,9 @@ const NewsListing = () => {
   const newsType = location.state?.type;
   const newsParentId = location.state?.clickedId;
 
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [showDropdown, setShowDropdown] = useState(false);
 
-  const ITEMS_PER_PAGE = 5;
   const [currentPage, setCurrentPage] = useState(() => {
     return parseInt(localStorage.getItem("currentNewsPage") || "1", 10);
   });
@@ -98,8 +99,8 @@ const NewsListing = () => {
 
   // ✅ React Query (fetching based on current page + URL id)
   const { data, isLoading, isError, isFetching } = useQuery({
-    queryKey: ["news", currentPage, newsId],
-    queryFn: () =>getNewsListing(currentPage, ITEMS_PER_PAGE, newsId, newsType),
+    queryKey: ["news", currentPage, newsId, itemsPerPage],
+    queryFn: () => getNewsListing(currentPage, itemsPerPage, newsId, newsType),
     keepPreviousData: true,
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
@@ -107,7 +108,7 @@ const NewsListing = () => {
 
   const news = data?.data || [];
   const totalRecords = data?.totalRecords || 0;
-  const totalPages = Math.ceil(totalRecords / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(totalRecords / itemsPerPage);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -163,11 +164,46 @@ const NewsListing = () => {
 
           {/* ✅ Pagination from API */}
           {!isLoading && totalPages > 1 && (
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
+            <>
+              <div className="d-flex align-items-center justify-content-between">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
+
+                <div className="position-relative dropup">
+                  <button
+                    className="btn dark-blue-bg-color dropdown-toggle text-white listing-dropdown-btn"
+                    type="button"
+                    onClick={() => setShowDropdown(prev => !prev)}
+                  >
+                    {itemsPerPage}
+                  </button>
+
+                  {showDropdown && (
+                    <ul className="dropdown-menu show">
+                      {[20, 30, 50].map((value) => (
+                        <li key={value}>
+                          <button
+                            className="dropdown-item"
+                            onClick={() => {
+                              setItemsPerPage(value);
+                              setCurrentPage(1);
+                              setShowDropdown(false);
+                            }}
+                          >
+                            {value}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+
+              </div>
+
+            </>
           )}
         </div>
 
