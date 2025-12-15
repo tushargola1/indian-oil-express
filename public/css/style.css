@@ -3238,7 +3238,6 @@ li.clearfix {
   padding-left: 30px !important;
   padding-right: 30px !important;
 }
-<<<<<<< HEAD
 /* end */
 
 /* 12-12-25 */
@@ -3270,22 +3269,18 @@ li.clearfix {
   border: none;
 }
 
-.read-more-btn:hover {
+.read-more-btn:hover 
+{
   background-color: #e26b1f;
 }
-.custome_heading{
+.custome_heading
+{
 border-bottom: 2px solid #000000;
 padding-bottom: 10px;
 }
 
-/* .custome_para{
-  border-bottom: 1px solid #ccc;
-    padding-bottom: 10px;
-} */
-
 
 /* end  */
-=======
 
 
 
@@ -3346,4 +3341,3 @@ padding-bottom: 10px;
 .dropdown-item:last-child {
   margin-bottom: 0;
 }
->>>>>>> 8fbbf7d66c3c3d6666fd6ad323e23b62fa4e5a71

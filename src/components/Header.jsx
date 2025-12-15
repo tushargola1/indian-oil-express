@@ -180,7 +180,7 @@ export default function Header() {
                  <i className="fa fa-bars dark-blue-color"></i>
                 </a> */}
                 </div>
-                <div className="location-wrapper " ref={locationMenuRef}>
+                {/* <div className="location-wrapper " ref={locationMenuRef}>
                   <div className="share-btn" onClick={toggleLocationMenu}>
                     <i
                       className={`fa ${showLocationMenu ? "fa-times" : "fa-bars"
@@ -219,7 +219,7 @@ export default function Header() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
               <div className={`sprint-logo-area mb-3 mt-2  `}>
                 <img
@@ -284,27 +284,27 @@ export default function Header() {
                       Leader's Speak
                     </a>
                   </li>
-               <li className="nav-item dropdown">
-  <a
-    className="nav-link dropdown-toggle"
-    href="#"
-    id="yourCompanyDropdown"
-    role="button"
-    aria-expanded="false"
-  >
-    WeekendXpress
-  </a>
+                  <li className="nav-item dropdown">
+                    <a
+                      className="nav-link dropdown-toggle"
+                      href="#"
+                      id="yourCompanyDropdown"
+                      role="button"
+                      aria-expanded="false"
+                    >
+                      WeekendXpress
+                    </a>
 
-  <ul className="dropdown-menu" aria-labelledby="yourCompanyDropdown">
-    {weekendXpress.map((item) => (
-      <li key={item.id} >
-        <a className="dropdown-item" href="#">
-          {item.text}
-        </a>
-      </li>
-    ))}
-  </ul>
-</li>
+                    <ul className="dropdown-menu" aria-labelledby="yourCompanyDropdown">
+                      {weekendXpress.map((item) => (
+                        <li key={item.id} >
+                          <a className="dropdown-item" href="#">
+                            {item.text}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
 
                   <li className="nav-item ">
                     {" "}
@@ -312,11 +312,11 @@ export default function Header() {
                     <a
                       className="nav-link "
                       href="#"
-                     
+
                     >
                       SpecialXpress
                     </a>
-                   
+
 
 
                   </li>
