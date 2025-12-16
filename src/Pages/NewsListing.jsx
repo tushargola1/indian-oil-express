@@ -40,7 +40,7 @@ const NewsItem = ({ id, imagePath, title, shortDesc, newsDate, byLine }) => {
   return (
     <div className="news-item row gy-xl-0 gy-lg-2 gy-md-3 gy-4 border-bottom  mb-3">
       <div className="news-image col-xl-2 col-lg-12 col-md-12 col-12">
-        <Link to={`/news-detail/${id}`}>
+        <Link to={`/news-detail/${id}`}>  
 
           <img
             src={

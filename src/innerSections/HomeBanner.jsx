@@ -125,7 +125,8 @@ const HomeBanner = () => {
                 <Skeleton count={8} />
               ) : isBannerError ? (
                 <p>❌ Failed to load banners</p>
-              ) : (
+              ) 
+              : (
                 <Swiper
                   modules={[Autoplay, EffectFade, Controller]}
                   effect="fade"
