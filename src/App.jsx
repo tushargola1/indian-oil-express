@@ -99,6 +99,7 @@ function AppContent() {
             }
           />
          <Route
+          <Route
             path="/Expresslisting/"
             element={
               <ProtectedRoute>
@@ -107,6 +108,7 @@ function AppContent() {
             }
           />
  
+
           <Route
             path="WeekendXpress/news-listing/:newsId"
             element={

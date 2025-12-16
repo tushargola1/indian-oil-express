@@ -74,6 +74,112 @@ import { Link } from "react-router-dom";
 const Expresslisting = ({ imagePath, title, shortDesc, newsDate, byLine }) => {
 
 
+const getNewsListing = async (page, ITEMS_PER_PAGE, newsId, newsType) => {
+
+
+  const start = (page - 1) * ITEMS_PER_PAGE;
+
+  const xpress = newsType === "XpressNews";
+
+  const endpoint = xpress
+    ? "XpressNews/GetXpressNewsFL"
+    : "WebPages/GetWebPagesFL";
+
+  const paramNewsId = xpress ? "xpressNewsTypeId" : "webPageCategoryId";
+
+  const res = await axios.post(
+    apiBaseUrl(endpoint),
+    {
+      searchValue: "",
+      sortColumn: "",
+      sortDirection: "ASC",
+      start,
+      length: ITEMS_PER_PAGE,
+      [paramNewsId]: Number(newsId),
+      leadershipCategoryId: "",
+      divisionId: "",
+      fromDate: "",
+      toDate: "",
+      showIn: "W",
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${Cookies.get("accessToken")}`,
+      },
+    }
+  );
+
+  // ✅ Return structured response
+  return {
+    data: res.data.data.data || [],
+    totalRecords: res.data.data.recordsFiltered || 0,
+  };
+};
+
+// ✅ News Item Component
+const NewsItem = ({ imagePath, title, shortDesc, newsDate, byLine }) => {
+  const [day, month, year] = newsDate.split(" ")[0].split("-");
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const formattedMonth = monthNames[parseInt(month) - 1];
+
+  return (
+    <div className="news-item row gy-xl-0 gy-lg-2 gy-md-3 gy-4 border-bottom  mb-3">
+      <div className="news-image col-xl-2 col-lg-12 col-md-12 col-12">
+        <img
+          src={
+            imagePath?.startsWith("https://ioclxpressapp.businesstowork.com")
+              ? imagePath
+              : fallback
+          }
+          alt={title || "News"}
+          className={`img-fluid ${!imagePath?.startsWith("https://ioclxpressapp.businesstowork.com")
+            ? "fallback-listing"
+            : ""
+            }`}
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = fallback;
+            e.target.className = "img-fluid fallback-listing"; // ensure fallback styling
+          }}
+        />
+      </div>
+      <div className="news-content col-xl-8 col-lg-12 col-md-12 col-12">
+        <div className="news-title fw-bold">{title}</div>
+        <div className="news-description small mb-2">{shortDesc || byLine}</div>
+      </div>
+      <div className="news-date-box col-xl-2 col-lg-12 col-md-12 col-12 text-end">
+        <div className="news-date-month fw-bold">{formattedMonth}</div>
+        <div className="news-date-day-year">
+          {day}, {year}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ✅ Main Component
+const Expresslisting = () => {
+  const { data: categoryData = [], isLoading: isBannerLoading, isError: isBannerError } = useQuery({
+    queryKey: ["categoryData"],
+    queryFn: () => expressDetails(),
+    staleTime: Infinity,
+    cacheTime: Infinity,
+    refetchOnWindowFocus: false,
+  });
   const { newsId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -109,6 +215,16 @@ const Expresslisting = ({ imagePath, title, shortDesc, newsDate, byLine }) => {
   const totalRecords = data?.totalRecords || 0;
   const totalPages = Math.ceil(totalRecords / ITEMS_PER_PAGE);
   const idMain = data?.newsMainId;
+    queryFn: () =>
+      getNewsListing(currentPage, ITEMS_PER_PAGE, newsId, newsType),
+    keepPreviousData: true,
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+  });
+
+  const news = data?.data || [];
+  const totalRecords = data?.totalRecords || 0;
+  const totalPages = Math.ceil(totalRecords / ITEMS_PER_PAGE);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -169,6 +285,17 @@ const Expresslisting = ({ imagePath, title, shortDesc, newsDate, byLine }) => {
                         }}
                       />
                     </Link>
+    <div className="container-fluid px-lg-5 px-md-3 px-3 mt-5">
+      <div className="row g-3 justify-content-between flex-lg-row flex-md-column-reverse flex-column-reverse">
+        {/* MAIN CONTENT */}
+        {/* <div className="col-xl-9 col-lg-7 col-md-12 col-12">
+          {news.map((item, i) =>
+            i === 0 ? (
+              <h4 className="fw-bold">
+                {item.xpressNewsType || item.webPageCategory}
+              </h4>
+            ) : null
+          )}
 
                   </div>
                   <div className="news-content col-xl-8 col-lg-12 col-md-12 col-12">
@@ -235,6 +362,17 @@ const Expresslisting = ({ imagePath, title, shortDesc, newsDate, byLine }) => {
             )}
           </div>
         </div>
+          )}
+
+          {!isLoading && totalPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          )}
+        </div> */}
+
         {/* <div className="col-xl-9 col-lg-7 col-md-12 col-12">
       <div className="row g-4">
 
@@ -303,11 +441,19 @@ const Expresslisting = ({ imagePath, title, shortDesc, newsDate, byLine }) => {
               <div key={item.id || i} className="col-md-4 col-12">
                 <div className="custom-card pt-3 pb-0 px-3">
 
+        <div className="col-xl-9 col-lg-7 col-md-12 col-12">
+          <div className="row g-4">
+
+            {categoryData.map((item, i) => (
+              <div key={item.id || i} className="col-md-4 col-12">
+                <div className="custom-card pt-3 pb-0 px-3">
+
                   <div className="d-flex justify-content-between align-items-center mb-2 custome_heading">
                     <h5 className="fw-bold m-0">{item.title}</h5>
                   </div>
 
                   {true && (     
+                  {true && (        // you can replace with open1, open2, open3 if needed
                     <div>
                       <p className="custome_para">{item.shortDesc}</p>
                     </div>
@@ -328,6 +474,8 @@ const Expresslisting = ({ imagePath, title, shortDesc, newsDate, byLine }) => {
 
           </div> */}
         {/* </div> */}
+          </div>
+        </div>
 
 
 

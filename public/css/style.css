@@ -70,7 +70,7 @@ a {
   font-size: 14px;
 }
 
-.fw-600 {
+.fw-500 {
   font-weight: 500;
 }
 
@@ -349,7 +349,7 @@ header {
 @media (max-width: 1481px) {
   .navbar-expand-lg .navbar-nav .nav-link {
     padding-left: unset;
-    font-size: 18px;
+    font-size: 19px;
   }
 }
 
@@ -1445,6 +1445,8 @@ img {
 
 p.reading-time {
   font-weight: 600;
+  font-size: 0.9rem;
+  color: black;
 }
 
 .icons-section {
@@ -1626,7 +1628,7 @@ p.reading-time {
 .aa0 {
   /* max-width: 500px; */
   /* padding: 0 24px; */
-  margin: 28px auto 32px;
+  margin: 20px auto 32px;
 }
 
 .aa0 .ah2 {
@@ -3300,7 +3302,7 @@ padding-bottom: 10px;
   transition: opacity 0.2s ease-in-out;
   margin-top: 0;
   padding: 12px;
-  border-radius: 12px !important;
+  border-radius: 0 0 12px 12px !important;
   border: none;
   box-shadow: 0px 4px 18px rgba(0, 0, 0, 0.12);
   background: #fff;
@@ -3340,4 +3342,159 @@ padding-bottom: 10px;
 /* Remove last item margin */
 .dropdown-item:last-child {
   margin-bottom: 0;
+}
+ 
+.fs-1812{
+  font-size: 1.18rem;
+}
+.fw-600{
+  font-weight: 600;
+}
+
+.no-comments-text {
+  color: #9ca3af;   /* subtle gray */
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.toggle-comments {
+  color: #2563eb;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.toggle-comments:hover {
+  text-decoration: underline;
+}
+
+
+.comments-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid #e5e7eb;
+  background: #fff;
+  flex-wrap: wrap;
+  padding-top: 20px;
+}
+
+.comments-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.comments-heading {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.comments-text {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.first-voice-pill {
+  background: #7ccf9b;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin: 0 4px;
+  white-space: nowrap;
+}
+
+.share-opinion-btn {
+  background: #111111;
+  color: #ffffff;
+  border: none;
+  padding: 8px 18px;
+  /* border-radius: 20px; */
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.share-opinion-btn:hover {
+  background: #000000;
+}
+
+
+
+/* header dropdown */
+.user-dropdown {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  font-weight: 600;
+  color: #333;
+}
+
+.user-name {
+  /* padding: 8px 12px; */
+  display: inline-block;
+  transition: color 0.2s;
+}
+
+/* .user-name:hover {
+  color: #007bff;
+} */
+
+/* Dropdown menu */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: -25%; /* you can change to left:0 if you want */
+  min-width: 140px;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+/* Show dropdown */
+.dropdown-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Dropdown item */
+.dropdown-item {
+  display: block;
+  padding: 10px 15px;
+  color: #333;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+/* .dropdown-item:hover {
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 4px;
+} */
+
+.listing-dropdown-btn:active{
+background-color: var(--light-blue) !important;
+}
+
+ul.dropdown-menu.header-submenu {
+    columns: 2;
+}
+.dropdown-menu.header-submenu {
+  
+  right: -50%;
+ 
 }

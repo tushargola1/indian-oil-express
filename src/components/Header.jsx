@@ -19,7 +19,7 @@ export default function Header() {
   const [issticky, setIsSticky] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [query, setQuery] = useState("");
-
+const [isOpen, setIsOpen] = useState(false);
   const locationMenuRef = useRef(null);
 
   const toggleLocationMenu = () => {
@@ -162,17 +162,40 @@ export default function Header() {
                   {/* | */}
                   <a
                     href=""
-                    className="text-dark text-decoration-none mx-2  fw-600"
+                    className="text-dark text-decoration-none me-2  fw-600"
                   >
                     Sitemap
                   </a>
+     <div
+      className="user-dropdown ms-2"
+      onMouseEnter={() => setIsOpen(true)}
+      onMouseLeave={() => setIsOpen(false)}
+    >
+      <span className="user-name">Welcome User <i className="fa fa-chevron-down fs-12"></i></span>
+
+      <div className={`dropdown-menu ${isOpen ? "show" : ""}`}>
+        <button href="#" className="dropdown-item"  onClick={handleLogout}>
+          <div className="d-flex align-items-center justify-content-between">
+            <div>
+        <i class="fa-solid fa-arrow-right-from-bracket "></i> 
+
+            </div>
+            <div>
+               Logout 
+            </div>
+          </div>
+        </button>
+      </div>
+    </div>
+
                   {/* | */}
-                  <button
+                  {/* <button
                     onClick={handleLogout}
                     className="text-dark text-decoration-none ms-3 fw-600 bg-transparent border-0"
                   >
                     Logout
-                  </button>
+                  </button> */}
+                  
                   {/* <a
                   href=""
                   className=" text-decoration-none ms-4  fw-600"
@@ -296,6 +319,7 @@ export default function Header() {
                     </a>
 
                     <ul className="dropdown-menu" aria-labelledby="yourCompanyDropdown">
+                    <ul className="dropdown-menu header-submenu" aria-labelledby="yourCompanyDropdown">
                       {weekendXpress.map((item) => (
                         <li key={item.id} >
                           <a className="dropdown-item" href="#">

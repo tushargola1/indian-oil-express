@@ -6,14 +6,14 @@ import { Link, useLocation, useParams } from "react-router-dom";
 
 // ===================== Data & API =====================
 import { useQuery } from "@tanstack/react-query";
-import { 
-  addReadTime, 
-  addView, 
-  downloadNews, 
-  fetchTopNews, 
-  getAllComments, 
-  getNewsDetails, 
-  likeDislike 
+import {
+  addReadTime,
+  addView,
+  downloadNews,
+  fetchTopNews,
+  getAllComments,
+  getNewsDetails,
+  likeDislike
 } from "../components/ApiFunctions";
 
 // ===================== UI Components =====================
@@ -32,12 +32,13 @@ import fallback from "../assets/image/fallback.png";
 
 export default function NewsDetails() {
   const location = useLocation();
-
+  const [showComments, setShowComments] = useState(false);
   const { newsId } = useParams();
   const [readTime, setReadTime] = useState(0);
   const [showComment, setShowComment] = useState(false);
 
   const newsType = location?.state?.type || "XpressNews";
+  const [showCommentBox, setShowCommentBox] = useState(false);
 
   // ============================================
   // ⭐ Fetch News Details
@@ -166,6 +167,10 @@ export default function NewsDetails() {
       console.error(error);
     }
   };
+  const formatDateOnly = (dateTime) => {
+    if (!dateTime) return "";
+    return dateTime.split(" ")[0]; // takes only DD-MM-YYYY
+  };
 
   return (
     <>
@@ -173,10 +178,18 @@ export default function NewsDetails() {
         <div className="row g-3 justify-content-between ">
           <div className="col-xl-9 col-lg-8 col-md-12 col-12  ">
             <div className="detail-page-content">
-              <h5 className="italic-text fw-bold"> {newsDetails?.title}</h5>
-              <div className="reader-time-section d-flex align-items-center justify-content-between flex-wrap gap-1 px-0">
-                <p className="mb-0">{newsDetails?.shortDesc}</p>
-                <p className="mb-0 reading-time">{newsDetails?.newsDate}</p>
+              <h5 className="italic-text fw-600 fs-1812"> {newsDetails?.title}</h5>
+              <div className="reader-time-section px-0">
+                  <p className="mb-0"
+                  dangerouslySetInnerHTML={{ __html: newsDetails?.shortDesc }}
+                />
+                <div className="text-end">
+                  <p className="mb-0 reading-time">
+                    Updated:
+                    <i class="fa-solid fa-calendar-days mx-2 orange-color"></i>
+                    {formatDateOnly(newsDetails?.newsDate)}
+                  </p>
+                </div>
               </div>
               <div className="icons-section ">
                 <div>
@@ -255,18 +268,97 @@ export default function NewsDetails() {
                 {/* <p>
                   {newsDetails?.description }
                 </p> */}
-                <button
-                  className="px-3 py-2 details-page-button mt-4 "
-                  onClick={() => setShowComment((prev) => !prev)}
-                >
-                  {showComment ? "Hide Comments" : "Read Comments"}
-                </button>
 
-                {showComment && (
-                  <CommentSection comments={allComments} newsId={newsId} />
+                {/* ================= COMMENTS SECTION ================= */}
+                <div className="comments-bar mt-4">
+                  <div className="comments-left">
+                    {allComments.length === 0 ? (
+                      <p className="comments-text">
+                        Be the first to share a thought and become the
+                        <span className="first-voice-pill"> First Voice </span>
+                        of this News Article
+                      </p>
+                    ) : (
+                      <button
+                        className="px-3 py-2 details-page-button mt-2"
+                        onClick={() => setShowComments((prev) => !prev)}
+                      >
+                        {showComments
+                          ? "Hide Comments"
+                          : `Read ${allComments.length} Comments`}
+                      </button>
+                    )}
+                  </div>
+
+                  {/* SHARE OPINION BUTTON */}
+                  {allComments.length === 0 && !showComments && (
+                    <button
+                      className="share-opinion-btn"
+                      onClick={() => setShowComments(true)}
+                    >
+                      Share your Opinion
+                    </button>
+                  )}
+                </div>
+
+                {/* COMMENT SECTION */}
+                {showComments && (
+                  <CommentSection
+                    comments={allComments}
+                    newsId={newsId}
+                    autoFocus
+                  />
                 )}
+
+
+                {/* <div className="comments-bar mt-4">
+  <div className="comments-left">
+    <h5 className="comments-heading">Comments</h5>
+
+    {allComments.length === 0 ? (
+      <p className="comments-text">
+        Be the first to share a thought and become the
+        <span className="first-voice-pill"> First Voice </span>
+        of this News Article
+      </p>
+    ) : (
+      <p
+        className="read-comments-link"
+        onClick={() => {
+          setShowComments((prev) => !prev);
+          setShowCommentBox(true);
+        }}
+      >
+        {showComments
+          ? "Hide Comments"
+          : `Read ${allComments.length} Comments`}
+      </p>
+    )}
+  </div>
+
+  {allComments.length === 0 && !showCommentBox && (
+    <button
+      className="share-opinion-btn"
+      onClick={() => setShowCommentBox(true)}
+    >
+      Share your Opinion
+    </button>
+  )}
+</div>
+
+{(showCommentBox || showComments) && (
+  <CommentSection
+    comments={showComments ? allComments : []}
+    newsId={newsId}
+    autoFocus
+  />
+)} */}
+
+
+
+
               </div>
-             
+
             </div>
           </div>
           <div className="col-xl-3 mt-4 col-lg-3 col-md-12 col-12 details-page-right-section right-bar-side detail-page-left-section">

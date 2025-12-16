@@ -70,7 +70,7 @@ export default function CommentSection({ comments: apiComments, newsId }) {
       );
 
       const newComment = normalizeComments([res.data.data])[0];
-      setComments((prev) => [newComment, ...prev]);
+      setComments((prev) => [...prev, newComment]);
       setNewCommentText("");
     } catch (err) {
       console.error("Add comment error:", err);
@@ -201,30 +201,31 @@ export default function CommentSection({ comments: apiComments, newsId }) {
 
                   <div className="my-3">
                     <button
-                      className="btn btn-sm btn-success me-2"
+                      className="btn btn-sm "
                       onClick={() => {
                         setReplyingTo(reply.id);
                         setReplyText("");
                         setIsEditing(false);
                       }}
                     >
-                      Reply
+                      <i className="fa-solid fa-comment-dots text-success" ></i>
                     </button>
                     <button
-                      className="btn btn-sm btn-warning me-2"
+                      className="btn btn-sm"
                       onClick={() => {
                         setReplyingTo(reply.id);
                         setReplyText(reply.text);
                         setIsEditing(true);
                       }}
                     >
-                      Edit
+                      <i className="fa-solid fa-pen-to-square text-warning"></i>
+
                     </button>
                     <button
-                      className="btn btn-sm btn-danger"
+                      className="btn btn-sm "
                       onClick={() => handleDeleteComment(reply.id, reply.text)}
                     >
-                      Delete
+                      <i className="fa-solid fa-trash text-danger"></i>
                     </button>
                   </div>
                 </div>
@@ -294,7 +295,7 @@ export default function CommentSection({ comments: apiComments, newsId }) {
         )}
 
         {/* TOP REPLY / EDIT BOX */}
-        <div ref={topReplyBoxRef} className="mt-4">
+        <div ref={topReplyBoxRef} className="mt-2">
           {replyingTo && (
             <div className="mb-3 p-2 border rounded bg-light">
               <p className="fw-bold mb-1">
@@ -317,7 +318,7 @@ export default function CommentSection({ comments: apiComments, newsId }) {
                 {loading ? "Posting..." : "Submit"}
               </button>
               <button
-                className="btn btn-secondary btn-sm"
+                className="btn btn-secondary btn-sm rounded-0"
                 onClick={() => {
                   setReplyingTo(null);
                   setReplyText("");
@@ -350,32 +351,32 @@ export default function CommentSection({ comments: apiComments, newsId }) {
 
                     <div className="my-3">
                       <button
-                        className="btn btn-sm btn-success me-2"
+                        className="btn btn-sm  "
                         onClick={() => {
                           setReplyingTo(comment.id);
                           setReplyText("");
                           setIsEditing(false);
                         }}
                       >
-                        Reply
+                        <i className="fa-solid fa-comment-dots text-success"></i>
                       </button>
                       <button
-                        className="btn btn-sm btn-warning me-2"
+                        className="btn btn-sm "
                         onClick={() => {
                           setReplyingTo(comment.id);
                           setReplyText(comment.text);
                           setIsEditing(true);
                         }}
                       >
-                        Edit
+                        <i className="fa-solid fa-pen-to-square text-warning"></i>
                       </button>
                       <button
-                        className="btn btn-sm btn-danger"
+                        className="btn btn-sm "
                         onClick={() =>
                           handleDeleteComment(comment.id, comment.text)
                         }
                       >
-                        Delete
+                        <i className="fa-solid fa-trash text-danger"></i>
                       </button>
                     </div>
                   </div>
