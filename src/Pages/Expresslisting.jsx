@@ -11,67 +11,6 @@ import { useParams, useLocation } from "react-router-dom";
 import fallback from "../assets/image/fallback.png";
 import { useNavigate } from "react-router-dom";
 import { expressDetails } from "../components/ApiFunctions"
-import NewsItem from "./NewsListing";
-import { Link } from "react-router-dom";
-
-
-
-// ✅ News Item Component
-// const NewsItem = ({ imagePath, title, shortDesc, newsDate, byLine }) => {
-//   const [day, month, year] = newsDate.split(" ")[0].split("-");
-//   const monthNames = [
-//     "January",
-//     "February",
-//     "March",
-//     "April",
-//     "May",
-//     "June",
-//     "July",
-//     "August",
-//     "September",
-//     "October",
-//     "November",
-//     "December",
-//   ];
-//   const formattedMonth = monthNames[parseInt(month) - 1];
-
-//   return (
-//     <div className="news-item row gy-xl-0 gy-lg-2 gy-md-3 gy-4 border-bottom  mb-3">
-//       <div className="news-image col-xl-2 col-lg-12 col-md-12 col-12">
-//         <img
-//           src={
-//             imagePath?.startsWith("https://ioclxpressapp.businesstowork.com")
-//               ? imagePath
-//               : fallback
-//           }
-//           alt={title || "News"}
-//           className={`img-fluid ${!imagePath?.startsWith("https://ioclxpressapp.businesstowork.com")
-//             ? "fallback-listing"
-//             : ""
-//             }`}
-//           onError={(e) => {
-//             e.target.onerror = null;
-//             e.target.src = fallback;
-//             e.target.className = "img-fluid fallback-listing"; // ensure fallback styling
-//           }}
-//         />
-//       </div>
-//       <div className="news-content col-xl-8 col-lg-12 col-md-  12 col-12">
-//         <div className="news-title fw-bold">{title}</div>
-//         <div className="news-description small mb-2">{shortDesc || byLine}</div>
-//       </div>
-//       <div className="news-date-box col-xl-2 col-lg-12 col-md-12 col-12 text-end">
-//         <div className="news-date-month fw-bold">{formattedMonth}</div>
-//         <div className="news-date-day-year">
-//           {day}, {year}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// ✅ Main Component
-const Expresslisting = ({ imagePath, title, shortDesc, newsDate, byLine }) => {
 
 
 const getNewsListing = async (page, ITEMS_PER_PAGE, newsId, newsType) => {
@@ -204,17 +143,6 @@ const Expresslisting = () => {
   // ✅ React Query (fetching based on current page + URL id)
   const { data, isLoading, isError, isFetching } = useQuery({
     queryKey: ["news", currentPage, newsId],
-   queryFn: expressDetails,
-    // keepPreviousData: true,
-    // staleTime: 5 * 60 * 1000,
-    // refetchOnWindowFocus: false,
-  });
-
-  const news = data || [];
-  // alert(news);
-  const totalRecords = data?.totalRecords || 0;
-  const totalPages = Math.ceil(totalRecords / ITEMS_PER_PAGE);
-  const idMain = data?.newsMainId;
     queryFn: () =>
       getNewsListing(currentPage, ITEMS_PER_PAGE, newsId, newsType),
     keepPreviousData: true,
@@ -235,56 +163,6 @@ const Expresslisting = () => {
   }
 
   return (
-    <div className="container-fluid px-30 px-md-3 px-3 mt-5">
-      <div className="row g-3 justify-content-between flex-lg-row flex-md-column-reverse flex-column-reverse">
-
-        <div className="col-xl-9 col-lg-7 col-md-12 col-12">
-          <div className="listing-page-section">
-            {news.map((item, i) => {
-              let day = "", month = "", year = "";
-              if (item.newsDate) {
-                [year, month, day] = item.newsDate.split(" ")[0].split("-");
-              }
-              const monthNames = [
-                "January",
-                "February",
-                "March",
-                "April",
-                "May",
-                "June",
-                "July",
-                "August",
-                "September",
-                "October",
-                "November",
-                "December",
-              ];
-              const formattedMonth = monthNames[parseInt(month) - 1];
-              
-              return (
-                <div className="news-item row gy-xl-0 gy-lg-2 gy-md-3 gy-4 border-bottom  mb-3">
-
-                  <div className="news-image col-xl-2 col-lg-12 col-md-12 col-12">
-                    <Link to={`/news-detail/${item.id}`}>
-                    {idMain}
-                      <img
-                        src={
-                          imagePath?.startsWith("https://ioclxpressapp.businesstowork.com")
-                            ? imagePath
-                            : fallback
-                        }
-                        alt={title || "News"}
-                        className={`img-fluid ${!imagePath?.startsWith("https://ioclxpressapp.businesstowork.com")
-                          ? "fallback-listing"
-                          : ""
-                          }`}
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = fallback;
-                          e.target.className = "img-fluid fallback-listing"; // ensure fallback styling
-                        }}
-                      />
-                    </Link>
     <div className="container-fluid px-lg-5 px-md-3 px-3 mt-5">
       <div className="row g-3 justify-content-between flex-lg-row flex-md-column-reverse flex-column-reverse">
         {/* MAIN CONTENT */}
@@ -297,30 +175,6 @@ const Expresslisting = () => {
             ) : null
           )}
 
-                  </div>
-                  <div className="news-content col-xl-8 col-lg-12 col-md-12 col-12">
-                    <Link to={`/news-detail/${item.id}`}>
-                      <div className="news-title fw-bold">{item.title}</div>
-                    </Link>
-                    <div className="news-description small mb-2">{item.shortDesc || byLine}</div>
-                  </div>
-                  <div className="news-date-box col-xl-2 col-lg-12 col-md-12 col-12 text-end">
-                    <div className="news-date-month fw-bold">{formattedMonth}</div>
-                    <div className="news-date-day-year">
-                      {day}, {year}
-                    </div>
-                  </div>
-                </div>
-                // i === 0 ? (
-                //   <h4 className="fw-bold">
-                //     {item.xpressNewsType || item.webPageCategory}
-                //   </h4>
-                // ) : null
-
-              );
-            })
-            }
-            {/* 
           {isLoading || isFetching ? (
             Array.from({ length: 3 }).map((_, index) => (
               <div key={index} className="mb-3 ">
@@ -341,8 +195,7 @@ const Expresslisting = () => {
                 </div>
               </div>
             ))
-          )  
-         : (
+          ) : (
             <div className="listing-page-section">
               {news.length > 0 ? (
                 news.map((item) => <NewsItem key={item.id} {...item} />)
@@ -350,18 +203,6 @@ const Expresslisting = () => {
                 <p>No news found.</p>
               )}
             </div>
-          )
-          } */}
-
-            {!isLoading && totalPages > 1 && (
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-              />
-            )}
-          </div>
-        </div>
           )}
 
           {!isLoading && totalPages > 1 && (
@@ -404,43 +245,6 @@ const Expresslisting = () => {
       </div>
     </div> */}
 
-        {/* <div className="col-xl-9 col-lg-7 col-md-12 col-12"> */}
-        {/* <div className="news-item row gy-xl-0 gy-lg-2 gy-md-3 gy-4 border-bottom  mb-3">
-            <div className="news-image col-xl-2 col-lg-12 col-md-12 col-12">
-              <img
-                src={
-                  imagePath?.startsWith("https://ioclxpressapp.businesstowork.com")
-                    ? imagePath
-                    : fallback
-                }
-                alt={title || "News"}
-                className={`img-fluid ${!imagePath?.startsWith("https://ioclxpressapp.businesstowork.com")
-                  ? "fallback-listing"
-                  : ""
-                  }`}
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = fallback;
-                  e.target.className = "img-fluid fallback-listing"; 
-                }}
-              />
-            </div>
-            <div className="news-content col-xl-8 col-lg-12 col-md-12 col-12">
-              <div className="news-title fw-bold">{title}</div>
-            </div>
-            <div className="news-date-box col-xl-2 col-lg-12 col-md-12 col-12 text-end">
-              <div className="news-date-month fw-bold">{formattedMonth}</div>
-              <div className="news-date-day-year">
-                {day}, {year}
-              </div>
-            </div>
-          </div> */}
-        {/* <div className="row g-4">
-
-            {categoryData.map((item, i) => (
-              <div key={item.id || i} className="col-md-4 col-12">
-                <div className="custom-card pt-3 pb-0 px-3">
-
         <div className="col-xl-9 col-lg-7 col-md-12 col-12">
           <div className="row g-4">
 
@@ -452,7 +256,6 @@ const Expresslisting = () => {
                     <h5 className="fw-bold m-0">{item.title}</h5>
                   </div>
 
-                  {true && (     
                   {true && (        // you can replace with open1, open2, open3 if needed
                     <div>
                       <p className="custome_para">{item.shortDesc}</p>
@@ -472,13 +275,8 @@ const Expresslisting = () => {
               </div>
             ))}
 
-          </div> */}
-        {/* </div> */}
           </div>
         </div>
-
-
-
 
         {/* SIDEBAR */}
         <div className="col-xl-3 col-lg-5 col-md-12 col-12 page-listing-side d-flex flex-column ps-0">

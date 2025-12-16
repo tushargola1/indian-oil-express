@@ -17,7 +17,7 @@ import fallback from "../assets/image/fallback.png";
 // ===================== Helper Functions =====================
 import { getWebPageData } from "../components/ApiFunctions";
 
-// ===================== Category Colors ==========col-xl-9 col-lg-7 col-md-12 col-12===========
+// ===================== Category Colors =====================
 const colors = {
   "Strengthening Synergy": "#eed6c5",
   "Learning Pathways": "#eee5c5",

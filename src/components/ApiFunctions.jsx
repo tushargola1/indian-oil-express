@@ -163,14 +163,15 @@ export const getNewsDetails = async (newsId) => {
 
 export const expressDetails = async () => {
   const url = apiBaseUrl(`XpressNews/GetXpressNewsTDTY`);
+console.log("📡 Full API Response:", url);  
   const res = await axios.get(url, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${Cookies.get("accessToken")}`,
     },
-  }); 
-  console.log("Express Details API Response:", res.data.data);
-   return res?.data?.data;
+  });
+  console.log("📡 Full API Response:", res.data.data);   
+   return res?.data?.data ?? null;
 };
 
 // get details page sidebar data
