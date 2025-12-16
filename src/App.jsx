@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import { Suspense, lazy } from "react";
+import Search from "./innerPage/Search";
 
 // Lazy Loaded Components
 const Header = lazy(() => import("./components/Header"));
@@ -76,7 +77,8 @@ function AppContent() {
             path="/search"
             element={
               <ProtectedRoute>
-                <SearchPage />
+                {/* <SearchPage /> */}
+                <Search />
               </ProtectedRoute>
             }
           />
@@ -99,7 +101,6 @@ function AppContent() {
             }
           />
          <Route
-          <Route
             path="/Expresslisting/"
             element={
               <ProtectedRoute>
