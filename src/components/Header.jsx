@@ -124,6 +124,7 @@ const handleSubmit = (e) => {
 useEffect(() => {
   setQuery("");
 }, [searchParams]);
+
   return (
     <header className={`border-bottom shadow-sm custome_mobile_header`}>
       {/* Top Row */}

@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 import { apiBaseUrl } from '../Helper';
 
@@ -13,7 +12,6 @@ const headers = {
   "Content-Type": "application/json",
   Authorization: `Bearer ${Cookies.get("accessToken")}`,
 };
-
 
 // header weekend xpress nav dropdown
 export const getWeekendXpress = async () => {
@@ -350,4 +348,30 @@ export const getWebPageCategories = async () => {
   }));
 };
 
-expressDetails();
+// dropdown weekend xpress categories data show
+export const WeekendDropdownData = async (page, ITEMS_PER_PAGE, newsId, newsType ) => {
+  const start = (page - 1) * ITEMS_PER_PAGE;
+  const res = await axios.post(apiBaseUrl("WeekendXpress/GetWeekendXpressFL"), 
+  // ✅ BODY (DATA)
+  {
+    searchValue: "",
+    sortColumn: "",
+    sortDirection: "ASC",
+    start,
+    length: ITEMS_PER_PAGE,
+    weekendXpressTypeId: newsId,
+    fromDate: "",
+    toDate: "",
+  },  
+  {
+    headers: {
+      Authorization: `Bearer ${Cookies.get("accessToken")}`,
+ 
+    },
+  }
+  );
+  return {
+  list: res.data.data.data || [],
+  totalRecords: res.data.data.recordsFiltered || 0,
+  }
+};

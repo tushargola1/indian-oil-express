@@ -1995,16 +1995,17 @@ p.reading-time {
 }
 
 .news-image {
-  /* flex: 0 0 110px; */
-  height: 90px;
+  /* flex-shrink: 1; */
   overflow: hidden;
   padding: 0;
+  margin-top: 0;
+  background: red;
 }
 
 .news-image img {
   width: 100%;
-  height: 100px;
-  object-fit: cover;
+  min-height: 72px;
+  height: 100%;
 }
 
 .news-content {
@@ -3526,4 +3527,107 @@ ul.dropdown-menu.header-submenu {
   0% { transform: translateY(-50%) scale(1); }
   50% { transform: translateY(-50%) scale(1.2); }
   100% { transform: translateY(-50%) scale(1); }
+}
+
+.date-picker {
+  cursor: pointer;
+}
+
+
+.calendar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.calendar-modal {
+  background: #fff;
+  width: 360px;
+  padding: 20px;
+  border-radius: 14px;
+  position: relative;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+.close-btn {
+  position: absolute;
+  right: 12px;
+  top: 10px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.calendar-box {
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.highlight-date {
+  background-color: #ff5722 !important;
+  color: #fff !important;
+  border-radius: 50%;
+}
+
+.bulletin-box {
+  margin-top: 15px;
+}
+
+.bulletin-box ul {
+  list-style: none;
+  padding: 0;
+}
+
+.bulletin-box li {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+.bulletin-box li:hover {
+  background: #f5f5f5;
+}
+
+.no-data {
+  color: #999;
+}
+
+.announcement-item-list{
+
+    border: 1px solid #e7e7e7 !important;
+    background: white !important;
+}
+
+.fc-daygrid-day-events {
+    display: none !important;
+}
+.fc-toolbar-chunk:nth-child(3) {
+  display: none !important;
+}
+.fc .fc-toolbar-title
+ {
+    font-size: 1.12em !important;
+}
+.fc .fc-daygrid-day-top {
+    display: flex;
+    /* flex-direction: row-reverse; */
+    justify-content: center !important;
+}
+
+.fc-col-header ,.fc-daygrid-body .fc-daygrid-body-unbalanced  {
+  width: 100% !important;
 }

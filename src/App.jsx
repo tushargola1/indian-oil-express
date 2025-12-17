@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import Search from "./innerPage/Search";
+import WeekendXpressListing from "./Pages/WeekendXpressListing";
 
 // Lazy Loaded Components
 const Header = lazy(() => import("./components/Header"));
@@ -114,7 +115,7 @@ function AppContent() {
             path="WeekendXpress/news-listing/:newsId"
             element={
               <ProtectedRoute>
-                <NewsListing />
+                <WeekendXpressListing />
               </ProtectedRoute>
             }
           />
