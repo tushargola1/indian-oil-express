@@ -194,71 +194,6 @@
 // }
 
 
-
-// import React, { useEffect, useRef } from 'react';
-// import FullCalendar from '@fullcalendar/react';
-// import dayGridPlugin from '@fullcalendar/daygrid';
-// import { format } from 'date-fns';
-
-// export default function CalendarModal({ isOpen, onClose }) {
-//   // Convert date format (DD-MM-YYYY to YYYY-MM-DD)
-//   const formatDate = (dateStr) => {
-//     const [day, month, year] = dateStr.split("-");
-//     return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
-//   };
-
-//   // Array of dates to highlight
-//   const highlightDates = ["7-11-2025", "30-03-2025"];
-  
-//   // Convert the date strings into a usable format (YYYY-MM-DD)
-//   const highlightedDates = highlightDates.map(formatDate);
-
-//   const calendarRef = useRef(null);
-
-//   const handleDatesSet = (data) => {
-//     const calendarApi = data.view.calendar;
-
-//     // Loop over all the dates in the current view
-//     const cells = document.querySelectorAll('.fc-daygrid-day');
-//     cells.forEach((cell) => {
-//       const date = cell.getAttribute('data-date'); // FullCalendar stores date in data-date attribute
-//       if (highlightedDates.includes(date)) {
-//         cell.classList.add('highlighted'); // Add your custom class to highlight
-//       } else {
-//         cell.classList.remove('highlighted'); // Remove the class if the date is not in the array
-//       }
-//     });
-//   };
-
-//   return (
-//     <div>
-//       <FullCalendar
-//         ref={calendarRef}
-//         plugins={[dayGridPlugin]}
-//         initialView="dayGridMonth"
-//         datesSet={handleDatesSet} // Hook for when the calendar view is set
-//         headerToolbar={{
-//           left: 'prev,next today',
-//           center: 'title',
-//           right: 'dayGridMonth',
-//         }}
-//         events={[]}  // You can add events if needed
-//       />
-//       <style>
-//         {`
-//           .highlighted {
-//             background-color: #ff9800 !important; /* Highlight color */
-//             color: white !important;
-//             border-radius: 50%;
-//           }
-//         `}
-//       </style>
-//     </div>
-//   );
-// }
-
-
-
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -411,7 +346,6 @@ export default function CalendarModal({ isOpen, onClose }) {
           datesSet={handleMonthChange}
           selectable
           validRange={{
-            start: "2025-01-01",
             end: today,
           }}
           headerToolbar={{
@@ -438,16 +372,18 @@ export default function CalendarModal({ isOpen, onClose }) {
               <p className="no-data mb-0">No bulletins found.</p>
             ) : (
               <ul className="dropdown-list">
-                {options.map((item) => (
-                  <li
-                    key={item.id}
-                    className="dropdown-item d-flex justify-content-between align-items-center"
-                    onClick={() => handleDownload(item)}
-                  >
-                    <span>{item.title}</span>
-                    <i className="fa fa-download"></i>
-                  </li>
-                ))}
+             {options.map((item) => (
+                   <li
+                     key={item.id}
+                     className="dropdown-item d-flex justify-content-between align-items-center"
+                     onClick={() => handleDownload(item)}
+                   >
+                     <span>{item.text}</span>
+                     <i className="fa fa-download"></i>
+                   </li>
+                 ))}
+
+                
               </ul>
             )}
           </div>
