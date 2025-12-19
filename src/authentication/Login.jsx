@@ -5,6 +5,7 @@ import indianOilLogo from "../assets/image/logos/indianOil-Logo.png";
 import { loginApi } from "../components/ApiFunctions";
 import { showAlert } from "../components/SweetAlert";
 import Cookies from "js-cookie";
+import {jwtDecode} from "jwt-decode";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -36,7 +37,8 @@ const handleLogin = (e) => {
         const accessToken = data.accessToken || null;
         const refreshToken = data.refreshToken || null;
         const refreshTokenExpiry = data.refreshTokenExpiry || null;
-
+        const decodedToken = jwtDecode(accessToken);
+      
         if (!accessToken || !refreshToken) {
           showAlert({
             type: "error",
@@ -89,7 +91,7 @@ const handleLogin = (e) => {
           showConfirmButton: false,
         });
 
-        navigate("/");
+        navigate("/" , {state : decodedToken});
       } else {
         showAlert({
           type: "error",

@@ -6,7 +6,7 @@ import { useParams, useLocation, Link } from "react-router-dom";
 
 // ===================== API & Data =====================
 import { useQuery } from "@tanstack/react-query";
-import { getNewsListing } from "../components/ApiFunctions";
+import { WeekendDropdownData } from "../components/ApiFunctions";
 
 // ===================== UI Components =====================
 import Pagination from "../components/Pagination";
@@ -16,7 +16,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 // ===================== Assets =====================
 import fallback from "../assets/image/fallback.png";
-import mainaa from "../assets/image/banner/main-img.jpg";
+
 
 // ✅ News Item Component
 const NewsItem = ({ id, imagePath, title, shortDesc, newsDate, byLine }) => {
@@ -42,7 +42,7 @@ const NewsItem = ({ id, imagePath, title, shortDesc, newsDate, byLine }) => {
       <div className="news-image col-xl-2 col-lg-12 col-md-12 col-12">
         <Link to={`/news-detail/${id}`}>  
 
-          {/* <img
+          <img
             src={
               imagePath?.startsWith("https://ioclxpressapp.businesstowork.com")
                 ? imagePath
@@ -58,9 +58,7 @@ const NewsItem = ({ id, imagePath, title, shortDesc, newsDate, byLine }) => {
               e.target.src = fallback;
               e.target.className = "img-fluid fallback-listing"; // ensure fallback styling
             }}
-          /> */}
-
-          <img src={mainaa} />
+          />
         </Link>
 
       </div>
@@ -81,7 +79,7 @@ const NewsItem = ({ id, imagePath, title, shortDesc, newsDate, byLine }) => {
 };
 
 // ✅ Main Component
-const NewsListing = () => {
+const WeekendXpressListing = () => {
   const { newsId } = useParams();
   const location = useLocation();
 
@@ -102,16 +100,20 @@ const NewsListing = () => {
   // ✅ React Query (fetching based on current page + URL id)
   const { data, isLoading, isError, isFetching } = useQuery({
     queryKey: ["news", currentPage, newsId, itemsPerPage],
-    queryFn: () => getNewsListing(currentPage, itemsPerPage, newsId, newsType),
+    queryFn: () => WeekendDropdownData(currentPage, itemsPerPage, newsId, newsType),
     keepPreviousData: true,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 5 * 60 * 1000, 
     refetchOnWindowFocus: false,
+    
   });
-
-  const news = data?.data || [];
+console.log("Full data:", data);
+  const news = data?.list || [];
+    // console.log("News data:", news);
   const totalRecords = data?.totalRecords || 0;
+  // console.log("total Page" , totalRecords);
   const totalPages = Math.ceil(totalRecords / itemsPerPage);
-
+  
+  
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -223,4 +225,4 @@ const NewsListing = () => {
   );
 };
 
-export default NewsListing;
+export default WeekendXpressListing;

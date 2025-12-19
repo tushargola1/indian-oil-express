@@ -1,5 +1,5 @@
 import Swal from "sweetalert2";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import indianOilLogo from "../assets/image/logos/indianOil-Logo.png";
 import sprintLogo from "../assets/image/logos/sprint-logo.png";
 import indianOil from "../assets/image/logos/indianOil.png";
@@ -19,12 +19,40 @@ export default function Header() {
   const [issticky, setIsSticky] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [query, setQuery] = useState("");
-const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const locationMenuRef = useRef(null);
-
+  const location = useLocation()
+  const accessTokenDecodedData = location.state;
   const toggleLocationMenu = () => {
     setShowLocationMenu((prev) => !prev);
   };
+
+
+
+
+
+  useEffect(() => {
+    const expiryCheckFn = () => {
+      let timestamp = accessTokenDecodedData?.exp;
+      let expiryTime = new Date(timestamp * 1000);
+      console.log("Access Token Expiry Date:", expiryTime);
+      const currentTime = new Date();
+      console.log("Current Date:", currentTime);
+      if (currentTime >= expiryTime) {
+        const event = { preventDefault: () => { } };
+        handleLogout(event);
+      }
+    }
+    expiryCheckFn()
+    const logoutInterval = setTimeout(() => {
+      expiryCheckFn()
+    }, 60000)
+
+    return () => clearTimeout(logoutInterval);
+
+
+  }, [accessTokenDecodedData])
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -111,10 +139,20 @@ const [isOpen, setIsOpen] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (!query.trim()) return;
-    // navigate to /search with query param ?query=...
-    navigate(`/search?query=${encodeURIComponent(query.trim())}`);
+
+    // convert spaces to +
+    const formattedQuery = query.trim().replace(/\s+/g, "+");
+
+    navigate(`/search?query=${formattedQuery}`);
   };
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    setQuery("");
+  }, [searchParams]);
+
   return (
     <header className={`border-bottom shadow-sm custome_mobile_header`}>
       {/* Top Row */}
@@ -166,27 +204,27 @@ const [isOpen, setIsOpen] = useState(false);
                   >
                     Sitemap
                   </a>
-     <div
-      className="user-dropdown ms-2"
-      onMouseEnter={() => setIsOpen(true)}
-      onMouseLeave={() => setIsOpen(false)}
-    >
-      <span className="user-name">Welcome User <i className="fa fa-chevron-down fs-12"></i></span>
+                  <div
+                    className="user-dropdown ms-2"
+                    onMouseEnter={() => setIsOpen(true)}
+                    onMouseLeave={() => setIsOpen(false)}
+                  >
+                    <span className="user-name">Welcome {accessTokenDecodedData?.nam} <i className="fa fa-chevron-down fs-12"></i></span>
 
       <div className={`dropdown-menu ${isOpen ? "show" : ""}`}>
         <button href="#" className="dropdown-item"  onClick={handleLogout}>
           <div className="d-flex align-items-center justify-content-between">
             <div>
-        <i className="fa-solid fa-arrow-right-from-bracket "></i> 
+        <i class="fa-solid fa-arrow-right-from-bracket "></i> 
 
-            </div>
-            <div>
-               Logout 
-            </div>
-          </div>
-        </button>
-      </div>
-    </div>
+                          </div>
+                          <div>
+                            Logout
+                          </div>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
 
                   {/* | */}
                   {/* <button
@@ -195,7 +233,7 @@ const [isOpen, setIsOpen] = useState(false);
                   >
                     Logout
                   </button> */}
-                  
+
                   {/* <a
                   href=""
                   className=" text-decoration-none ms-4  fw-600"
