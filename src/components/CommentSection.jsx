@@ -144,7 +144,7 @@ export default function CommentSection({ comments: apiComments, newsId }) {
     if (!window.confirm("Are you sure you want to delete this comment?"))
       return;
     setLoading(true);
-
+// alert("Deleting comment...");
     try {
       const body = {
         Id: id,
@@ -183,6 +183,7 @@ export default function CommentSection({ comments: apiComments, newsId }) {
     const hasMore = visibleCount < replies.length;
 
     return (
+      // ui function to render sub replies worked
       <>
         {visibleList.map((reply) => (
           <li className={`clearfix reply-level-${level}`} key={reply.id}>
@@ -276,6 +277,7 @@ export default function CommentSection({ comments: apiComments, newsId }) {
         {/* ADD MAIN COMMENT BOX */}
         {/* ADD MAIN COMMENT BOX */}
         {!replyingTo && (
+          // alert("Showing reply box..."),
           <div className="mb-4 mt-2">
             <textarea
               className="form-control mb-2"
@@ -297,6 +299,7 @@ export default function CommentSection({ comments: apiComments, newsId }) {
         {/* TOP REPLY / EDIT BOX */}
         <div ref={topReplyBoxRef} className="mt-2">
           {replyingTo && (
+            
             <div className="mb-3 p-2 border rounded bg-light">
               <p className="fw-bold mb-1">
                 {isEditing

@@ -10,7 +10,7 @@ import axios from "axios";
 import { apiBaseUrl } from "../Helper";
 import { useQuery } from "@tanstack/react-query";
 import { getWeekendXpress } from "./ApiFunctions";
-
+import {WeekendDropdownData} from "./ApiFunctions";
 
 
 export default function Header() {
@@ -177,7 +177,7 @@ const [isOpen, setIsOpen] = useState(false);
         <button href="#" className="dropdown-item"  onClick={handleLogout}>
           <div className="d-flex align-items-center justify-content-between">
             <div>
-        <i class="fa-solid fa-arrow-right-from-bracket "></i> 
+        <i className="fa-solid fa-arrow-right-from-bracket "></i> 
 
             </div>
             <div>
@@ -321,11 +321,11 @@ const [isOpen, setIsOpen] = useState(false);
                     <ul className="dropdown-menu header-submenu" aria-labelledby="yourCompanyDropdown">
                       {weekendXpress.map((item) => (
                         <li key={item.id} >
-                          <a className="dropdown-item" href="#">
+                          <Link className="dropdown-item" to={`/WeekendXpress/news-listing/${item.id}`}>
                             {item.text}
-                          </a>
+                          </Link>
                         </li>
-                      ))}
+                      ))}                  
                     </ul>
                   </li>
 

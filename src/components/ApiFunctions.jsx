@@ -160,7 +160,6 @@ export const getNewsDetails = async (newsId) => {
 };
 
 // Express listing page
-
 export const expressDetails = async () => {
   const url = apiBaseUrl(`XpressNews/GetXpressNewsTDTY`);
 console.log("📡 Full API Response:", url);  
@@ -351,4 +350,37 @@ export const getWebPageCategories = async () => {
   }));
 };
 
-expressDetails();
+// dropdown weekend xpress categories data show
+
+export const WeekendDropdownData = async (page, ITEMS_PER_PAGE, newsId, newsType ) => {
+  const start = (page - 1) * ITEMS_PER_PAGE;
+  const res = await axios.post(apiBaseUrl("WeekendXpress/GetWeekendXpressFL"), 
+  // ✅ BODY (DATA)
+  {
+    searchValue: "",
+    sortColumn: "",
+    sortDirection: "ASC",
+    start,
+    length: ITEMS_PER_PAGE,
+    weekendXpressTypeId: newsId,
+    fromDate: "",
+    toDate: "",
+  },  
+  {
+    headers: {
+      Authorization: `Bearer ${Cookies.get("accessToken")}`,
+ 
+    },
+  }
+ 
+  );
+  // console.log("📡 Actual list (array):", res);
+  return {
+  list: res.data.data.data || [],
+  totalRecords: res.data.data.recordsFiltered || 0,
+  }
+};
+
+WeekendDropdownData();
+
+// expressDetails();

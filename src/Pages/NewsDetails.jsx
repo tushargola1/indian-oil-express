@@ -365,7 +365,7 @@ export default function NewsDetails() {
             {topNews.length > 0 && <SidebarCategorySwiper items={topNews} />}
           </div>
         </div>
-        <div className="d-flex align-items-center justify-content-between  flex-wrap mt-3">
+        <div className="d-flex align-items-center justify-content-between flex-wrap mt-3">
           <h4 className="recommanded-story-heading">Recommanded Stories</h4>
           <div
             className="d-flex align-items-center gap-3 flex-wrap
