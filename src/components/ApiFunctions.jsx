@@ -349,32 +349,32 @@ export const getWebPageCategories = async () => {
 };
 
 // dropdown weekend xpress categories data show
-export const WeekendDropdownData = async (page, ITEMS_PER_PAGE, newsId, newsType ) => {
-  const start = (page - 1) * ITEMS_PER_PAGE;
-  const res = await axios.post(apiBaseUrl("WeekendXpress/GetWeekendXpressFL"), 
-  // ✅ BODY (DATA)
-  {
-    searchValue: "",
-    sortColumn: "",
-    sortDirection: "ASC",
-    start,
-    length: ITEMS_PER_PAGE,
-    weekendXpressTypeId: newsId,
-    fromDate: "",
-    toDate: "",
-  },  
-  {
-    headers: {
-      Authorization: `Bearer ${Cookies.get("accessToken")}`,
+// export const WeekendDropdownData = async (page, ITEMS_PER_PAGE, newsId, newsType ) => {
+//   const start = (page - 1) * ITEMS_PER_PAGE;
+//   const res = await axios.post(apiBaseUrl("WeekendXpress/GetWeekendXpressFL"), 
+//   // ✅ BODY (DATA)
+//   {
+//     searchValue: "",
+//     sortColumn: "",
+//     sortDirection: "ASC",
+//     start,
+//     length: ITEMS_PER_PAGE,
+//     weekendXpressTypeId: newsId,
+//     fromDate: "",
+//     toDate: "",
+//   },  
+//   {
+//     headers: {
+//       Authorization: `Bearer ${Cookies.get("accessToken")}`,
  
-    },
-  }
-  );
-  return {
-  list: res.data.data.data || [],
-  totalRecords: res.data.data.recordsFiltered || 0,
-  }
-};
+//     },
+//   }
+//   );
+//   return {
+//   list: res.data.data.data || [],
+//   totalRecords: res.data.data.recordsFiltered || 0,
+//   }
+// };
 // dropdown weekend xpress categories data show
 
 export const WeekendDropdownData = async (page, ITEMS_PER_PAGE, newsId, newsType ) => {

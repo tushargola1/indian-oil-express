@@ -21,6 +21,8 @@ export default function CommentSection({ comments: apiComments, newsId }) {
   const [comments, setComments] = useState([]);
   const [visibleReplies, setVisibleReplies] = useState({});
 
+  const [replyTargetId, setReplyTargetId] = useState(null);
+
   // 🔥 Normalize API Response
   const normalizeComments = (items) =>
     items.map((c) => ({
@@ -82,60 +84,55 @@ export default function CommentSection({ comments: apiComments, newsId }) {
   // =============================
   //          REPLY / EDIT
   // =============================
-  const handleReplySubmit = async (id, isReply = false) => {
-    if (!replyText.trim()) return;
-    setLoading(true);
+const handleReplySubmit = async () => {
+  if (!replyText.trim() || !replyingTo) return;
+  setLoading(true);
 
-    try {
-      const body = {
-        xpressNewsId: newsId,
-        comment: replyText.trim(),
-        parentId: isReply ? id : undefined,
-        id: isEditing ? id : undefined,
-        action: isEditing ? "Edit" : "Add",
-        ipAddress: "::1",
-      };
+  try {
+    const body = {
+      xpressNewsId: newsId,
+      comment: replyText.trim(),
+      parentId: replyingTo, // 🔥 ALWAYS level-1
+      ipAddress: "::1",
+      action: isEditing ? "Edit" : "Add",
+      id: isEditing ? replyTargetId : undefined,
+    };
 
-      const res = await axios.post(
-        apiBaseUrl("XpressNews/ManageComment"),
-        body,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${Cookies.get("accessToken")}`,
-          },
-        }
-      );
-
-      const updatedComment = normalizeComments([res.data.data])[0];
-
-      if (isEditing) {
-        const updateCommentTree = (items) =>
-          items.map((c) =>
-            c.id === id
-              ? updatedComment
-              : { ...c, replies: updateCommentTree(c.replies) }
-          );
-        setComments((prev) => updateCommentTree(prev));
-      } else {
-        const addReply = (items) =>
-          items.map((c) => {
-            if (c.id === id && !isReply)
-              return { ...c, replies: [...c.replies, updatedComment] };
-            return { ...c, replies: addReply(c.replies) };
-          });
-        setComments((prev) => addReply(prev));
+    const res = await axios.post(
+      apiBaseUrl("XpressNews/ManageComment"),
+      body,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("accessToken")}`,
+        },
       }
+    );
 
-      setReplyText("");
-      setReplyingTo(null);
-      setIsEditing(false);
-    } catch (err) {
-      console.error("Reply/Edit error:", err);
-    }
+    const newReply = normalizeComments([res.data.data])[0];
 
-    setLoading(false);
-  };
+    // 🔥 Insert reply ONLY under level-1 parent
+    const addReplyToLevel1 = (items) =>
+      items.map((c) => {
+        if (c.id === replyingTo) {
+          return { ...c, replies: [...c.replies, newReply] };
+        }
+        return { ...c, replies: addReplyToLevel1(c.replies) };
+      });
+
+    setComments((prev) => addReplyToLevel1(prev));
+
+    setReplyText("");
+    setReplyingTo(null);
+    setReplyTargetId(null);
+    setIsEditing(false);
+  } catch (err) {
+    console.error("Reply error:", err);
+  }
+
+  setLoading(false);
+};
+
 
   // =============================
   //          DELETE COMMENT
@@ -144,7 +141,7 @@ export default function CommentSection({ comments: apiComments, newsId }) {
     if (!window.confirm("Are you sure you want to delete this comment?"))
       return;
     setLoading(true);
-// alert("Deleting comment...");
+    // alert("Deleting comment...");
     try {
       const body = {
         Id: id,
@@ -177,13 +174,100 @@ export default function CommentSection({ comments: apiComments, newsId }) {
   // =============================
   //          SHOW REPLIES
   // =============================
+  // const renderReplies = (replies, level = 1, parentId) => {
+  //   if (level > 2) return null; 
+  //   const visibleCount = visibleReplies[parentId] || 2;
+  //   const visibleList = replies.slice(0, visibleCount);
+  //   const hasMore = visibleCount < replies.length;
+
+  //   return (
+  //     // ui function to render sub replies worked
+  //     <>
+  //       {visibleList.map((reply) => (
+  //         <li className={`clearfix reply-level-${level}`} key={reply.id}>
+  //           <div className="reply-box">
+  //             <div className="d-flex gap-2">
+  //               <div className="circle-user-comment">
+  //                 <i className="fa-solid fa-user"></i>
+  //               </div>
+  //               <div className="post-comments w-100">
+  //                 <div className="d-flex justify-content-between flex-wrap gy-2 align-items-center">
+  //                   <p className="fw-bold mb-1">{reply.name}</p>
+  //                   <small className="text-muted">{reply.time}</small>
+  //                 </div>
+
+  //                 <p>{reply.text}</p>
+
+  //                 <div className="my-3">
+  //                   <button
+  //                     className="btn btn-sm "
+  //                     onClick={() => {
+  //                       setReplyingTo(reply.id);
+  //                       setReplyText("");
+  //                       setIsEditing(false);
+  //                     }}
+  //                   >
+  //                     <i className="fa-solid fa-comment-dots text-success" ></i>
+  //                   </button>
+  //                   <button
+  //                     className="btn btn-sm"
+  //                     onClick={() => {
+  //                       setReplyingTo(reply.id);
+  //                       setReplyText(reply.text);
+  //                       setIsEditing(true);
+  //                     }}
+  //                   >
+  //                     <i className="fa-solid fa-pen-to-square text-warning"></i>
+
+  //                   </button>
+  //                   <button
+  //                     className="btn btn-sm "
+  //                     onClick={() => handleDeleteComment(reply.id, reply.text)}
+  //                   >
+  //                     <i className="fa-solid fa-trash text-danger"></i>
+  //                   </button>
+  //                 </div>
+  //               </div>
+  //             </div>
+
+  //             {reply.replies.length > 0 && (
+  //               <ul className="comments ps-0">
+  //                 {renderReplies(
+  //                   reply.replies,
+  //                   level === 1 ? 2 : 2, 
+  //                   reply.id
+  //                 )}
+  //               </ul>
+  //             )}
+  //           </div>
+  //         </li>
+  //       ))}
+
+  //       {hasMore && (
+  //         <span
+  //           className="show-more-btn"
+  //           onClick={() =>
+  //             setVisibleReplies((prev) => ({
+  //               ...prev,
+  //               [parentId]: (prev[parentId] || 2) + 6,
+  //             }))
+  //           }
+  //         >
+  //           Show more replies ({replies.length - visibleCount})
+  //         </span>
+  //       )}
+  //     </>
+  //   );
+  // };
+
   const renderReplies = (replies, level = 1, parentId) => {
+    if (level > 2) return null; // 🔒 stop deeper levels
+
     const visibleCount = visibleReplies[parentId] || 2;
     const visibleList = replies.slice(0, visibleCount);
     const hasMore = visibleCount < replies.length;
 
     return (
-      // ui function to render sub replies worked
       <>
         {visibleList.map((reply) => (
           <li className={`clearfix reply-level-${level}`} key={reply.id}>
@@ -192,25 +276,32 @@ export default function CommentSection({ comments: apiComments, newsId }) {
                 <div className="circle-user-comment">
                   <i className="fa-solid fa-user"></i>
                 </div>
+
                 <div className="post-comments w-100">
-                  <div className="d-flex justify-content-between flex-wrap gy-2 align-items-center">
+                  <div className="d-flex justify-content-between align-items-center">
                     <p className="fw-bold mb-1">{reply.name}</p>
                     <small className="text-muted">{reply.time}</small>
                   </div>
 
                   <p>{reply.text}</p>
 
+                  {/* ACTION BUTTONS */}
                   <div className="my-3">
-                    <button
-                      className="btn btn-sm "
-                      onClick={() => {
-                        setReplyingTo(reply.id);
-                        setReplyText("");
-                        setIsEditing(false);
-                      }}
-                    >
-                      <i className="fa-solid fa-comment-dots text-success" ></i>
-                    </button>
+
+                    {/* ✅ Reply button only till level 1 */}
+                    {/* {level < 2 && ( */}
+                      <button
+                        className="btn btn-sm"
+                        onClick={() => {
+                          // setReplyingTo(reply.id);   // reply to THIS reply
+                          setReplyText("");
+                          setIsEditing(false);
+                        }}
+                      >
+                        <i className="fa-solid fa-comment-dots text-success"></i>
+                      </button>
+                    {/* )} */}
+
                     <button
                       className="btn btn-sm"
                       onClick={() => {
@@ -220,25 +311,36 @@ export default function CommentSection({ comments: apiComments, newsId }) {
                       }}
                     >
                       <i className="fa-solid fa-pen-to-square text-warning"></i>
+                    </button>
 
-                    </button>
-                    <button
-                      className="btn btn-sm "
-                      onClick={() => handleDeleteComment(reply.id, reply.text)}
-                    >
-                      <i className="fa-solid fa-trash text-danger"></i>
-                    </button>
+                  <button
+  className="btn btn-sm"
+  onClick={() => {
+    // 🔥 ALWAYS attach reply to LEVEL-1 parent
+    const level1ParentId = level === 1 ? reply.id : parentId;
+
+    setReplyingTo(level1ParentId);   // where reply box opens
+    setReplyTargetId(reply.id);      // who was clicked
+    setReplyText("");
+    setIsEditing(false);
+
+    // optional scroll
+    setTimeout(() => {
+      topReplyBoxRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  }}
+>
+  <i className="fa-solid fa-comment-dots text-success"></i>
+</button>
+
                   </div>
                 </div>
               </div>
 
-              {reply.replies.length > 0 && (
+              {/* ✅ Render children ONLY when level === 1 */}
+              {level === 1 && reply.replies?.length > 0 && (
                 <ul className="comments ps-0">
-                  {renderReplies(
-                    reply.replies,
-                    Math.min(level + 1, 4),
-                    reply.id
-                  )}
+                  {renderReplies(reply.replies, 2, reply.id)}
                 </ul>
               )}
             </div>
@@ -261,6 +363,7 @@ export default function CommentSection({ comments: apiComments, newsId }) {
       </>
     );
   };
+
 
   // =============================
   //               UI
@@ -299,7 +402,7 @@ export default function CommentSection({ comments: apiComments, newsId }) {
         {/* TOP REPLY / EDIT BOX */}
         <div ref={topReplyBoxRef} className="mt-2">
           {replyingTo && (
-            
+
             <div className="mb-3 p-2 border rounded bg-light">
               <p className="fw-bold mb-1">
                 {isEditing
@@ -315,7 +418,7 @@ export default function CommentSection({ comments: apiComments, newsId }) {
               />
               <button
                 className="btn dark-blue-bg-color text-white submit-btn btn-sm me-2 rounded-0"
-                onClick={() => handleReplySubmit(replyingTo)}
+                onClick={handleReplySubmit}
                 disabled={loading}
               >
                 {loading ? "Posting..." : "Submit"}
