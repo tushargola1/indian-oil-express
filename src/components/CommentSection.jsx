@@ -49,6 +49,7 @@ export default function CommentSection({ comments: apiComments, newsId }) {
   //          ADD MAIN COMMENT
   // =============================
   const handleAddComment = async () => {
+    // alert("Adding main comment...");
     if (!newCommentText.trim()) return;
     setLoading(true);
 
@@ -84,54 +85,54 @@ export default function CommentSection({ comments: apiComments, newsId }) {
   // =============================
   //          REPLY / EDIT
   // =============================
-const handleReplySubmit = async () => {
-  if (!replyText.trim() || !replyingTo) return;
-  setLoading(true);
+  const handleReplySubmit = async () => {
+    if (!replyText.trim() || !replyingTo) return;
+    setLoading(true);
 
-  try {
-    const body = {
-      xpressNewsId: newsId,
-      comment: replyText.trim(),
-      parentId: replyingTo, // 🔥 ALWAYS level-1
-      ipAddress: "::1",
-      action: isEditing ? "Edit" : "Add",
-      id: isEditing ? replyTargetId : undefined,
-    };
+    try {
+      const body = {
+        xpressNewsId: newsId,
+        comment: replyText.trim(),
+        parentId: replyingTo, // 🔥 ALWAYS level-1
+        ipAddress: "::1",
+        action: isEditing ? "Edit" : "Add",
+        id: isEditing ? replyTargetId : undefined,
+      };
 
-    const res = await axios.post(
-      apiBaseUrl("XpressNews/ManageComment"),
-      body,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${Cookies.get("accessToken")}`,
-        },
-      }
-    );
-
-    const newReply = normalizeComments([res.data.data])[0];
-
-    // 🔥 Insert reply ONLY under level-1 parent
-    const addReplyToLevel1 = (items) =>
-      items.map((c) => {
-        if (c.id === replyingTo) {
-          return { ...c, replies: [...c.replies, newReply] };
+      const res = await axios.post(
+        apiBaseUrl("XpressNews/ManageComment"),
+        body,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("accessToken")}`,
+          },
         }
-        return { ...c, replies: addReplyToLevel1(c.replies) };
-      });
+      );
 
-    setComments((prev) => addReplyToLevel1(prev));
+      const newReply = normalizeComments([res.data.data])[0];
 
-    setReplyText("");
-    setReplyingTo(null);
-    setReplyTargetId(null);
-    setIsEditing(false);
-  } catch (err) {
-    console.error("Reply error:", err);
-  }
+      // 🔥 Insert reply ONLY under level-1 parent
+      const addReplyToLevel1 = (items) =>
+        items.map((c) => {
+          if (c.id === replyingTo) {
+            return { ...c, replies: [...c.replies, newReply] };
+          }
+          return { ...c, replies: addReplyToLevel1(c.replies) };
+        });
 
-  setLoading(false);
-};
+      setComments((prev) => addReplyToLevel1(prev));
+
+      setReplyText("");
+      setReplyingTo(null);
+      setReplyTargetId(null);
+      setIsEditing(false);
+    } catch (err) {
+      console.error("Reply error:", err);
+    }
+
+    setLoading(false);
+  };
 
 
   // =============================
@@ -290,48 +291,57 @@ const handleReplySubmit = async () => {
 
                     {/* ✅ Reply button only till level 1 */}
                     {/* {level < 2 && ( */}
+                    {level <= 2 && (
                       <button
                         className="btn btn-sm"
                         onClick={() => {
-                          // setReplyingTo(reply.id);   // reply to THIS reply
+                          const level1ParentId = level === 1 ? reply.id : parentId;
+                          setReplyingTo(level1ParentId);
+                          setReplyTargetId(reply.id);
                           setReplyText("");
                           setIsEditing(false);
+                          setTimeout(() => {
+                            topReplyBoxRef.current?.scrollIntoView({ behavior: "smooth" });
+                          }, 100);
                         }}
                       >
                         <i className="fa-solid fa-comment-dots text-success"></i>
                       </button>
-                    {/* )} */}
-
+                    )}
                     <button
                       className="btn btn-sm"
                       onClick={() => {
-                        setReplyingTo(reply.id);
+                        setReplyingTo(parentId);      // ✅ level-1 parent
+                        setReplyTargetId(reply.id);   // edit THIS reply
                         setReplyText(reply.text);
                         setIsEditing(true);
                       }}
                     >
                       <i className="fa-solid fa-pen-to-square text-warning"></i>
                     </button>
-
-                  <button
-  className="btn btn-sm"
-  onClick={() => {
-    // 🔥 ALWAYS attach reply to LEVEL-1 parent
-    const level1ParentId = level === 1 ? reply.id : parentId;
-
-    setReplyingTo(level1ParentId);   // where reply box opens
-    setReplyTargetId(reply.id);      // who was clicked
-    setReplyText("");
-    setIsEditing(false);
-
-    // optional scroll
-    setTimeout(() => {
-      topReplyBoxRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
-  }}
->
-  <i className="fa-solid fa-comment-dots text-success"></i>
-</button>
+                    <button
+                      className="btn btn-sm "
+                      onClick={() =>
+                        handleDeleteComment(reply.id, reply.text)
+                      }
+                    >
+                      <i className="fa-solid fa-trash text-danger"></i>
+                    </button>
+                    {/* <button
+                      className="btn btn-sm"
+                      onClick={() => {
+                        const level1ParentId = level === 1 ? reply.id : parentId;
+                        setReplyingTo(level1ParentId);   
+                        setReplyTargetId(reply.id);      
+                        setReplyText("");
+                        setIsEditing(false);
+                        setTimeout(() => {
+                          topReplyBoxRef.current?.scrollIntoView({ behavior: "smooth" });
+                        }, 100);
+                      }}
+                    >
+                      <i className="fa-solid fa-comment-dots text-success"></i>
+                    </button> */}
 
                   </div>
                 </div>
