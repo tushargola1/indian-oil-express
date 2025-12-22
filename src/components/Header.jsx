@@ -6,8 +6,6 @@ import indianOil from "../assets/image/logos/indianOil.png";
 import { useEffect, useRef, useState } from "react";
 import CalendarModal from "../modal/CalendarModal";
 import Cookies from "js-cookie";
-import axios from "axios";
-import { apiBaseUrl } from "../Helper";
 import { useQuery } from "@tanstack/react-query";
 import { getWeekendXpress } from "./ApiFunctions";
 import {WeekendDropdownData} from "./ApiFunctions";
@@ -22,14 +20,10 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const locationMenuRef = useRef(null);
   const location = useLocation()
-  const accessTokenDecodedData = location.state;
+  const accessTokenDecodedData = location?.state;
   const toggleLocationMenu = () => {
     setShowLocationMenu((prev) => !prev);
   };
-
-
-
-
 
   useEffect(() => {
     const expiryCheckFn = () => {
@@ -39,14 +33,14 @@ export default function Header() {
       const currentTime = new Date();
       console.log("Current Date:", currentTime);
       if (currentTime >= expiryTime) {
-        const event = { preventDefault: () => { } };
-        handleLogout(event);
+        // const event = { preventDefault: () => { } };
+        handleLogout("timeout");
       }
     }
     expiryCheckFn()
     const logoutInterval = setTimeout(() => {
       expiryCheckFn()
-    }, 60000)
+    }, 1000)
 
     return () => clearTimeout(logoutInterval);
 
@@ -70,47 +64,78 @@ export default function Header() {
     };
   }, []);
 
-  const handleLogout = (e) => {
-    e.preventDefault();
+  const handleLogout = (timeout) => {
+
+   
+    if (timeout === "timeout") {
+    Cookies.remove("accessToken", { path: "/" });
+    Cookies.remove("refreshToken", { path: "/" });
+    Cookies.remove("auth", { path: "/" });
     localStorage.clear();
+
     Swal.fire({
-      title: "Are you sure?",
-      text: "You will be logged out of your session!",
       icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, Logout",
+      title: "Session Expired",
+      text: "Server timed out. Please login again.",
+      showConfirmButton: false,
+      timer: 2000,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
       background: "#fffef5",
       color: "#000",
       customClass: {
         popup: "rounded-4 shadow",
       },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Cookies.remove("accessToken", { path: "/" });
-        Cookies.remove("refreshToken", { path: "/" });
-        Cookies.remove("auth", { path: "/" });
-
-        Swal.fire({
-          icon: "success",
-          title: "Logged out!",
-          text: "You have been successfully logged out.",
-          showConfirmButton: false,
-          timer: 1500,
-          background: "#f0fff4",
-          color: "#155724",
-          iconColor: "#28a745",
-          customClass: {
-            popup: "rounded-4 shadow-lg",
-          },
-        });
-
-        setTimeout(() => {
-          navigate("/login");
-        }, 1500);
-      }
     });
+
+    setTimeout(() => {
+      navigate("/login");
+    }, 2000);
+
+    return; // ⛔ stop here
+  }
+
+  // MANUAL LOGOUT
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You will be logged out of your session!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Yes, Logout",
+    background: "#fffef5",
+    color: "#000",
+    customClass: {
+      popup: "rounded-4 shadow",
+    },
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Cookies.remove("accessToken", { path: "/" });
+      Cookies.remove("refreshToken", { path: "/" });
+      Cookies.remove("auth", { path: "/" });
+      localStorage.clear();
+
+      Swal.fire({
+        icon: "success",
+        title: "Logged out!",
+        text: "You have been successfully logged out.",
+        showConfirmButton: false,
+        timer: 1500,
+        background: "#f0fff4",
+        color: "#155724",
+        iconColor: "#28a745",
+        customClass: {
+          popup: "rounded-4 shadow-lg",
+        },
+      });
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
+    }
+  });
+  
   };
 
   useEffect(() => {
@@ -152,7 +177,7 @@ export default function Header() {
   useEffect(() => {
     setQuery("");
   }, [searchParams]);
-
+console.log(accessTokenDecodedData);
   return (
     <header className={`border-bottom shadow-sm custome_mobile_header`}>
       {/* Top Row */}

@@ -13,6 +13,7 @@ import {
   fetchTopNews,
   getAllComments,
   getNewsDetails,
+  getWeekendXpress,
   likeDislike
 } from "../components/ApiFunctions";
 
@@ -192,13 +193,13 @@ export default function NewsDetails() {
                 </div>
               </div>
               <div className="icons-section ">
-                <div>
+                <div className="d-flex justify-content-center align-items-center ">
                   <ShareTooltip
                     userReactions={newsDetails?.userReactions || []}
                     onReactionClick={(reactionId) => handleReaction(reactionId)}
                   />
 
-                  <span>{newsDetails?.likesCount}</span>
+                  <span className="ms-2">{newsDetails?.likesCount}</span>
                 </div>
                 <p>
                   <i className="fa-regular fa-eye me-2"></i>
@@ -423,3 +424,7 @@ export default function NewsDetails() {
     </>
   );
 }
+
+
+
+

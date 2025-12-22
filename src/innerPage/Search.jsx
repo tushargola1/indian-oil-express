@@ -1,5 +1,5 @@
 // ===================== React =====================
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // ===================== Routing =====================
 import { useSearchParams, Link, useLocation } from "react-router-dom";
@@ -22,19 +22,33 @@ import pdfIcon from "../assets/image/pdf.png";
 import { useQuery } from "@tanstack/react-query";
 
 const DEBOUNCE_DELAY = 800;
-const highlightText = (text = "", keyword = "") => {
+const highlightText = (text, keyword = "") => {
+    if (!text || typeof text !== "string") return "";
+
     if (!keyword) return text;
 
-    const regex = new RegExp(`(${keyword})`, "gi");
+    const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const regex = new RegExp(`(${escapedKeyword})`, "gi");
+
     return text.replace(
         regex,
         `<span class="search-highlight">$1</span>`
     );
 };
 
+
 // ===================== News Item =====================
-const NewsItem = ({ id, imagePath, title, description, newsDate, searchKeyword , entityId}) => {
-    const safeDate = newsDate || "";
+const NewsItem = ({
+    id,
+    imagePath,
+    title = "",
+    description = "",
+    entityDate,
+    searchKeyword,
+    entityId
+}) => {
+
+    const safeDate = entityDate || "";
     const datePart = safeDate.includes(" ")
         ? safeDate.split(" ")[0]
         : safeDate;
@@ -75,17 +89,23 @@ const NewsItem = ({ id, imagePath, title, description, newsDate, searchKeyword ,
                     <div
                         className="news-title fw-bold clamp-1"
                         dangerouslySetInnerHTML={{
-                            __html: highlightText(title, searchKeyword),
+                            __html: title
+                                ? highlightText(title, searchKeyword)
+                                : "",
                         }}
                     />
+
 
                 </Link>
                 <div
                     className="news-description small"
                     dangerouslySetInnerHTML={{
-                        __html: highlightText(description, searchKeyword),
+                        __html: description
+                            ? highlightText(description, searchKeyword)
+                            : "",
                     }}
                 />
+
 
             </div>
 
@@ -127,6 +147,7 @@ const Search = () => {
     const [isListening, setIsListening] = useState(false);
 
     const totalPages = Math.ceil(totalRecords / itemsPerPage);
+    const abortControllerRef = useRef(null);
 
     // ===================== Debounce =====================
     useEffect(() => {
@@ -141,9 +162,19 @@ const Search = () => {
     useEffect(() => {
         if (!debouncedKeyword.trim()) {
             setNews([]);
+            setAllNews([]);
             setTotalRecords(0);
             return;
         }
+
+        // Abort previous request
+        if (abortControllerRef.current) {
+            abortControllerRef.current.abort();
+        }
+
+        // Create new controller
+        const controller = new AbortController();
+        abortControllerRef.current = controller;
 
         const fetchSearchResults = async () => {
             setIsLoading(true);
@@ -160,22 +191,31 @@ const Search = () => {
                             "Content-Type": "application/json",
                             Authorization: `Bearer ${Cookies.get("accessToken")}`,
                         },
+                        signal: controller.signal,
                     }
                 );
 
                 const list = res.data?.data || [];
                 setAllNews(list);
                 setTotalRecords(list.length);
-
             } catch (err) {
-                setNews([]);
+                if (err.name !== "CanceledError" && err.name !== "AbortError") {
+                    console.error(err);
+                    setAllNews([]);
+                    setTotalRecords(0);
+                }
+            } finally {
+                setIsLoading(false);
             }
-            setIsLoading(false);
         };
 
         fetchSearchResults();
-    }, [debouncedKeyword, currentPage, itemsPerPage]);
 
+        // Cleanup on unmount / dependency change
+        return () => {
+            controller.abort();
+        };   
+    }, [debouncedKeyword, currentPage, itemsPerPage]);
 
     // ===================== Handlers =====================
     const handleInputChange = (e) => {
@@ -235,15 +275,15 @@ const Search = () => {
         setNews(allNews.slice(start, end));
     }, [allNews, currentPage, itemsPerPage]);
 
-    
-  // Announcement Data
-  const { data: announcements, isLoading: isAnnouncementLoading, isError: isAnnouncementError } = useQuery({
-    queryKey: ["announcements"],
-    queryFn: () => fetchAnnouncements(),
-    staleTime: Infinity,
-    cacheTime: Infinity,
-    refetchOnWindowFocus: false,
-  });
+
+    // Announcement Data
+    const { data: announcements, isLoading: isAnnouncementLoading, isError: isAnnouncementError } = useQuery({
+        queryKey: ["announcements"],
+        queryFn: () => fetchAnnouncements(),
+        staleTime: Infinity,
+        cacheTime: Infinity,
+        refetchOnWindowFocus: false,
+    });
 
     // ===================== JSX =====================
     return (
@@ -367,44 +407,44 @@ const Search = () => {
                             newsParentId={newsParentId}
                         />
                     </div> */}
-                  <div className="sticky-sidebar-listing w-100">
+                    <div className="sticky-sidebar-listing w-100">
 
                         {isAnnouncementLoading ? (
-                                <Skeleton count={8} height={20} />
-                              ) : isAnnouncementError ? (
-                                <p>❌ Failed to load announcements</p>
-                              ) : (
-                                <div className="announcement-list d-flex flex-column gap-2 w-100">
-                                  {announcements.map((item) => (
+                            <Skeleton count={8} height={20} />
+                        ) : isAnnouncementError ? (
+                            <p>❌ Failed to load announcements</p>
+                        ) : (
+                            <div className="announcement-list d-flex flex-column gap-2 w-100">
+                                {announcements.map((item) => (
                                     <Link
-                                      key={item.id}
-                                      to={`/announcement/${item.id}`}
-                                      className="announcement-item d-flex justify-content-between align-items-center p-2 border rounded"
-                                      style={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "space-between",
-                                        textDecoration: "none",
-                                        color: "#000",
-                                      }}
-                                    >
-                                      <p
-                                        className="mb-0 announcement-title"
+                                        key={item.id}
+                                        to={`/announcement/${item.id}`}
+                                        className="announcement-item d-flex justify-content-between align-items-center p-2 border rounded"
                                         style={{
-                                          display: "-webkit-box",
-                                          WebkitLineClamp: 2,
-                                          WebkitBoxOrient: "vertical",
-                                          overflow: "hidden",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "space-between",
+                                            textDecoration: "none",
+                                            color: "#000",
                                         }}
-                                      >
-                                        {item.title}
-                                      </p>
-                                      <img src={pdfIcon} alt="PDF" style={{ width: 20, height: 20 }} className="ms-4" />
+                                    >
+                                        <p
+                                            className="mb-0 announcement-title"
+                                            style={{
+                                                display: "-webkit-box",
+                                                WebkitLineClamp: 2,
+                                                WebkitBoxOrient: "vertical",
+                                                overflow: "hidden",
+                                            }}
+                                        >
+                                            {item.title}
+                                        </p>
+                                        <img src={pdfIcon} alt="PDF" style={{ width: 20, height: 20 }} className="ms-4" />
                                     </Link>
-                                  ))}
-                                </div>
-                              )}
-                               </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
