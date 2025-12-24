@@ -8,7 +8,7 @@ import CalendarModal from "../modal/CalendarModal";
 import Cookies from "js-cookie";
 import { useQuery } from "@tanstack/react-query";
 import { getWeekendXpress } from "./ApiFunctions";
-
+import {WeekendDropdownData} from "./ApiFunctions";
 
 
 export default function Header() {
@@ -236,11 +236,11 @@ console.log(accessTokenDecodedData);
                   >
                     <span className="user-name">Welcome {accessTokenDecodedData?.nam} <i className="fa fa-chevron-down fs-12"></i></span>
 
-                    <div className={`dropdown-menu ${isOpen ? "show" : ""} `} style={{ right: "0" }}>
-                      <button href="#" className="dropdown-item" onClick={handleLogout}>
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div>
-                            <i class="fa-solid fa-arrow-right-from-bracket "></i>
+      <div className={`dropdown-menu ${isOpen ? "show" : ""}`}>
+        <button href="#" className="dropdown-item"  onClick={handleLogout}>
+          <div className="d-flex align-items-center justify-content-between">
+            <div>
+        <i class="fa-solid fa-arrow-right-from-bracket "></i> 
 
                           </div>
                           <div>
@@ -388,7 +388,7 @@ console.log(accessTokenDecodedData);
                             {item.text}
                           </Link>
                         </li>
-                      ))}
+                      ))}                  
                     </ul>
                   </li>
 
@@ -431,7 +431,7 @@ console.log(accessTokenDecodedData);
 
                 {/* Search Box Inside Offcanvas */}
                 <div className="col-lg-2 px-0 mt-sm-2 mt-lg-0 mt-md-2 mt-xl-0">
-                  <form className="d-flex navbar-form" onSubmit={handleSubmit}>
+                  <form className="d-flex navbar-form custome_form" onSubmit={handleSubmit}>
                     <input
                       className="form-control me-2"
                       type="search"
