@@ -68,7 +68,7 @@ export default function CategoryCard() {
 
   return (
     <div className="container-fluid my-3 px-40">
-      <div className="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-sm-2 row-cols-1 justify-content-center align-items-stretch gy-2">
+      <div className="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-sm-2 row-cols-1 justify-content-center align-items-stretch gy-2 equal-height">
         {isLoading
           ? Array.from({ length: 5 }).map((_, index) => (
               <div className="col news-card-col news-card-col-img" key={index}>

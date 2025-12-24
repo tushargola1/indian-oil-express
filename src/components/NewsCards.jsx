@@ -38,7 +38,7 @@ const NewsCards = () => {
   }
 
   return (
-    <div className="container-fluid my-3 px-40">
+    <div className="container-fluid my-3 px-40 main_news">
       <div className="row row-cols-xl-6 row-cols-lg-4 row-cols-md-3 row-cols-1 gy-2  align-items-center flex-wrap">
         {isLoading
           ?

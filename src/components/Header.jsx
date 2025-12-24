@@ -431,7 +431,7 @@ console.log(accessTokenDecodedData);
 
                 {/* Search Box Inside Offcanvas */}
                 <div className="col-lg-2 px-0 mt-sm-2 mt-lg-0 mt-md-2 mt-xl-0">
-                  <form className="d-flex navbar-form" onSubmit={handleSubmit}>
+                  <form className="d-flex navbar-form custome_form" onSubmit={handleSubmit}>
                     <input
                       className="form-control me-2"
                       type="search"
