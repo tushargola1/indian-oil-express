@@ -121,7 +121,7 @@ const NewsListing = () => {
   }
 
   return (
-    <div className="container-fluid px-30 px-md-3 px-3 mt-5">
+    <div className="container-fluid px-30 px-md-3 px-3 mt-3">
       <div className="row g-3 justify-content-between flex-lg-row flex-md-column-reverse flex-column-reverse">
         {/* MAIN CONTENT */}
         <div className="col-xl-9 col-lg-7 col-md-12 col-12">

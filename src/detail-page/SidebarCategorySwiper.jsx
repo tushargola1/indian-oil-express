@@ -46,7 +46,7 @@ export default function SidebarCategorySwiper({ items }) {
                       <img
                         src={slide.image || fallback}
                         alt={slide.title}
-                        className="banner-img-details"
+                        className="fallback-img banner-img-details"
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.src = fallback; // fallback image

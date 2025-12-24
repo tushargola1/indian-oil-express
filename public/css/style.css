@@ -358,6 +358,7 @@ header {
   .navbar-expand-lg .navbar-nav .nav-link {
     padding-left: unset;
     font-size: 16px;
+    white-space: nowrap;
   }
 }
 
@@ -379,7 +380,7 @@ header {
 
 @media (max-width: 1160px) {
   .navbar-expand-lg .navbar-nav {
-    gap: 15px !important;
+    gap: 5px !important;
   }
 }
 
@@ -3187,8 +3188,12 @@ li.clearfix {
     display: none;
   }
 }
-
-@media (max-width: 768px) {
+@media (min-width: 992px) and (max-width: 1200px) {
+.navbar-form{
+      padding: 0 0px;
+}
+}
+@media (max-width: 992px) {
 
   .bottom-navbar::before,
   .bottom-navbar::after {
@@ -3365,10 +3370,6 @@ font-size: 12px;
 /* 23-12-2025 */
 
 @media (max-width: 768px) {
-  /* .equal-height {
-  display: flex;
-  gap: 20px;
-} */
 
 .equal-height .card  {
 height:100%;
@@ -3420,6 +3421,37 @@ margin-top:16px;
     /* transform: translateX(-50%); */
     background: #00000000 linear-gradient(90deg, #6b8abe 65%, #e16d3800 100%) 0% 0% no-repeat padding-box;
     opacity: 0.8;
+  }
+}
+
+.pagination-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.page-number,
+.page-arrow {
+  min-width: 36px;
+  height: 36px;
+  font-size: 14px;
+}
+
+@media (max-width: 576px) {
+
+  .pagination-container {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .pagination-container .page-number:not(.active):not(:nth-child(2)) {
+    display: none;
+  }
+
+  .listing-dropdown-btn {
+    width: 100%;
+    margin-top: 10px;
+    text-align: center;
   }
 }
 
