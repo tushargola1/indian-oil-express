@@ -6,15 +6,21 @@ import { apiBaseUrl } from "../Helper";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import { format, parse } from "date-fns";
+import { format } from "date-fns";
 
 export default function CalendarModal({ isOpen, onClose }) {
-  const today = new Date().toISOString().split("T")[0];
-const tomorrow = new Date(today);
-tomorrow.setDate(tomorrow.getDate() + 1);
 
-// Format the new date in the same YYYY-MM-DD format
-const tomorrowFormatted = tomorrow.toISOString().split("T")[0];
+const formatToDDMMYYYY = (dateStr) => {
+  return format(new Date(dateStr), "dd-MM-yyyy");
+};
+const today = format(new Date(), "dd-MM-yyyy");
+
+
+const tomorrow = new Date();
+tomorrow.setDate(tomorrow.getDate() + 1);
+const tomorrowFormatted = format(tomorrow, "dd-MM-yyyy"); // now in DD-MM-YYYY
+
+
   const [selectedDate, setSelectedDate] = useState(today);
   const [options, setOptions] = useState([]);
   const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -79,7 +85,8 @@ const tomorrowFormatted = tomorrow.toISOString().split("T")[0];
         .map((item) => {
           const dateStr = item.bulletinDate.split(" ")[0]; // Get date part (DD-MM-YYYY)
           const [day, month, year] = dateStr.split("-");
-          const formattedDate = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+     const formattedDate = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+
           return formattedDate;
         })
         .filter(Boolean);
@@ -94,10 +101,11 @@ const tomorrowFormatted = tomorrow.toISOString().split("T")[0];
   /* -------------------------------------------------------
      🔹 Date Click
   ------------------------------------------------------- */
-  const handleDateClick = (info) => {
-    setSelectedDate(info.dateStr);
-    fetchByDate(info.dateStr);
-  };
+const handleDateClick = (info) => {
+  const formattedDate = formatToMMDDYYYY(info.dateStr);
+  setSelectedDate(formattedDate);
+  fetchByDate(formattedDate);
+};
 
   /* -------------------------------------------------------
      🔹 Month Change (SAFE)
@@ -152,21 +160,24 @@ const tomorrowFormatted = tomorrow.toISOString().split("T")[0];
   /* -------------------------------------------------------
      🔹 Initial Load
   ------------------------------------------------------- */
-  useEffect(() => {
-    if (!isOpen) return;
+useEffect(() => {
+  if (!isOpen) return;
 
-    fetchByDate(today);
+  const todayFormatted = format(new Date(), "MM-dd-yyyy");
+  setSelectedDate(todayFormatted);
+  fetchByDate(todayFormatted);
 
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth() + 1;
-    const monthKey = `${year}-${month}`;
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+  const monthKey = `${year}-${month}`;
 
-    const startDate = `${year}-${String(month).padStart(2, "0")}-01`;
-    const endDate = `${year}-${String(month).padStart(2, "0")}-31`;
+  const startDate = `${year}-${String(month).padStart(2, "0")}-01`;
+  const endDate = `${year}-${String(month).padStart(2, "0")}-31`;
 
-    fetchMonthBulletins(startDate, endDate, monthKey);
-  }, [isOpen]);
+  fetchMonthBulletins(startDate, endDate, monthKey);
+}, [isOpen]);
+
 
   if (!isOpen) return null;
 

@@ -20,6 +20,7 @@ import fallback from "../assets/image/fallback.png";
 import { fetchAnnouncements } from "../components/ApiFunctions";
 import pdfIcon from "../assets/image/pdf.png";
 import { useQuery } from "@tanstack/react-query";
+import { parse, format } from "date-fns";
 
 const DEBOUNCE_DELAY = 800;
 const highlightText = (text, keyword = "") => {
@@ -47,18 +48,26 @@ const NewsItem = ({
     searchKeyword,
     entityId
 }) => {
+const formatToDDMMYYYY = (dateStr) => {
+  if (!dateStr) return "";
+  try {
+    return format(parse(dateStr, "dd-MM-yyyy hh:mm a", new Date()), "dd-MM-yyyy");
+  } catch {
+    return dateStr;
+  }
+};
 
     const safeDate = entityDate || "";
     const datePart = safeDate.includes(" ")
         ? safeDate.split(" ")[0]
         : safeDate;
 
-    const [day = "", month = "", year = ""] = datePart.split("-");
+    // const [day = "", month = "", year = ""] = datePart.split("-");
 
-    const monthNames = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December",
-    ];
+    // const monthNames = [
+    //     "January", "February", "March", "April", "May", "June",
+    //     "July", "August", "September", "October", "November", "December",
+    // ];
 
     return (
         <div className="news-item row gy-xl-0 gy-lg-2 gy-md-3 gy-4 border-bottom mb-3">
@@ -110,11 +119,14 @@ const NewsItem = ({
             </div>
 
             <div className="news-date-box col-xl-2 col-12 text-end">
-                <div className="fw-bold">
+                {/* <div className="fw-bold">
                     {month ? monthNames[parseInt(month) - 1] : ""}
                 </div>
                 <div>
                     {day && year ? `${day}, ${year}` : ""}
+                </div> */}
+                <div>
+                    {formatToDDMMYYYY(entityDate)}
                 </div>
             </div>
         </div>

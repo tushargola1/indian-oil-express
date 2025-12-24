@@ -87,7 +87,7 @@ const CategoriesSidebar = ({ newsType, newsParentId }) => {
 
       {/* Mobile Header */}
       <div className="d-xl-none mb-3 d-lg-none d-md-flex d-flex justify-content-between align-items-center">
-        <div className="p-3 fw-bold text-white sidebar-header col-md-6">
+        <div className="p-xl-3 p-lg-3 p-md-2 p-sm-2 p-1 fw-bold text-white sidebar-header col-md-6">
           <h3>Categories</h3>
         </div>
         <button
