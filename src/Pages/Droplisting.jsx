@@ -16,10 +16,15 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 // ===================== Assets =====================
 import fallback from "../assets/image/fallback.png";
-
+import { parse, format } from "date-fns";
 
 // ✅ News Item Component
 const NewsItem = ({ id, imagePath, title, shortDesc, newsDate, byLine }) => {
+    const formatToDDMMYYYY = (dateStr) => {
+  if (!dateStr) return "";
+  // Parse DD-MM-YYYY hh:mm AM/PM and format to DD-MM-YYYY
+  return format(parse(dateStr, "dd-MM-yyyy hh:mm a", new Date()), "dd-MM-yyyy");
+};
   const [day, month, year] = newsDate.split(" ")[0].split("-");
   const monthNames = [
     "January",
@@ -69,10 +74,10 @@ const NewsItem = ({ id, imagePath, title, shortDesc, newsDate, byLine }) => {
         <div className="news-description small mb-2">{shortDesc || byLine}</div>
       </div>
       <div className="news-date-box col-xl-2 col-lg-12 col-md-12 col-12 text-end">
-        <div className="news-date-month fw-bold">{formattedMonth}</div>
-        <div className="news-date-day-year">
+   <div className="news-date-month fw-bold">  {formatToDDMMYYYY(newsDate)}</div>
+        {/* <div className="news-date-day-year">
           {day}, {year}
-        </div>
+        </div> */}
       </div>
     </div>
   );
@@ -123,7 +128,7 @@ console.log("Full data:", data);
   }
 
   return (
-    <div className="container-fluid px-30 px-md-3 px-3 mt-3">
+    <div className="container-fluid px-30 px-md-3 px-3 mt-5">
       <div className="row g-3 justify-content-between flex-lg-row flex-md-column-reverse flex-column-reverse">
         {/* MAIN CONTENT */}
         <div className="col-xl-9 col-lg-7 col-md-12 col-12">
