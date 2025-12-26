@@ -12,9 +12,9 @@ import {
   downloadNews,
   fetchTopNews,
   getAllComments,
-  getNewsDetails,
+  GetWeekendXpressDetails,
   getWeekendXpress,
-  likeDislike
+  WeekendlikeDislike
 } from "../components/ApiFunctions";
 
 // ===================== UI Components =====================
@@ -51,7 +51,7 @@ export default function NewsDetails() {
     refetch,
   } = useQuery({
     queryKey: ["newsDetails", newsId],
-    queryFn: () => getNewsDetails(newsId),
+    queryFn: () => GetWeekendXpressDetails(newsId),
     enabled: !!newsId,
     refetchOnWindowFocus: false,
     staleTime: Infinity,
@@ -146,11 +146,10 @@ export default function NewsDetails() {
 
 
   // Reaction
-  const handleReaction = (reactionId) => {
-    likeDislike(newsId, reactionId).then(() => refetch());
+  const handleReactions = (reactionId) => {
+    WeekendlikeDislike(newsId, reactionId).then(() => refetch());
   };
 
- 
   // Download
   const handleDownload = async () => {
     try {
@@ -197,7 +196,7 @@ export default function NewsDetails() {
                 <div className="d-flex justify-content-center align-items-center ">
                   <ShareTooltip
                     userReactions={newsDetails?.userReactions || []}
-                    onReactionClick={(reactionId) => handleReaction(reactionId)}
+                    onReactionClick={(reactionId) => handleReactions(reactionId)}
                   />
 
                   <span className="ms-2">{newsDetails?.likesCount}</span>
@@ -379,7 +378,7 @@ export default function NewsDetails() {
           </div>
         </div>
         <div className="row px-2 row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 justify-content-center align-items-stretch gy-2 mt-lg-0 mt-md-1 mt-0 ">
-          {newsDetails?.recommendedXpressNews.map((item, index) => (
+          {newsDetails?.recommendedWeekendXpress.map((item, index) => (
             <div className="col recommanded-story-col" key={index}>
               <div className="details-right-category">
                 <div className="height-50">

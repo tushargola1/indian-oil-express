@@ -37,7 +37,7 @@ export const loginApi = (email, password) => {
       },
     })
     .then((res) => {
-      console.log('✅ Login Response:', res.data);
+      // console.log('✅ Login Response:', res.data);
       if (res.data.isSuccess) {
         return { success: true, data: res.data }; // Return success data
       } else {
@@ -144,30 +144,43 @@ export const getWebPageData = async () => {
 };
 
 // news details
-export const getNewsDetails = async (newsId) => {
+export const getNewsDetails = async (newsId) => { 
   const url = apiBaseUrl(`XpressNews/GetXpressNewsDetails/${newsId}`);
-
   const res = await axios.get(url, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${Cookies.get("accessToken")}`,
     },
   });
+console.log("📡 Full API Responses:", res);
+  return res?.data?.data ?? null;
+};
 
+
+// weekend xpress details
+export const GetWeekendXpressDetails = async (newsId) => { 
+  const url = apiBaseUrl(`WeekendXpress/GetWeekendXpressDetails/${newsId}`);
+  const res = await axios.get(url, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${Cookies.get("accessToken")}`,
+    },
+  });
+console.log("📡 Full API Responses:", res?.data?.data);
   return res?.data?.data ?? null;
 };
 
 // Express listing page
 export const expressDetails = async () => {
   const url = apiBaseUrl(`XpressNews/GetXpressNewsTDTY`);
-console.log("📡 Full API Response:", url);  
+// console.log("📡 Full API Response:", url);  
   const res = await axios.get(url, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${Cookies.get("accessToken")}`,
     },
   });
-  console.log("📡 Full API Response:", res.data.data);   
+  // console.log("📡 Full API Response:", res.data.data);   
    return res?.data?.data ?? null;
 };
 
@@ -256,6 +269,16 @@ export const likeDislike = async (newsId, reactionId) => {
   return data;
 };
 
+// WeekendlikeDislike API
+export const WeekendlikeDislike = async (newsId, reactionId) => {
+  const { data } = await axios.post(
+    apiBaseUrl("WeekendXpress/LikeDislike"),
+    { WeekendXpressId: newsId, likeTypeId: reactionId, ipAddress: "::1" },
+    { headers }
+  );
+  console.log("📡 WeekendlikeDislike Response:", data);
+  return data;
+};
 // Download API
 export const downloadNews = async (newsId) => {
   const res = await axios.get(apiBaseUrl(`XpressNews/Download/${newsId}`), {
@@ -399,13 +422,10 @@ export const WeekendDropdownData = async (page, ITEMS_PER_PAGE, newsId, newsType
   }
  
   );
-  // console.log("📡 Actual list (array):", res);
+  console.log("📡 Actual list (array):", res);
   return {
   list: res.data.data.data || [],
   totalRecords: res.data.data.recordsFiltered || 0,
   }
 };
-
-WeekendDropdownData();
-
-// expressDetails();
+WeekendlikeDislike();
