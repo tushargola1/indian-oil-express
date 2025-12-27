@@ -2,7 +2,7 @@ import { useReducer } from "react";
 import { reactionUrl } from "../Helper";
 
 const ShareTooltip = ({ userReactions = [], onReactionClick }) => {
-
+console.log("userReactions:", userReactions, "onReactionClick:", onReactionClick);
   return (
     <div className="tooltip-container">
       <div className="button-contentd d-flex align-items-center justify-content-center">
@@ -10,7 +10,7 @@ const ShareTooltip = ({ userReactions = [], onReactionClick }) => {
           userReactions.slice(0, 1).map((item, index) => {
 
             const imgSrc = `${reactionUrl}${item.name}.png`;
-
+console.log("Rendering reaction image:", imgSrc);
             return (
               // <i className="fa-regular fa-thumbs-up me-2 orange-color"></i>
               <img
@@ -19,8 +19,6 @@ const ShareTooltip = ({ userReactions = [], onReactionClick }) => {
                 style={{
                   width: "20px",
                   height: "20px",
-                  // filter: reaction.isReacted ? "none" : "grayscale(60%)",
-                  // opacity: reaction.isReacted ? 1 : 0.7,
                 }}
               />
             )

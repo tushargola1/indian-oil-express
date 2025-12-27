@@ -10,9 +10,11 @@ const Home = lazy(() => import("./Pages/Home"));
 const Login = lazy(() => import("./authentication/Login"));
 const ForgetPassword = lazy(() => import("./authentication/ForgetPassword"));
 const NewsDetails = lazy(() => import("./Pages/NewsDetails"));
+
 const NewsListing = lazy(() => import("./Pages/NewsListing"));
 const Droplisting = lazy(() => import("./Pages/Droplisting"));
 const Expresslisting = lazy(() => import("./Pages/Expresslisting"));
+const WeekendDetails = lazy(() => import("./Pages/WeekendDetails"));
 const ProtectedRoute = lazy(() => import("./authentication/ProtectedRoute"));
 const PublicRoute = lazy(() => import("./authentication/PublicRoute"));
 const ScrollToTop = lazy(() => import("./components/ScrollToTop"));
@@ -74,7 +76,14 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
-
+  <Route
+            path="/WeekendDetails/:newsId"
+            element={
+              <ProtectedRoute>
+                <WeekendDetails />
+              </ProtectedRoute>
+            }
+ />
           <Route
             path="/search"
             element={
@@ -135,6 +144,7 @@ function AppContent() {
               </ProtectedRoute>
             }
  />
+ 
  
         </Routes>
       </Suspense>
