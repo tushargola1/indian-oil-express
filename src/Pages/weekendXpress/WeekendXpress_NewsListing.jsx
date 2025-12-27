@@ -6,25 +6,28 @@ import { useParams, useLocation, Link } from "react-router-dom";
 
 // ===================== API & Data =====================
 import { useQuery } from "@tanstack/react-query";
-import { WeekendDropdownData } from "../components/ApiFunctions";
+import { WeekendDropdownData } from "../../components/ApiFunctions";
 
 // ===================== UI Components =====================
-import Pagination from "../components/Pagination";
-import CategoriesSidebar from "../innerPage/CategoriesSidebar";
+import Pagination from "../../components/Pagination";
+import CategoriesSidebar from "../../innerPage/CategoriesSidebar";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 // ===================== Assets =====================
-import fallback from "../assets/image/fallback.png";
+import fallback from "../../assets/image/fallback.png";
 import { parse, format } from "date-fns";
 
 // ✅ News Item Component
 const NewsItem = ({ id, imagePath, title, shortDesc, newsDate, byLine }) => {
-    const formatToDDMMYYYY = (dateStr) => {
-  if (!dateStr) return "";
-  // Parse DD-MM-YYYY hh:mm AM/PM and format to DD-MM-YYYY
-  return format(parse(dateStr, "dd-MM-yyyy hh:mm a", new Date()), "dd-MM-yyyy");
-};
+  const formatToDDMMYYYY = (dateStr) => {
+    if (!dateStr) return "";
+    // Parse DD-MM-YYYY hh:mm AM/PM and format to DD-MM-YYYY
+    return format(
+      parse(dateStr, "dd-MM-yyyy hh:mm a", new Date()),
+      "dd-MM-yyyy"
+    );
+  };
   const [day, month, year] = newsDate.split(" ")[0].split("-");
   const monthNames = [
     "January",
@@ -45,8 +48,7 @@ const NewsItem = ({ id, imagePath, title, shortDesc, newsDate, byLine }) => {
   return (
     <div className="news-item row gy-xl-0 gy-lg-2 gy-md-3 gy-4 border-bottom  mb-3">
       <div className="news-image col-xl-2 col-lg-12 col-md-12 col-12">
-        <Link to={`/WeekendDetails/${id}`}>  
-
+        <Link to={`/WeekendDetails/${id}`}>
           <img
             src={
               imagePath?.startsWith("https://ioclxpressapp.businesstowork.com")
@@ -54,10 +56,11 @@ const NewsItem = ({ id, imagePath, title, shortDesc, newsDate, byLine }) => {
                 : fallback
             }
             alt={title || "News"}
-            className={`img-fluid ${!imagePath?.startsWith("https://ioclxpressapp.businesstowork.com")
-              ? "fallback-listing"
-              : ""
-              }`}
+            className={`img-fluid ${
+              !imagePath?.startsWith("https://ioclxpressapp.businesstowork.com")
+                ? "fallback-listing"
+                : ""
+            }`}
             onError={(e) => {
               e.target.onerror = null;
               e.target.src = fallback;
@@ -65,7 +68,6 @@ const NewsItem = ({ id, imagePath, title, shortDesc, newsDate, byLine }) => {
             }}
           />
         </Link>
-
       </div>
       <div className="news-content col-xl-8 col-lg-12 col-md-12 col-12">
         <Link to={`/WeekendDetails/${id}`}>
@@ -74,7 +76,10 @@ const NewsItem = ({ id, imagePath, title, shortDesc, newsDate, byLine }) => {
         <div className="news-description small mb-2">{shortDesc || byLine}</div>
       </div>
       <div className="news-date-box col-xl-2 col-lg-12 col-md-12 col-12 text-end">
-   <div className="news-date-month fw-bold">  {formatToDDMMYYYY(newsDate)}</div>
+        <div className="news-date-month fw-bold">
+          {" "}
+          {formatToDDMMYYYY(newsDate)}
+        </div>
         {/* <div className="news-date-day-year">
           {day}, {year}
         </div> */}
@@ -84,7 +89,7 @@ const NewsItem = ({ id, imagePath, title, shortDesc, newsDate, byLine }) => {
 };
 
 // ✅ Main Component
-const Droplisting = () => {
+const WeekendXpress_NewsListing = () => {
   const { newsId } = useParams();
   const location = useLocation();
 
@@ -105,20 +110,18 @@ const Droplisting = () => {
   // ✅ React Query (fetching based on current page + URL id)
   const { data, isLoading, isError, isFetching } = useQuery({
     queryKey: ["news", currentPage, newsId, itemsPerPage],
-    queryFn: () => WeekendDropdownData(currentPage, itemsPerPage, newsId, newsType),
+    queryFn: () =>
+      WeekendDropdownData(currentPage, itemsPerPage, newsId, newsType),
     keepPreviousData: true,
-    staleTime: 5 * 60 * 1000, 
+    staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
-    
   });
-console.log("Full data:", data);
   const news = data?.list || [];
-    // console.log("News data:", news);
+  // console.log("News data:", news);
   const totalRecords = data?.totalRecords || 0;
   // console.log("total Page" , totalRecords);
   const totalPages = Math.ceil(totalRecords / itemsPerPage);
-  
-  
+
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -185,7 +188,7 @@ console.log("Full data:", data);
                   <button
                     className="btn dark-blue-bg-color dropdown-toggle text-white listing-dropdown-btn"
                     type="button"
-                    onClick={() => setShowDropdown(prev => !prev)}
+                    onClick={() => setShowDropdown((prev) => !prev)}
                   >
                     {itemsPerPage}
                   </button>
@@ -209,9 +212,7 @@ console.log("Full data:", data);
                     </ul>
                   )}
                 </div>
-
               </div>
-
             </>
           )}
         </div>
@@ -230,4 +231,4 @@ console.log("Full data:", data);
   );
 };
 
-export default Droplisting;
+export default WeekendXpress_NewsListing;

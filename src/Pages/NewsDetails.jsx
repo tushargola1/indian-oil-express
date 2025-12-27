@@ -309,6 +309,7 @@ export default function NewsDetails() {
                     comments={allComments}
                     newsId={newsId}
                     autoFocus
+                    type = "xpressNews"
                   />
                 )}
 

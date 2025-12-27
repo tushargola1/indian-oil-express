@@ -210,6 +210,12 @@ const Search = () => {
                 const list = res.data?.data || [];
                 setAllNews(list);
                 setTotalRecords(list.length);
+
+//                      if (list.length > 0) {
+//     setTotalRecords(list[0].totalCount);
+// } else {
+//     setTotalRecords(0);
+// }
             } catch (err) {
                 if (err.name !== "CanceledError" && err.name !== "AbortError") {
                     console.error(err);

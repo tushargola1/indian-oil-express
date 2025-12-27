@@ -1,45 +1,62 @@
-import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
+// ===================== React & Router =====================
 import { Suspense, lazy } from "react";
-import Search from "./innerPage/Search";
-import WeekendXpressListing from "./Pages/WeekendXpressListing";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 
-// Lazy Loaded Components
+// ===================== Pages / Components =====================
+import Search from "./innerPage/Search";
+
+// ===================== Lazy Loaded Components =====================
 const Header = lazy(() => import("./components/Header"));
 const Footer = lazy(() => import("./components/Footer"));
 const Home = lazy(() => import("./Pages/Home"));
+
 const Login = lazy(() => import("./authentication/Login"));
 const ForgetPassword = lazy(() => import("./authentication/ForgetPassword"));
-const NewsDetails = lazy(() => import("./Pages/NewsDetails"));
 
+const NewsDetails = lazy(() => import("./Pages/NewsDetails"));
 const NewsListing = lazy(() => import("./Pages/NewsListing"));
-const Droplisting = lazy(() => import("./Pages/Droplisting"));
+
+const WeekendXpress_NewsListing = lazy(() => import("./Pages/weekendXpress/WeekendXpress_NewsListing"));
 const Expresslisting = lazy(() => import("./Pages/Expresslisting"));
-const WeekendDetails = lazy(() => import("./Pages/WeekendDetails"));
+
+const WeekendDetails = lazy(() => import("./Pages/weekendXpress/WeekendDetails"));
+
 const ProtectedRoute = lazy(() => import("./authentication/ProtectedRoute"));
 const PublicRoute = lazy(() => import("./authentication/PublicRoute"));
+
 const ScrollToTop = lazy(() => import("./components/ScrollToTop"));
 const SearchPage = lazy(() => import("./innerPage/SearchPage"));
+
 const Announcements = lazy(() => import("./detail-page/Announcements"));
 
+// ===================== App Content =====================
 function AppContent() {
   const location = useLocation();
   const hideLayout = ["/login", "/forgetPassword"].includes(location.pathname);
 
   return (
     <>
+      {/* Scroll to Top */}
       <Suspense fallback={null}>
         <ScrollToTop />
       </Suspense>
 
+      {/* Header */}
       {!hideLayout && (
         <Suspense fallback={null}>
           <Header />
         </Suspense>
       )}
 
+      {/* Routes */}
       <Suspense fallback={null}>
         <Routes>
-          {/* Public Routes */}
+          {/* ===================== Public Routes ===================== */}
           <Route
             path="/login"
             element={
@@ -58,7 +75,7 @@ function AppContent() {
             }
           />
 
-          {/* Protected Routes */}
+          {/* ===================== Protected Routes ===================== */}
           <Route
             path="/"
             element={
@@ -76,14 +93,16 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
-  <Route
+
+          <Route
             path="/WeekendDetails/:newsId"
             element={
               <ProtectedRoute>
                 <WeekendDetails />
               </ProtectedRoute>
             }
- />
+          />
+
           <Route
             path="/search"
             element={
@@ -102,6 +121,7 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/news-listing/:newsId"
             element={
@@ -110,15 +130,8 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
-           <Route
-            path="/news-listing/:newsId"
-            element={
-              <ProtectedRoute>
-                <NewsListing />
-              </ProtectedRoute>
-            }
-          />
-         <Route
+
+          <Route
             path="/Expresslisting/"
             element={
               <ProtectedRoute>
@@ -127,28 +140,19 @@ function AppContent() {
             }
           />
 
-
-          {/* <Route
+       
+          <Route
             path="WeekendXpress/news-listing/:newsId"
             element={
               <ProtectedRoute>
-                <WeekendXpressListing />
+                <WeekendXpress_NewsListing />
               </ProtectedRoute>
             }
-          /> */}
-            <Route
-            path="WeekendXpress/news-listing/:newsId"
-            element={
-              <ProtectedRoute>
-                <Droplisting />
-              </ProtectedRoute>
-            }
- />
- 
- 
+          />
         </Routes>
       </Suspense>
 
+      {/* Footer */}
       {!hideLayout && (
         <Suspense fallback={null}>
           <Footer />
@@ -158,6 +162,7 @@ function AppContent() {
   );
 }
 
+// ===================== App Wrapper =====================
 export default function App() {
   return (
     <Router>

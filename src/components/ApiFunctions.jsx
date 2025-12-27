@@ -1,8 +1,8 @@
-import axios from 'axios';
-import { apiBaseUrl } from '../Helper';
+import axios from "axios";
+import { apiBaseUrl } from "../Helper";
 
 // login encryption
-import { Encryption } from '../authentication/Encryption';
+import { Encryption } from "../authentication/Encryption";
 
 // cookies
 import Cookies from "js-cookie";
@@ -15,15 +15,15 @@ const headers = {
 
 // header weekend xpress nav dropdown
 export const getWeekendXpress = async () => {
-  const res = await axios.get(apiBaseUrl('WeekendXpressTypes/GetDropdown'), {
+  const res = await axios.get(apiBaseUrl("WeekendXpressTypes/GetDropdown"), {
     headers: {
       Authorization: `Bearer ${Cookies.get("accessToken")}`,
     },
-  })
-  return res?.data?.data
-}
+  });
+  return res?.data?.data;
+};
 
-// login api 
+// login api
 export const loginApi = (email, password) => {
   const rawBody = JSON.stringify({
     username: Encryption(email),
@@ -33,7 +33,7 @@ export const loginApi = (email, password) => {
   return axios
     .post(apiBaseUrl("Auth/SapLogin"), rawBody, {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     })
     .then((res) => {
@@ -45,8 +45,11 @@ export const loginApi = (email, password) => {
       }
     })
     .catch((err) => {
-      console.error('❌ Error:', err);
-      return { success: false, message: err.response?.data?.message || 'Server error' }; // Return error message
+      console.error("❌ Error:", err);
+      return {
+        success: false,
+        message: err.response?.data?.message || "Server error",
+      }; // Return error message
     });
 };
 
@@ -76,17 +79,20 @@ export const fetchAnnouncements = async () => {
       },
     }
   );
-  return response.data.data
+  return response.data.data;
 };
 
-// Fetch announcement details 
+// Fetch announcement details
 export const fetchAnnouncementDetails = async (announcementId) => {
-  const res = await axios.get(apiBaseUrl(`Announcements/GetVM/${announcementId}`), {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${Cookies.get("accessToken")}`,
-    },
-  });
+  const res = await axios.get(
+    apiBaseUrl(`Announcements/GetVM/${announcementId}`),
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${Cookies.get("accessToken")}`,
+      },
+    }
+  );
   return res.data?.data;
 };
 
@@ -144,7 +150,7 @@ export const getWebPageData = async () => {
 };
 
 // news details
-export const getNewsDetails = async (newsId) => { 
+export const getNewsDetails = async (newsId) => {
   const url = apiBaseUrl(`XpressNews/GetXpressNewsDetails/${newsId}`);
   const res = await axios.get(url, {
     headers: {
@@ -152,13 +158,12 @@ export const getNewsDetails = async (newsId) => {
       Authorization: `Bearer ${Cookies.get("accessToken")}`,
     },
   });
-console.log("📡 Full API Responses:", res);
+  console.log("📡 Full API Responses:", res);
   return res?.data?.data ?? null;
 };
 
-
 // weekend xpress details
-export const GetWeekendXpressDetails = async (newsId) => { 
+export const GetWeekendXpressDetails = async (newsId) => {
   const url = apiBaseUrl(`WeekendXpress/GetWeekendXpressDetails/${newsId}`);
   const res = await axios.get(url, {
     headers: {
@@ -166,22 +171,22 @@ export const GetWeekendXpressDetails = async (newsId) => {
       Authorization: `Bearer ${Cookies.get("accessToken")}`,
     },
   });
-console.log("📡 Full API Responses:", res?.data?.data);
+  console.log("📡 Full API Responses:", res?.data?.data);
   return res?.data?.data ?? null;
 };
 
 // Express listing page
 export const expressDetails = async () => {
   const url = apiBaseUrl(`XpressNews/GetXpressNewsTDTY`);
-// console.log("📡 Full API Response:", url);  
+  // console.log("📡 Full API Response:", url);
   const res = await axios.get(url, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${Cookies.get("accessToken")}`,
     },
   });
-  // console.log("📡 Full API Response:", res.data.data);   
-   return res?.data?.data ?? null;
+  // console.log("📡 Full API Response:", res.data.data);
+  return res?.data?.data ?? null;
 };
 
 // get details page sidebar data
@@ -299,7 +304,12 @@ export const addDownload = async (newsId) => {
 };
 
 // news listing
-export const getNewsListing = async (page, ITEMS_PER_PAGE, newsId, newsType) => {
+export const getNewsListing = async (
+  page,
+  ITEMS_PER_PAGE,
+  newsId,
+  newsType
+) => {
   const start = (page - 1) * ITEMS_PER_PAGE;
 
   const xpress = newsType === "XpressNews";
@@ -374,7 +384,7 @@ export const getWebPageCategories = async () => {
 // dropdown weekend xpress categories data show
 // export const WeekendDropdownData = async (page, ITEMS_PER_PAGE, newsId, newsType ) => {
 //   const start = (page - 1) * ITEMS_PER_PAGE;
-//   const res = await axios.post(apiBaseUrl("WeekendXpress/GetWeekendXpressFL"), 
+//   const res = await axios.post(apiBaseUrl("WeekendXpress/GetWeekendXpressFL"),
 //   // ✅ BODY (DATA)
 //   {
 //     searchValue: "",
@@ -385,11 +395,11 @@ export const getWebPageCategories = async () => {
 //     weekendXpressTypeId: newsId,
 //     fromDate: "",
 //     toDate: "",
-//   },  
+//   },
 //   {
 //     headers: {
 //       Authorization: `Bearer ${Cookies.get("accessToken")}`,
- 
+
 //     },
 //   }
 //   );
@@ -400,32 +410,102 @@ export const getWebPageCategories = async () => {
 // };
 // dropdown weekend xpress categories data show
 
-export const WeekendDropdownData = async (page, ITEMS_PER_PAGE, newsId, newsType ) => {
+export const WeekendDropdownData = async (
+  page,
+  ITEMS_PER_PAGE,
+  newsId,
+  newsType
+) => {
   const start = (page - 1) * ITEMS_PER_PAGE;
-  const res = await axios.post(apiBaseUrl("WeekendXpress/GetWeekendXpressFL"), 
-  // ✅ BODY (DATA)
-  {
-    searchValue: "",
-    sortColumn: "",
-    sortDirection: "ASC",
-    start,
-    length: ITEMS_PER_PAGE,
-    weekendXpressTypeId: newsId,
-    fromDate: "",
-    toDate: "",
-  },  
-  {
-    headers: {
-      Authorization: `Bearer ${Cookies.get("accessToken")}`,
- 
+  const res = await axios.post(
+    apiBaseUrl("WeekendXpress/GetWeekendXpressFL"),
+    // ✅ BODY (DATA)
+    {
+      searchValue: "",
+      sortColumn: "",
+      sortDirection: "ASC",
+      start,
+      length: ITEMS_PER_PAGE,
+      weekendXpressTypeId: newsId,
+      fromDate: "",
+      toDate: "",
     },
-  }
- 
+    {
+      headers: {
+        Authorization: `Bearer ${Cookies.get("accessToken")}`,
+      },
+    }
   );
   console.log("📡 Actual list (array):", res);
   return {
-  list: res.data.data.data || [],
-  totalRecords: res.data.data.recordsFiltered || 0,
-  }
+    list: res.data.data.data || [],
+    totalRecords: res.data.data.recordsFiltered || 0,
+  };
 };
-WeekendlikeDislike();
+
+
+
+// Weekend xpress Add a view
+export const WeekendXpressaddView = async (newsId) => {
+  const { data } = await axios.post(
+    apiBaseUrl("WeekendXpress/AddView"),
+    { WeekendXpressId: newsId, ipAddress: "::1" },
+    { headers }
+  );
+  return data;
+};
+
+
+// Weekend xpress Add read time
+export const WeekendXpressaddReadTime = async (newsId, readTime) => {
+  const { data } = await axios.post(
+    apiBaseUrl("WeekendXpress/AddReadTime"),
+    { WeekendXpressId: newsId, readTime, ipAddress: "::1" },
+    { headers }
+  );
+  return data;
+};
+
+// Weekend xpress Download API
+export const WeekendXpressAddDownload = async (weekendXpressId) => {
+  const res = await axios.post(
+    apiBaseUrl("WeekendXpress/AddDownload"),
+    {
+      WeekendXpressId: weekendXpressId,
+      ipAddress: "::1", // or get dynamically
+    },
+    { headers }
+  );
+
+  return res.data;
+};
+
+
+// Weekend Xpress - Download PDF
+export const WeekendXpressdownloadNews = async (weekendXpressId) => {
+  const res = await axios.get(
+    apiBaseUrl(`WeekendXpress/Download/${weekendXpressId}`),
+    {
+      headers,
+      responseType: "blob",
+    }
+  );
+
+  return res.data;
+};
+
+
+// Weekend Xpress  get all comments
+export const WeekendXpressgetAllComments = async (newsId) => {
+  const res = await axios.get(
+    apiBaseUrl(`WeekendXpress/GetWeekendXpressComments/${newsId}`),
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${Cookies.get("accessToken")}`,
+      },
+    }
+  );
+
+  return res?.data?.data ?? []; // <-- ALWAYS ARRAY
+};

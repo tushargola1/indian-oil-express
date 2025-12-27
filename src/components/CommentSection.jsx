@@ -6,10 +6,24 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { apiBaseUrl } from "../Helper";
 
-
-export default function CommentSection({ comments: apiComments, newsId }) {
+export default function CommentSection({
+  comments: apiComments,
+  newsId,
+  type,
+}) {
   const containerRef = useRef(null);
   const topReplyBoxRef = useRef(null);
+
+  // =============================
+  // API CONFIG BASED ON TYPE
+  // =============================
+  const isWeekendXpress = type === "weekendXpress";
+
+  const COMMENT_API = isWeekendXpress
+    ? "WeekendXpress/ManageComment"
+    : "XpressNews/ManageComment";
+
+  const ID_KEY = isWeekendXpress ? "WeekendXpressId" : "xpressNewsId";
 
   const [replyingTo, setReplyingTo] = useState(null);
   const [replyText, setReplyText] = useState("");
@@ -49,31 +63,26 @@ export default function CommentSection({ comments: apiComments, newsId }) {
   //          ADD MAIN COMMENT
   // =============================
   const handleAddComment = async () => {
-    // alert("Adding main comment...");
     if (!newCommentText.trim()) return;
     setLoading(true);
 
     try {
       const body = {
-        xpressNewsId: newsId,
+        [ID_KEY]: newsId, // 🔥 dynamic key
         comment: newCommentText.trim(),
         ipAddress: "::1",
         action: "Add",
       };
 
-      const res = await axios.post(
-        apiBaseUrl("XpressNews/ManageComment"),
-        body,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${Cookies.get("accessToken")}`,
-          },
-        }
-      );
+      const res = await axios.post(apiBaseUrl(COMMENT_API), body, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("accessToken")}`,
+        },
+      });
 
       const newComment = normalizeComments([res.data.data])[0];
-      setComments((prev) => [...prev, newComment]);
+      setComments((prev) => [newComment, ...prev]); // ✅ latest on top
       setNewCommentText("");
     } catch (err) {
       console.error("Add comment error:", err);
@@ -85,54 +94,62 @@ export default function CommentSection({ comments: apiComments, newsId }) {
   // =============================
   //          REPLY / EDIT
   // =============================
-  const handleReplySubmit = async () => {
-    if (!replyText.trim() || !replyingTo) return;
-    setLoading(true);
+const handleReplySubmit = async () => {
+  if (!replyText.trim() || !replyingTo) return;
+  setLoading(true);
 
-    try {
-      const body = {
-        xpressNewsId: newsId,
-        comment: replyText.trim(),
-        parentId: replyingTo, // 🔥 ALWAYS level-1
-        ipAddress: "::1",
-        action: isEditing ? "Edit" : "Add",
-        id: isEditing ? replyTargetId : undefined,
-      };
+  try {
+    const body = {
+      [ID_KEY]: newsId,
+      comment: replyText.trim(),
+      parentId: replyingTo,
+      ipAddress: "::1",
+      action: isEditing ? "Edit" : "Add",
+      id: isEditing ? replyTargetId : undefined, // ✅ MUST NOT BE NULL
+    };
 
-      const res = await axios.post(
-        apiBaseUrl("XpressNews/ManageComment"),
-        body,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${Cookies.get("accessToken")}`,
-          },
+    const res = await axios.post(apiBaseUrl(COMMENT_API), body, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${Cookies.get("accessToken")}`,
+      },
+    });
+
+    const newReply = normalizeComments([res.data.data])[0];
+
+    const updateComments = (items) =>
+      items.map((c) => {
+        // Editing top-level comment
+        if (isEditing && c.id === replyTargetId) return newReply;
+
+        // Editing/adding a reply under this comment
+        if (c.id === replyingTo) {
+          return {
+            ...c,
+            replies: isEditing
+              ? c.replies.map((r) =>
+                  r.id === replyTargetId ? newReply : r
+                )
+              : [newReply, ...c.replies], // latest on top
+          };
         }
-      );
 
-      const newReply = normalizeComments([res.data.data])[0];
+        // Recursively update replies
+        return { ...c, replies: updateComments(c.replies) };
+      });
 
-      // 🔥 Insert reply ONLY under level-1 parent
-      const addReplyToLevel1 = (items) =>
-        items.map((c) => {
-          if (c.id === replyingTo) {
-            return { ...c, replies: [...c.replies, newReply] };
-          }
-          return { ...c, replies: addReplyToLevel1(c.replies) };
-        });
+    setComments((prev) => updateComments(prev));
 
-      setComments((prev) => addReplyToLevel1(prev));
+    setReplyText("");
+    setReplyingTo(null);
+    setReplyTargetId(null);
+    setIsEditing(false);
+  } catch (err) {
+    console.error("Reply error:", err);
+  }
 
-      setReplyText("");
-      setReplyingTo(null);
-      setReplyTargetId(null);
-      setIsEditing(false);
-    } catch (err) {
-      console.error("Reply error:", err);
-    }
-
-    setLoading(false);
-  };
+  setLoading(false);
+};
 
 
   // =============================
@@ -146,12 +163,12 @@ export default function CommentSection({ comments: apiComments, newsId }) {
     try {
       const body = {
         Id: id,
-        comment: text, // can be empty if you want
+        comment: text,
         ipAddress: "::1",
         action: "Delete",
       };
 
-      await axios.post(apiBaseUrl("XpressNews/ManageComment"), body, {
+      await axios.post(apiBaseUrl(COMMENT_API), body, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${Cookies.get("accessToken")}`,
@@ -176,7 +193,7 @@ export default function CommentSection({ comments: apiComments, newsId }) {
   //          SHOW REPLIES
   // =============================
   // const renderReplies = (replies, level = 1, parentId) => {
-  //   if (level > 2) return null; 
+  //   if (level > 2) return null;
   //   const visibleCount = visibleReplies[parentId] || 2;
   //   const visibleList = replies.slice(0, visibleCount);
   //   const hasMore = visibleCount < replies.length;
@@ -235,7 +252,7 @@ export default function CommentSection({ comments: apiComments, newsId }) {
   //               <ul className="comments ps-0">
   //                 {renderReplies(
   //                   reply.replies,
-  //                   level === 1 ? 2 : 2, 
+  //                   level === 1 ? 2 : 2,
   //                   reply.id
   //                 )}
   //               </ul>
@@ -288,20 +305,22 @@ export default function CommentSection({ comments: apiComments, newsId }) {
 
                   {/* ACTION BUTTONS */}
                   <div className="my-3">
-
                     {/* ✅ Reply button only till level 1 */}
                     {/* {level < 2 && ( */}
                     {level <= 2 && (
                       <button
                         className="btn btn-sm"
                         onClick={() => {
-                          const level1ParentId = level === 1 ? reply.id : parentId;
+                          const level1ParentId =
+                            level === 1 ? reply.id : parentId;
                           setReplyingTo(level1ParentId);
                           setReplyTargetId(reply.id);
                           setReplyText("");
                           setIsEditing(false);
                           setTimeout(() => {
-                            topReplyBoxRef.current?.scrollIntoView({ behavior: "smooth" });
+                            topReplyBoxRef.current?.scrollIntoView({
+                              behavior: "smooth",
+                            });
                           }, 100);
                         }}
                       >
@@ -311,8 +330,8 @@ export default function CommentSection({ comments: apiComments, newsId }) {
                     <button
                       className="btn btn-sm"
                       onClick={() => {
-                        setReplyingTo(parentId);      // ✅ level-1 parent
-                        setReplyTargetId(reply.id);   // edit THIS reply
+                        setReplyingTo(parentId); // ✅ level-1 parent
+                        setReplyTargetId(reply.id); // edit THIS reply
                         setReplyText(reply.text);
                         setIsEditing(true);
                       }}
@@ -321,9 +340,7 @@ export default function CommentSection({ comments: apiComments, newsId }) {
                     </button>
                     <button
                       className="btn btn-sm "
-                      onClick={() =>
-                        handleDeleteComment(reply.id, reply.text)
-                      }
+                      onClick={() => handleDeleteComment(reply.id, reply.text)}
                     >
                       <i className="fa-solid fa-trash text-danger"></i>
                     </button>
@@ -342,7 +359,6 @@ export default function CommentSection({ comments: apiComments, newsId }) {
                     >
                       <i className="fa-solid fa-comment-dots text-success"></i>
                     </button> */}
-
                   </div>
                 </div>
               </div>
@@ -373,7 +389,6 @@ export default function CommentSection({ comments: apiComments, newsId }) {
       </>
     );
   };
-
 
   // =============================
   //               UI
@@ -412,7 +427,6 @@ export default function CommentSection({ comments: apiComments, newsId }) {
         {/* TOP REPLY / EDIT BOX */}
         <div ref={topReplyBoxRef} className="mt-2">
           {replyingTo && (
-
             <div className="mb-3 p-2 border rounded bg-light">
               <p className="fw-bold mb-1">
                 {isEditing
@@ -479,13 +493,15 @@ export default function CommentSection({ comments: apiComments, newsId }) {
                       <button
                         className="btn btn-sm "
                         onClick={() => {
-                          setReplyingTo(comment.id);
+                          setReplyingTo(comment.id); // parentId (required by API)
+                          setReplyTargetId(comment.id); // ✅ THIS FIX
                           setReplyText(comment.text);
                           setIsEditing(true);
                         }}
                       >
                         <i className="fa-solid fa-pen-to-square text-warning"></i>
                       </button>
+
                       <button
                         className="btn btn-sm "
                         onClick={() =>
